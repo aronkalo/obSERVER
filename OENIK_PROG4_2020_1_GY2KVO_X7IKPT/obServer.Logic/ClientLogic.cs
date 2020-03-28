@@ -72,6 +72,60 @@ namespace obServer.Logic
             });
         }
 
+        protected override void HandleConnect(Request request)
+        {
+            base.HandleConnect(request);
+        }
+
+        protected override void HandleDie(Request request)
+        {
+            base.HandleDie(request);
+        }
+
+        protected override void HandleDisconnect(Request request)
+        {
+            base.HandleDisconnect(request);
+        }
+
+        protected override void HandleHit(Request request)
+        {
+            base.HandleHit(request);
+        }
+
+        protected override void HandleMove(Request request)
+        {
+            base.HandleMove(request);
+        }
+
+        protected override void HandlePickup(Request request)
+        {
+            base.HandlePickup(request);
+        }
+
+        protected override void HandleReady(Request request)
+        {
+            base.HandleReady(request);
+        }
+
+        protected override void HandleRemove(Request request)
+        {
+            base.HandleRemove(request);
+        }
+
+        protected override void HandleSendMessage(Request request)
+        {
+            base.HandleSendMessage(request);
+        }
+
+        protected override void HandleSendObject(Request request)
+        {
+            base.HandleSendObject(request);
+        }
+
+        protected override void HandleShoot(Request request)
+        {
+            base.HandleShoot(request);
+        }
         public Request DoAddPlayer()
         {
             Guid PlayerId = Guid.NewGuid();
