@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace obServer.Model
+namespace obServer.Model.GameModel
 {
-    public class Class1
+    public sealed class obServerModel
     {
     }
 }

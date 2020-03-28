@@ -126,6 +126,7 @@ namespace obServer.Logic
         {
             base.HandleShoot(request);
         }
+
         //public Request DoAddPlayer()
         //{
         //    Guid PlayerId = Guid.NewGuid();
