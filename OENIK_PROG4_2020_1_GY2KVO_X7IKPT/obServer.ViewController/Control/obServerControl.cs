@@ -1,5 +1,4 @@
-﻿using obServer.Logic;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +18,6 @@ namespace obServer.ViewController.Control
         }
         private DispatcherTimer dt;
 
-        private BaseLogic
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
