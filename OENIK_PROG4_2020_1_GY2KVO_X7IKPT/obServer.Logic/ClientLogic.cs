@@ -126,81 +126,81 @@ namespace obServer.Logic
         {
             base.HandleShoot(request);
         }
-        public Request DoAddPlayer()
-        {
-            Guid PlayerId = Guid.NewGuid();
-            Player p = new Player(PlayerId, Physics.PlayerPhysics, 20, 20);
-            MapInfo.AddObject(p);
-            Player = p;
-            return new Request()
-            {
-                Broadcast = true,
-                Operation = UDPNetworking.GameOperation.SendObject,
-                Parameters = $"{Player.Identity};{Player.Position.X};{Player.Position.Y};{Player.Width};{Player.Height};{Player.Angle}",
-            };
-        }
+        //public Request DoAddPlayer()
+        //{
+        //    Guid PlayerId = Guid.NewGuid();
+        //    Player p = new Player(PlayerId, Physics.PlayerPhysics, 20, 20);
+        //    MapInfo.AddObject(p);
+        //    Player = p;
+        //    return new Request()
+        //    {
+        //        Broadcast = true,
+        //        Operation = UDPNetworking.GameOperation.SendObject,
+        //        Parameters = $"{Player.Identity};{Player.Position.X};{Player.Position.Y};{Player.Width};{Player.Height};{Player.Angle}",
+        //    };
+        //}
 
-        public double[] GetPlayerParameters()
-        {
-            return new double[]
-            {
-                Player.Width,
-                Player.Height,
-                Player.Position.X,
-                Player.Position.Y,
-                Player.Angle,
-                Player.Physics.MovementSpeed,
-            };
-        }
+        //public double[] GetPlayerParameters()
+        //{
+        //    return new double[]
+        //    {
+        //        Player.Width,
+        //        Player.Height,
+        //        Player.Position.X,
+        //        Player.Position.Y,
+        //        Player.Angle,
+        //        Player.Physics.MovementSpeed,
+        //    };
+        //}
 
-        public void RotatePlayer(double angle)
-        {
-            Player.Rotate(angle);
-        }
+        //public void RotatePlayer(double angle)
+        //{
+        //    Player.Rotate(angle);
+        //}
 
-        private void AddElement(BaseObject obj)
-        {
-            MapInfo.AddObject(obj);
-        }
+        //private void AddElement(BaseObject obj)
+        //{
+        //    MapInfo.AddObject(obj);
+        //}
 
-        private void SetObjectPositon(Guid id, double x , double y, double angle = 0 )
-        {
-            MapInfo.UpdateObject(id, x, y, angle);
-        }
+        //private void SetObjectPositon(Guid id, double x , double y, double angle = 0 )
+        //{
+        //    MapInfo.UpdateObject(id, x, y, angle);
+        //}
 
-        public IEnumerable<Tuple<Guid, double[], GameObjectType>> GetUpdatedVisuals()
-        {
-            return MapInfo.SelectUpdatedVisuals();
-        }
+        //public IEnumerable<Tuple<Guid, double[], GameObjectType>> GetUpdatedVisuals()
+        //{
+        //    return MapInfo.SelectUpdatedVisuals();
+        //}
 
-        public IEnumerable<Tuple<Guid, double[], GameObjectType>> GetDeletedVisuals()
-        {
-            return MapInfo.DeletedVisuals();
-        }
-        public void LoadMap()
-        {
-            foreach (var wall in SimpleMap.Walls)
-            {
-                MapInfo.AddObject(wall);
-            }
-            foreach (var weapon in SimpleMap.Weapons)
-            {
-                MapInfo.AddObject(weapon);
-            }
-        }
+        //public IEnumerable<Tuple<Guid, double[], GameObjectType>> GetDeletedVisuals()
+        //{
+        //    return MapInfo.DeletedVisuals();
+        //}
+        //public void LoadMap()
+        //{
+        //    foreach (var wall in SimpleMap.Walls)
+        //    {
+        //        MapInfo.AddObject(wall);
+        //    }
+        //    foreach (var weapon in SimpleMap.Weapons)
+        //    {
+        //        MapInfo.AddObject(weapon);
+        //    }
+        //}
 
         
-        internal Request[] DoShootWeapon()
-        {
-            if (Player.CurrentWeapon != null)
-            {
-                return DoShoot(Player.CurrentWeapon.Identity);
-            }
-            else
-            {
-                return new Request[0];
-            }
-        }
+        //internal Request[] DoShootWeapon()
+        //{
+        //    if (Player.CurrentWeapon != null)
+        //    {
+        //        return DoShoot(Player.CurrentWeapon.Identity);
+        //    }
+        //    else
+        //    {
+        //        return new Request[0];
+        //    }
+        //}
 
         //private void HandlePickup(Request response)
         //{
