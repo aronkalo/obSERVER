@@ -42,8 +42,18 @@
   <ItemGroup>
     <Compile Include="Model\GameModel.cs" />
     <Compile Include="Model\ServerModel.cs" />
+    <Compile Include="Network\IRepoGameServer.cs" />
+    <Compile Include="Network\IRepoGameClient.cs" />
+    <Compile Include="Network\RepoGameClient.cs" />
+    <Compile Include="Network\RepoGameServer.cs" />
     <Compile Include="Position\MapInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\obServer.Network\obServer.Network.csproj">
+      <Project>{4C0C22BC-8175-4781-9797-D2D06CE50C10}</Project>
+      <Name>obServer.Network</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

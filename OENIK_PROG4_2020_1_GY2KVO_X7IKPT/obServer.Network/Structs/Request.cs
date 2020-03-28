@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using obServer.Network.Structs;
 
-namespace obServer.Logic.Structs
+namespace obServer.Network.Structs
 {
     public struct Request
     {

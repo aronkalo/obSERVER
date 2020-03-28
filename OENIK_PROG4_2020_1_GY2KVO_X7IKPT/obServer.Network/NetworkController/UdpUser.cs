@@ -31,11 +31,11 @@ namespace obServer.Network.NetworkController
             Client.Send(datagram, datagram.Length);
         }
         //Sends Connecting Banner: 1
-        public static IPEndPoint SearchForServers(string userName, int serverPort, int clientPort)
+        public static IPEndPoint SearchForServers(int serverPort, int clientPort)
         {
             var Client = new UdpClient(clientPort);
             byte[] RequestData = Encoding.ASCII.GetBytes($"{Operation.Connect}" +
-                $":{userName}");
+                $":{"Client"}");
             var ServerEp = new IPEndPoint(IPAddress.Any, serverPort);
             Client.EnableBroadcast = true;
             Client.Client.SendTimeout = 100;

@@ -9,17 +9,10 @@ namespace obServer.Network.NetworkElements
 {
     public abstract class GameBase
     {
-		public GameBase(string Name)
+		public GameBase()
 		{
-			this.Name = Name;
 			sw = new Stopwatch();
 			sw.Start();
-		}
-		private string name;
-		public string Name
-		{
-			get { return name; }
-			set { name = value; }
 		}
 		private Stopwatch sw { get; set;}
 		public double ConnectionTime

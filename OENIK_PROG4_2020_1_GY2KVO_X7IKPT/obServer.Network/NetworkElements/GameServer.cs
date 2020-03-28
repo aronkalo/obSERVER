@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using obServer.Network.Interface;
 using obServer.Network.NetworkController;
 using obServer.Network.Structs;
 
 
 namespace obServer.Network.NetworkElements
 {
-    public class GameServer : GameBase
+    public sealed class GameServer : GameBase, IGameServer
     {
-        public GameServer(string Name) : base(Name) { }
+        public GameServer() : base() { }
 
         private UdpListener Listener { get; set; }
         private RequestPool RequestPool { get; set; }

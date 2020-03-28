@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using obServer.Network.Interface;
 using obServer.Network.NetworkController;
 using obServer.Network.Structs;
 
 
 namespace obServer.Network.NetworkElements
 {
-    public class GameClient : GameBase
+    public sealed class GameClient : GameBase, IGameClient
     {
-        public GameClient(string Name, int serverPort, int clientPort) : base(Name)
+        public GameClient(int serverPort, int clientPort) : base()
         {
-            var ServerIp = UdpUser.SearchForServers(Name, serverPort, clientPort);
-            this.CommPort = UdpUser.ConnectTo(ServerIp, clientPort);
-            //this.clientLogic = new ClientLogic(new GameClientInfo() { EndPoint=ServerIp, Id = new Guid()  });
+            var ServerIp = UdpUser.SearchForServers(serverPort, clientPort);
+            this.Network = UdpUser.ConnectTo(ServerIp, clientPort);
         }
         private bool ActiveSession { get; set; }
         private RequestPool ResponsePool { get; set; }
-        private UdpUser CommPort { get; set; }
-        //public ClientLogic clientLogic { get;}
-
+        private UdpUser Network { get; set; }
 
         public void Send(Operation operation, string parameters)
         {
-            CommPort.Send(operation, parameters);
+            Network.Send(operation, parameters);
         }
 
         public void StartListening()
@@ -35,7 +30,7 @@ namespace obServer.Network.NetworkElements
                 {
                     while (ActiveSession)
                     {
-                        var received = await CommPort.Receive();
+                        var received = await Network.Receive();
                         ResponsePool.AddPoolElement(received);
                     }
                 });
