@@ -63,6 +63,11 @@ namespace obServer.Model.GameModel.Item
             return new Bullet[0];
         }
 
+
+        internal void Move(double xMovement, double yMovement, double rotation)
+        {
+            ChangePosition(xMovement, yMovement, rotation);
+        }
         public void DoReload(int storedBullets)
         {
             if (storedBullets > (bulletCapacity - bulletCount))

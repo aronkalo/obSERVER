@@ -23,8 +23,6 @@ namespace obServer.Model.GameModel.Item
 			get { return id; }
 			set { id = value; }
 		}
-
-
 		private double[] position;
 
 		public double[] Position
