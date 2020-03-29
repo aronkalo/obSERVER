@@ -4,11 +4,12 @@ namespace obServer.Model.GameModel.Item
 {
 	public abstract class BaseItem
 	{
-		public BaseItem(Geometry geometry, string id, bool impact)
+		public BaseItem(Geometry geometry, string id, double[] position, double rotation, bool impact)
 		{
 			Id = id;
 			Position = new double[2];
-			Rotation = 0;
+			SetPosition(position[0], position[1]);
+			Rotation = rotation;
 			primitve = geometry;
 			Impact = impact;
 			changed = true;
