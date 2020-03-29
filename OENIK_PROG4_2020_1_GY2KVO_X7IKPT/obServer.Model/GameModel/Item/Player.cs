@@ -1,4 +1,5 @@
-﻿using System;
+﻿using obServer.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,17 +8,21 @@ using System.Windows.Media;
 
 namespace obServer.Model.GameModel.Item
 {
-    public sealed class Player : BaseItem
+    public sealed class Player : BaseItem, IPlayer, IBaseItem
     {
+        public static Geometry PlayerGeometry = new EllipseGeometry() { RadiusX = Width, RadiusY = Height};
         private const double movementSpeed = 100;
+        private const double Width = 100;
+        private const double Height = 100;
+
         public Player(Geometry geometry, Guid id, double[] position, double rotation, bool impact) : base(geometry, id, position, rotation, impact)
         {
             CurrentWeapon = null;
         }
 
-        private Weapon CurrentWeapon;
+        public IWeapon CurrentWeapon { get; private set; }
 
-        public void ChangeWeapon(Weapon newWeapon)
+        public void ChangeWeapon(IWeapon newWeapon)
         {
             if (CurrentWeapon == null)
             {
@@ -25,10 +30,20 @@ namespace obServer.Model.GameModel.Item
             }
             else
             {
-                Weapon helper = CurrentWeapon;
+                IWeapon helper = CurrentWeapon;
                 helper = null;
                 CurrentWeapon = newWeapon;
             }
+        }
+
+        public IBullet[] Shoot()
+        {
+            return CurrentWeapon.DoShoot();
+        }
+
+        public void Reload(int storedBullets)
+        {
+            CurrentWeapon.DoReload(storedBullets);
         }
 
         public void Move(double xMove, double yMove, double deltaTime, double rotation)

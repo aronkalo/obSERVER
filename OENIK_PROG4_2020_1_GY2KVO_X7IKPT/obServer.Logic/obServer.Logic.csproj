@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +51,10 @@
     <Compile Include="Structs\Request.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\obServer.Model\obServer.Model.csproj">
+      <Project>{D47B3456-F254-48FD-9F24-D54E376DEE81}</Project>
+      <Name>obServer.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\obServer.Network\obServer.Network.csproj">
       <Project>{4C0C22BC-8175-4781-9797-D2D06CE50C10}</Project>
       <Name>obServer.Network</Name>

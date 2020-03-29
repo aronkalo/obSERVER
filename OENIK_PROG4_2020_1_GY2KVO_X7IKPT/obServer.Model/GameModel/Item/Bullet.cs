@@ -1,15 +1,16 @@
-﻿using System;
+﻿using obServer.Model.Interfaces;
+using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace obServer.Model.GameModel.Item
 {
-    public sealed class Bullet : BaseItem
+    public sealed class Bullet : BaseItem, IBullet
     {
-        public static EllipseGeometry BulletGeometry { get { return new EllipseGeometry() { RadiusX = BulletWidth, RadiusY = BulletHeigth }; } }
+        public static EllipseGeometry BulletGeometry { get { return new EllipseGeometry() { RadiusX = BulletWidth, RadiusY = BulletHeight }; } }
         private static Brush BulletBrush { get { return new ImageBrush(new BitmapImage()); } }
         private const double BulletWidth = 5;
-        private const double BulletHeigth = 5;
+        private const double BulletHeight = 5;
         private double flySpeed;
         private double supressionCache;
         private double weight;

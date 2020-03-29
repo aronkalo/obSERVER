@@ -1,4 +1,7 @@
-﻿using obServer.Network.Structs;
+﻿using obServer.Model.GameModel;
+using obServer.Model.GameModel.Item;
+using obServer.Model.Interfaces;
+using obServer.Network.Structs;
 using obServer.Repository.Network;
 using System;
 using System.Collections.Generic;
@@ -14,7 +17,10 @@ namespace obServer.Logic
         {
             gameClient = new RepoGameClient(serverPort, clientPort);
             gameClient.StartListening();
+            model = new obServerModel();
         }
+
+        private obServerModel model;
 
         private const int serverPort = 3200;
 
@@ -125,6 +131,56 @@ namespace obServer.Logic
         protected override void HandleShoot(Request request)
         {
             base.HandleShoot(request);
+        }
+
+        public void Add(IBaseItem item)
+        {
+            model.ConstructItem(item);
+        }
+
+        public void MovePlayer(Guid id, double xMovement, double yMovement, double angle, double deltaTime)
+        {
+            var player = model.Players.Where(x => x.Id == id).First();
+            player.Move(xMovement, yMovement, deltaTime, angle);
+        }
+
+        public void Shoot(Guid id)
+        {
+            var player = model.Players.Where(x => x.Id == id).First();
+            IBullet[] bullets = player.Shoot();
+            if (bullets.Length > 0)
+            {
+                IWeapon weapon = player.CurrentWeapon;
+                foreach (var bullet in bullets)
+                {
+                    gameClient.Send(Operation.Shoot, "");
+                    model.ConstructItem(bullet);
+                }
+            }
+        }
+
+        public void FlyBullets()
+        {
+        }
+
+        public void Pickup()
+        {
+
+        }
+
+        public void Hit()
+        {
+
+        }
+
+        public void Die()
+        {
+
+        }
+
+        public void Reload()
+        {
+
         }
 
         //public Request DoAddPlayer()

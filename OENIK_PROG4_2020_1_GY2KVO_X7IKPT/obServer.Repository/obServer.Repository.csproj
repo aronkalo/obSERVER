@@ -40,8 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\GameModel.cs" />
-    <Compile Include="Model\ServerModel.cs" />
+    <Compile Include="Model\IRepoobServerModel.cs" />
+    <Compile Include="Model\RepoobServerModel.cs" />
     <Compile Include="Network\IRepoGameServer.cs" />
     <Compile Include="Network\IRepoGameClient.cs" />
     <Compile Include="Network\RepoGameClient.cs" />
@@ -50,6 +50,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\obServer.Model\obServer.Model.csproj">
+      <Project>{D47B3456-F254-48FD-9F24-D54E376DEE81}</Project>
+      <Name>obServer.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\obServer.Network\obServer.Network.csproj">
       <Project>{4C0C22BC-8175-4781-9797-D2D06CE50C10}</Project>
       <Name>obServer.Network</Name>

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using obServer.Model.Interfaces;
+using System;
 using System.Windows.Media;
 
 namespace obServer.Model.GameModel.Item
 {
-	public abstract class BaseItem
+	public abstract class BaseItem : IBaseItem
 	{
 		public BaseItem(Geometry geometry, Guid id, double[] position, double rotation, bool impact)
 		{

@@ -49,6 +49,12 @@
     <Compile Include="GameModel\Item\StaticItem.cs" />
     <Compile Include="GameModel\Item\Weapon.cs" />
     <Compile Include="GameModel\obServerModel.cs" />
+    <Compile Include="Interfaces\IBaseItem.cs" />
+    <Compile Include="Interfaces\IBullet.cs" />
+    <Compile Include="Interfaces\IobServerModel.cs" />
+    <Compile Include="Interfaces\IPlayer.cs" />
+    <Compile Include="Interfaces\IStaticItem.cs" />
+    <Compile Include="Interfaces\IWeapon.cs" />
     <Compile Include="Performance\Guids.cs" />
     <Compile Include="Performance\MapInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

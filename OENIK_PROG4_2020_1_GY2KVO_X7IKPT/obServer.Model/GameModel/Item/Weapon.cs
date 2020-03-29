@@ -1,9 +1,10 @@
-﻿using System;
+﻿using obServer.Model.Interfaces;
+using System;
 using System.Windows.Media;
 
 namespace obServer.Model.GameModel.Item
 {
-    public sealed class Weapon : BaseItem
+    public sealed class Weapon : BaseItem, IWeapon, IBaseItem
     {
         public const int PistolCapacity = 20;
         public const int ShotgunCapacity = 8;
@@ -34,7 +35,7 @@ namespace obServer.Model.GameModel.Item
         private double bulletWeight;
         private int bulletCount;
 
-        public Bullet[] DoShoot()
+        public IBullet[] DoShoot()
         {
             if (bulletCount > 0)
             {
@@ -64,7 +65,7 @@ namespace obServer.Model.GameModel.Item
         }
 
 
-        internal void Move(double xMovement, double yMovement, double rotation)
+        public void Move(double xMovement, double yMovement, double rotation)
         {
             ChangePosition(xMovement, yMovement, rotation);
         }
