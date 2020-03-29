@@ -1,10 +1,11 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 
 namespace obServer.Model.GameModel.Item
 {
 	public abstract class BaseItem
 	{
-		public BaseItem(Geometry geometry, string id, double[] position, double rotation, bool impact)
+		public BaseItem(Geometry geometry, Guid id, double[] position, double rotation, bool impact)
 		{
 			Id = id;
 			Position = new double[2];
@@ -15,9 +16,9 @@ namespace obServer.Model.GameModel.Item
 			changed = true;
 		}
 
-		private string id;
+		private Guid id;
 
-		public string Id
+		public Guid Id
 		{
 			get { return id; }
 			set { id = value; }

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="GameModel\Item\BaseItem.cs" />
     <Compile Include="GameModel\Item\Bullet.cs" />
+    <Compile Include="GameModel\Item\Weapon.cs" />
     <Compile Include="GameModel\obServerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
