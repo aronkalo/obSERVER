@@ -49,6 +49,8 @@
     <Compile Include="GameModel\Item\StaticItem.cs" />
     <Compile Include="GameModel\Item\Weapon.cs" />
     <Compile Include="GameModel\obServerModel.cs" />
+    <Compile Include="Performance\Guids.cs" />
+    <Compile Include="Performance\MapInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

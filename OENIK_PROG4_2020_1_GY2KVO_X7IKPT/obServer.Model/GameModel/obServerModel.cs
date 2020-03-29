@@ -2,6 +2,7 @@
 using obServer.Model.GameModel.Item;
 using System.Collections.Generic;
 using System.Linq;
+using obServer.Model.Performance;
 
 namespace obServer.Model.GameModel
 {
@@ -13,6 +14,8 @@ namespace obServer.Model.GameModel
         }
 
         private List<BaseItem> Items;
+
+        private MapInformation info;
 
         private bool itemsChanged
         {
@@ -84,6 +87,8 @@ namespace obServer.Model.GameModel
             if (!Items.Contains(item))
             {
                 Items.Add(item);
+                var bounds = item.RealPrimitive.Bounds;
+                info.Add(item.Id, (int)bounds.X, (int)bounds.Y, (int)bounds.Width, (int)bounds.Height);
                 itemsChanged = true;
             }
         }
@@ -96,10 +101,11 @@ namespace obServer.Model.GameModel
                 BaseItem item = items.First();
                 Items.Remove(item);
                 item = null;
+                info.Del(item.Id);
                 itemsChanged = true;
             }
         }
-
+        
         private IEnumerable<StaticItem> staticCache;
 
         private bool staticChanged;
