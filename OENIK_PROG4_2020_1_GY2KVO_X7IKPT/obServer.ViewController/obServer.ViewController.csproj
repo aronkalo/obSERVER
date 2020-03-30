@@ -95,5 +95,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\obServer.Logic\obServer.Logic.csproj">
+      <Project>{6376C887-24A4-4D13-947A-B5D528E2517D}</Project>
+      <Name>obServer.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\obServer.Model\obServer.Model.csproj">
+      <Project>{D47B3456-F254-48FD-9F24-D54E376DEE81}</Project>
+      <Name>obServer.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

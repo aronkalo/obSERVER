@@ -15,12 +15,15 @@ namespace obServer.Model.GameModel.Item
         private const double Width = 100;
         private const double Height = 100;
 
-        public Player(Geometry geometry, Guid id, double[] position, double rotation, bool impact) : base(geometry, id, position, rotation, impact)
+        public Player(Geometry geometry, Guid id, double[] position, double rotation, bool impact, double health) : base(geometry, id, position, rotation, impact)
         {
             CurrentWeapon = null;
+            this.health = health;
         }
 
         public IWeapon CurrentWeapon { get; private set; }
+
+        private double health;
 
         public void ChangeWeapon(IWeapon newWeapon)
         {
@@ -46,6 +49,7 @@ namespace obServer.Model.GameModel.Item
             CurrentWeapon.DoReload(storedBullets);
         }
 
+
         public void Move(double xMove, double yMove, double deltaTime, double rotation)
         {
             double xMovement = xMove * deltaTime * movementSpeed;
@@ -55,6 +59,15 @@ namespace obServer.Model.GameModel.Item
                 CurrentWeapon.Move(xMovement, yMovement, rotation);
             }
             ChangePosition(xMovement, yMovement, rotation);
+        }
+
+        public void Damaged(double damage)
+        {
+            health -= damage;
+            if (health < 0)
+            {
+                
+            }
         }
     }
 }

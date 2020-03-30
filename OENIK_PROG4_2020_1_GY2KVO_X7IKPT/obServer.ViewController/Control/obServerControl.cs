@@ -1,4 +1,7 @@
-﻿using System;
+﻿using obServer.Logic;
+using obServer.Model.GameModel;
+using obServer.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,9 +18,12 @@ namespace obServer.ViewController.Control
         public obServerControl()
         {
             Loaded += Window_Loaded;
+            om = new obServerModel();
+            cl = new ClientLogic(om);
         }
         private DispatcherTimer dt;
-
+        private ClientLogic cl;
+        private IobServerModel om;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -30,7 +36,6 @@ namespace obServer.ViewController.Control
                 win.KeyDown += KeyHit;
                 win.MouseMove += MouseMovement;
                 win.MouseLeftButtonDown += Shoot;
-                
             }
         }
 
@@ -46,7 +51,9 @@ namespace obServer.ViewController.Control
 
         private void KeyHit(object sender, KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            EventHandler movement = cl.MovementEvent;
+
+            cl.MovementEvent?.Invoke(this, new Logic.Event.MovementEventArgs());
         }
 
         private void Update(object sender, EventArgs e)

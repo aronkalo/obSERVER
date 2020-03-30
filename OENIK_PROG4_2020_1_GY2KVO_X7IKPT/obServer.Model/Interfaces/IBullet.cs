@@ -6,6 +6,6 @@ namespace obServer.Model.Interfaces
     public interface IBullet : IBaseItem
     {
         void Fly(double deltaTime);
-        double DoDamage();
+        void DoDamage(IPlayer player);
     }
 }

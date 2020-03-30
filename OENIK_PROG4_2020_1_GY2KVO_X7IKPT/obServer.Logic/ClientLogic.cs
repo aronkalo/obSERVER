@@ -1,4 +1,5 @@
-﻿using obServer.Model.GameModel;
+﻿using obServer.Logic.Event;
+using obServer.Model.GameModel;
 using obServer.Model.GameModel.Item;
 using obServer.Model.Interfaces;
 using obServer.Network.Structs;
@@ -8,19 +9,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace obServer.Logic
 {
     public sealed class ClientLogic : BaseLogic
     {
-        public ClientLogic()
+        public ClientLogic(IobServerModel model)
         {
             gameClient = new RepoGameClient(serverPort, clientPort);
             gameClient.StartListening();
-            model = new obServerModel();
+            this.model = model;
+            MovementEvent += OnPlayerMoved;
+            MovementEvent += NetworkMoved;
         }
 
-        private obServerModel model;
+        private void NetworkMoved(object sender, MovementEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnPlayerMoved(object sender, MovementEventArgs e)
+        {
+            e.movementPlayer.Move(e.movementDirection[0], e.movementDirection[1], e.deltaTime, e.angle);
+        }
+
+        public event EventHandler<InputEventArgs> InputEvent;
+
+        public event EventHandler<MovementEventArgs> MovementEvent;
+
+        private IobServerModel model;
 
         private const int serverPort = 3200;
 
@@ -138,12 +156,6 @@ namespace obServer.Logic
             model.ConstructItem(item);
         }
 
-        public void MovePlayer(Guid id, double xMovement, double yMovement, double angle, double deltaTime)
-        {
-            var player = model.Players.Where(x => x.Id == id).First();
-            player.Move(xMovement, yMovement, deltaTime, angle);
-        }
-
         public void Shoot(Guid id)
         {
             var player = model.Players.Where(x => x.Id == id).First();
@@ -159,8 +171,29 @@ namespace obServer.Logic
             }
         }
 
-        public void FlyBullets()
+        public void FlyBullets(double deltaTime)
         {
+            var bullets = model.Bullets;
+            foreach (var bullet in bullets)
+            {
+                bullet.Fly(deltaTime);
+                var ids = model.GetCloseItems(bullet.Id);
+                foreach (var id in ids)
+                {
+                    var it = model.AllItems.Where(x => x.Id == id);
+                    if (it.Count() > 0)
+                    {
+                        var item = it.First();
+                        if (item.CollidesWith(bullet.RealPrimitive))
+                        {
+                            if (item.GetType() == typeof(Player))
+                            {
+                                bullet.DoDamage((Player)item);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void Pickup()
@@ -168,9 +201,9 @@ namespace obServer.Logic
 
         }
 
-        public void Hit()
+        public void Hit(Guid bullet, Guid player)
         {
-
+            
         }
 
         public void Die()

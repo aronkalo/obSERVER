@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="BaseLogic.cs" />
     <Compile Include="ClientLogic.cs" />
+    <Compile Include="Event\MovementEventArgs.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerLogic.cs" />

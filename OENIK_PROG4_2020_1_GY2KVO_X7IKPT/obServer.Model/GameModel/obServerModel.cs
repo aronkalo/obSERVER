@@ -31,6 +31,14 @@ namespace obServer.Model.GameModel
             }
         }
 
+        public IEnumerable<IBaseItem> AllItems
+        {
+            get
+            {
+                return Items;
+            }
+        }
+
         public IEnumerable<IPlayer> Players
         {
             get
@@ -105,6 +113,11 @@ namespace obServer.Model.GameModel
                 info.Del(item.Id);
                 itemsChanged = true;
             }
+        }
+
+        public Guid[] GetCloseItems(Guid id)
+        {
+            return info.Collision(id);
         }
         
         private IEnumerable<IStaticItem> staticCache;

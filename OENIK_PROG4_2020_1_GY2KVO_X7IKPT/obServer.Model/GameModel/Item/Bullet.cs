@@ -49,9 +49,9 @@ namespace obServer.Model.GameModel.Item
             ChangePosition(xMovement, yMovement, 0);
         }
 
-        public double DoDamage()
+        public void DoDamage(IPlayer player)
         {
-            return damage;
+            player.Damaged(damage);
         }
     }
 }

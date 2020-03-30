@@ -10,5 +10,6 @@ namespace obServer.Model.Interfaces
         void Move(double xMove, double yMove, double deltaTime, double rotation);
         IBullet[] Shoot();
         void Reload(int storedBullets);
+        void Damaged(double damage);
     }
 }
