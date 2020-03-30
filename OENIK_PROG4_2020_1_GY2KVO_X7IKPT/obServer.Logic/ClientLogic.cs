@@ -1,5 +1,4 @@
-﻿using obServer.Logic.Event;
-using obServer.Model.GameModel;
+﻿using obServer.Model.GameModel;
 using obServer.Model.GameModel.Item;
 using obServer.Model.Interfaces;
 using obServer.Network.Structs;
@@ -20,24 +19,7 @@ namespace obServer.Logic
             gameClient = new RepoGameClient(serverPort, clientPort);
             gameClient.StartListening();
             this.model = model;
-            MovementEvent += OnPlayerMoved;
-            MovementEvent += NetworkMoved;
         }
-
-        private void NetworkMoved(object sender, MovementEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnPlayerMoved(object sender, MovementEventArgs e)
-        {
-            e.movementPlayer.Move(e.movementDirection[0], e.movementDirection[1], e.deltaTime, e.angle);
-        }
-
-        public event EventHandler<InputEventArgs> InputEvent;
-
-        public event EventHandler<MovementEventArgs> MovementEvent;
-
         private IobServerModel model;
 
         private const int serverPort = 3200;
@@ -94,6 +76,21 @@ namespace obServer.Logic
                 }
                 catch (Exception) { }
             });
+        }
+
+        public void OnTactic(object sender, TacticalEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnShoot(object sender, ShootEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnMovement(object sender, MovementEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void HandleConnect(Request request)
