@@ -9,11 +9,12 @@ namespace obServer.Model.GameModel
 {
     public sealed class obServerModel :IobServerModel
     {
-        public obServerModel()
+        public obServerModel(int width, int height)
         {
             IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[2] { 20, 20 }, 0, true, 100);
             Items = new List<IBaseItem>();
             ConstructItem(player);
+            info = new MapInformation(width, height);
             myPlayer = player;
         }
 
@@ -126,6 +127,12 @@ namespace obServer.Model.GameModel
                 var bounds = item.RealPrimitive.Bounds;
                 info.Add(item.Id, (int)bounds.X, (int)bounds.Y, (int)bounds.Width, (int)bounds.Height);
                 itemsChanged = true;
+            }
+            else
+            {
+                info.Del(item.Id);
+                var bounds = item.RealPrimitive.Bounds;
+                info.Add(item.Id, (int)item.Position[0], (int)item.Position[1], (int)bounds.Width, (int)bounds.Height);
             }
         }
 

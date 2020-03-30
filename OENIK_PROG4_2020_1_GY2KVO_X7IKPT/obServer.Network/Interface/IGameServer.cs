@@ -16,5 +16,9 @@ namespace obServer.Network.Interface
         void StopListening();
 
         void ReplyHandler(Request request);
+
+        bool AllReady { get; }
+
+        void ReadyClient(string address);
     }
 }

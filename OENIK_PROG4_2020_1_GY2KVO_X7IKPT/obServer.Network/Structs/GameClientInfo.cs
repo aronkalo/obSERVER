@@ -25,5 +25,15 @@ namespace obServer.Network.Structs
 			get { return ready; }
 			set { ready = value; }
 		}
+
+		public bool SetReady(string ipAddress)
+		{
+			IPAddress adr = IPAddress.Parse(ipAddress);
+			if (adr == endpoint.Address)
+			{
+				return true;
+			}
+			return false;
+		}
 	}
 }

@@ -11,7 +11,7 @@ namespace obServer.Model.Performance
         public MapInformation(int width, int height)
         {
             map = new Guids[width, height];
-            InitMap();
+            InitMap(width, height);
         }
 
         private Guids[,] map;
@@ -94,21 +94,14 @@ namespace obServer.Model.Performance
             }
             Task.WaitAll(tasks);
         }
-        private void InitMap()
+        private void InitMap(int width, int height)
         {
-            Task.Factory.StartNew(() =>
+            Action<int, int> act = new Action<int, int>((x, y) =>
             {
-                for (int x = 0; x < map.GetLength(0); x++)
-                {
-                    Task.Factory.StartNew(() =>
-                    {
-                        for (int y = 0; y < map.GetLength(1); y++)
-                        {
-                            map[x, y] = new Guids();
-                        }
-                    });
-                }
+                map[x, y] = new Guids();
             });
+            IterateRange(Guid.NewGuid(), 0, 0, width, height, act);
         }
+
     }
 }

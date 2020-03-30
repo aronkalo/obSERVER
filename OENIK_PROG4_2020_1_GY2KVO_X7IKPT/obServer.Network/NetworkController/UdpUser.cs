@@ -48,10 +48,7 @@ namespace obServer.Network.NetworkController
             }
             Client.Close();
             Client.Dispose();
-            string[] zones = ServerResponse.Split(':');
-            ClientPort = clientPort;
-            return new IPEndPoint(IPAddress.Parse(zones[2].Split(';')[0]),
-                int.Parse(zones[2].Split(';')[1]));
+            return ServerEp;
         }
     }
 }

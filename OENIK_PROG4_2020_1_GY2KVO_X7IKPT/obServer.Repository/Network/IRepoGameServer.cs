@@ -16,5 +16,9 @@ namespace obServer.Repository.Network
         void StopListening();
 
         void ReplyHandler(Request request);
+
+        bool AllReady { get; }
+
+        void ReadyClient(string address);
     }
 }

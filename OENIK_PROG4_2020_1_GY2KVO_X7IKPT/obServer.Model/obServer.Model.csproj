@@ -49,6 +49,8 @@
     <Compile Include="GameModel\Item\StaticItem.cs" />
     <Compile Include="GameModel\Item\Weapon.cs" />
     <Compile Include="GameModel\obServerModel.cs" />
+    <Compile Include="GameModel\ServerData.cs" />
+    <Compile Include="GameModel\ServerSide\ServerItem.cs" />
     <Compile Include="Interfaces\IBaseItem.cs" />
     <Compile Include="Interfaces\IBullet.cs" />
     <Compile Include="Interfaces\IobServerModel.cs" />

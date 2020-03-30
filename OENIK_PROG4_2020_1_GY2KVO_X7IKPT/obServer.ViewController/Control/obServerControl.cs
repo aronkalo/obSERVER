@@ -20,7 +20,7 @@ namespace obServer.ViewController.Control
         public obServerControl()
         {
             Loaded += Window_Loaded;
-            om = new obServerModel();
+            om = new obServerModel(1000,1000);
             cl = new ClientLogic(om);
             or = new obServerRenderer(om);
         }
@@ -114,7 +114,6 @@ namespace obServer.ViewController.Control
         {
             if (sl != null)
             {
-
             }
         }
     }

@@ -18,6 +18,20 @@ namespace obServer.Network.NetworkElements
         private bool ActiveSession { get; set; }
 
         private List<GameClientInfo> Clients { get; set; }
+
+        public void ReadyClient(string ipAddress)
+        {
+            Clients.ForEach(x => x.SetReady(ipAddress)); 
+        }
+
+        public bool AllReady
+        {
+            get
+            {
+                return Clients.All(x => x.Ready);
+            }
+        }
+
         public void StartListening()
         {
             if (this.Listener == null)
@@ -52,45 +66,6 @@ namespace obServer.Network.NetworkElements
                 });
             }
         }
-
-        //private void HandleRequests()
-        //{
-        //    Task.Factory.StartNew(() =>
-        //    {
-        //        while (ActiveSession)
-        //        {
-        //            if (RequestPool.NotNullElement())
-        //            {
-        //                Request oldestRequest = RequestPool.GetRequest();
-        //                var replys = serverLogic.HandleRequest(oldestRequest);
-        //                foreach (var reply in replys)
-        //                {
-        //                    Task t = new Task(() => ReplyHandler(reply));
-        //                    t.Start();
-        //                }
-        //            }
-        //        }
-        //    });
-        //}
-
-        //public void HandleBullets(double deltaTime)
-        //{
-        //    Request[] rs = serverLogic.GetBulletHits(deltaTime);
-        //    SendRange(rs);
-        //}
-
-        ////public void FixObject(Guid id)
-        ////{
-        ////    Request r = serverLogic.PlaceObject();
-        ////    Task.Factory.StartNew(() => ReplyHandler(r));
-        ////}
-        //private void SendRange(Request[] requests)
-        //{
-        //    foreach (var request in requests)
-        //    {
-        //        Task.Factory.StartNew(() => ReplyHandler(request));
-        //    }
-        //}
 
         private void Reply(Request request)
         {
