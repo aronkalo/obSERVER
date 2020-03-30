@@ -20,6 +20,9 @@ namespace obServer.Logic
             gameClient.StartListening();
             this.model = model;
         }
+
+        public EventHandler UpdateUI;
+
         private IobServerModel model;
 
         private const int serverPort = 3200;
@@ -78,19 +81,67 @@ namespace obServer.Logic
             });
         }
 
-        public void OnTactic(object sender, TacticalEventArgs e)
+        public void OnPickup(object sender, PlayerInputEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.Pickup)
+            {
+                var close = model.GetCloseItems(e.Player.Id);
+                var pickWeapon = model.Weapons.Where(x => close.Contains(x.Id));
+                if (pickWeapon.Count() > 0)
+                {
+                    e.Player.ChangeWeapon(pickWeapon.First());
+                }
+            }
         }
 
-        public void OnShoot(object sender, ShootEventArgs e)
+        public void OnReload(object sender, PlayerInputEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.Reload)
+            {
+                if (e.Player.CurrentWeapon != null)
+                {
+                    e.Player.Reload();
+                }
+            }
         }
 
-        public void OnMovement(object sender, MovementEventArgs e)
+        public void OnMove(object sender, PlayerInputEventArgs e)
         {
-            throw new NotImplementedException();
+            e.Player.Move(e.Movement[0], e.Movement[1], e.deltaTime, e.Angle);
+        }
+
+        public void OnShoot(object sender, PlayerInputEventArgs e)
+        {
+            var bullets = e.Player.Shoot();
+            foreach (var bullet in bullets)
+            {
+                model.ConstructItem(bullet);
+            }
+        }
+
+        public void FlyBullets(double deltaTime)
+        {
+            var bullets = model.Bullets;
+            foreach (var bullet in bullets)
+            {
+                bullet.Fly(deltaTime);
+                var ids = model.GetCloseItems(bullet.Id);
+                foreach (var id in ids)
+                {
+                    var it = model.AllItems.Where(x => x.Id == id);
+                    if (it.Count() > 0)
+                    {
+                        var item = it.First();
+                        if (item.CollidesWith(bullet.RealPrimitive))
+                        {
+                            if (item.GetType() == typeof(Player))
+                            {
+                                bullet.DoDamage((Player)item);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         protected override void HandleConnect(Request request)
@@ -152,373 +203,5 @@ namespace obServer.Logic
         {
             model.ConstructItem(item);
         }
-
-        public void Shoot(Guid id)
-        {
-            var player = model.Players.Where(x => x.Id == id).First();
-            IBullet[] bullets = player.Shoot();
-            if (bullets.Length > 0)
-            {
-                IWeapon weapon = player.CurrentWeapon;
-                foreach (var bullet in bullets)
-                {
-                    gameClient.Send(Operation.Shoot, "");
-                    model.ConstructItem(bullet);
-                }
-            }
-        }
-
-        public void FlyBullets(double deltaTime)
-        {
-            var bullets = model.Bullets;
-            foreach (var bullet in bullets)
-            {
-                bullet.Fly(deltaTime);
-                var ids = model.GetCloseItems(bullet.Id);
-                foreach (var id in ids)
-                {
-                    var it = model.AllItems.Where(x => x.Id == id);
-                    if (it.Count() > 0)
-                    {
-                        var item = it.First();
-                        if (item.CollidesWith(bullet.RealPrimitive))
-                        {
-                            if (item.GetType() == typeof(Player))
-                            {
-                                bullet.DoDamage((Player)item);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public void Pickup()
-        {
-
-        }
-
-        public void Hit(Guid bullet, Guid player)
-        {
-            
-        }
-
-        public void Die()
-        {
-
-        }
-
-        public void Reload()
-        {
-
-        }
-
-        //public Request DoAddPlayer()
-        //{
-        //    Guid PlayerId = Guid.NewGuid();
-        //    Player p = new Player(PlayerId, Physics.PlayerPhysics, 20, 20);
-        //    MapInfo.AddObject(p);
-        //    Player = p;
-        //    return new Request()
-        //    {
-        //        Broadcast = true,
-        //        Operation = UDPNetworking.GameOperation.SendObject,
-        //        Parameters = $"{Player.Identity};{Player.Position.X};{Player.Position.Y};{Player.Width};{Player.Height};{Player.Angle}",
-        //    };
-        //}
-
-        //public double[] GetPlayerParameters()
-        //{
-        //    return new double[]
-        //    {
-        //        Player.Width,
-        //        Player.Height,
-        //        Player.Position.X,
-        //        Player.Position.Y,
-        //        Player.Angle,
-        //        Player.Physics.MovementSpeed,
-        //    };
-        //}
-
-        //public void RotatePlayer(double angle)
-        //{
-        //    Player.Rotate(angle);
-        //}
-
-        //private void AddElement(BaseObject obj)
-        //{
-        //    MapInfo.AddObject(obj);
-        //}
-
-        //private void SetObjectPositon(Guid id, double x , double y, double angle = 0 )
-        //{
-        //    MapInfo.UpdateObject(id, x, y, angle);
-        //}
-
-        //public IEnumerable<Tuple<Guid, double[], GameObjectType>> GetUpdatedVisuals()
-        //{
-        //    return MapInfo.SelectUpdatedVisuals();
-        //}
-
-        //public IEnumerable<Tuple<Guid, double[], GameObjectType>> GetDeletedVisuals()
-        //{
-        //    return MapInfo.DeletedVisuals();
-        //}
-        //public void LoadMap()
-        //{
-        //    foreach (var wall in SimpleMap.Walls)
-        //    {
-        //        MapInfo.AddObject(wall);
-        //    }
-        //    foreach (var weapon in SimpleMap.Weapons)
-        //    {
-        //        MapInfo.AddObject(weapon);
-        //    }
-        //}
-
-        
-        //internal Request[] DoShootWeapon()
-        //{
-        //    if (Player.CurrentWeapon != null)
-        //    {
-        //        return DoShoot(Player.CurrentWeapon.Identity);
-        //    }
-        //    else
-        //    {
-        //        return new Request[0];
-        //    }
-        //}
-
-        //private void HandlePickup(Request response)
-        //{
-        //    string parameters = response.Parameters;
-        //    string[] prefixes = parameters.Split(';');
-        //    Guid id = Guid.Parse(prefixes[0]);
-        //    Guid weapon = Guid.Parse(prefixes[1]);
-        //    bool reply = Convert.ToBoolean(int.Parse(response.Reply));
-        //    if (reply)
-        //    {
-        //        Weapon newWeapon = (Weapon)MapInfo.Objects.Values.Where(x => x.Identity == weapon).First();
-        //        Player.ChangeWeapon(newWeapon);
-        //    }
-        //}
-
-        //private void HandleHit(Request response)
-        //{
-        //    string parameters = response.Parameters;
-        //    string[] prefixes = parameters.Split(';');
-        //    Guid id = Guid.Parse(prefixes[0]);
-        //    Guid bullet = Guid.Parse(prefixes[1]);
-        //    int damage = int.Parse(prefixes[2]);
-        //    if (MapInfo.Objects.Values.Where(x => x.Identity == id).Count() == 1 && MapInfo.Objects.Values.Where(x => x.Identity == bullet).Count() == 1)
-        //    {
-        //        BaseObject obj = MapInfo.Objects.Values.Where(x => x.Identity == id).FirstOrDefault();
-        //        Bullet bulletObj = (Bullet)MapInfo.Objects.Values.Where(x => x.Identity == bullet).FirstOrDefault();
-        //        bulletObj.DoDamage((Player)obj);
-        //        MapInfo.RemoveObject(bullet);
-        //    }
-        //}
-
-        //private void HandleDie(Request response)
-        //{
-        //    string parameters = response.Parameters;
-        //    string[] prefixes = parameters.Split(';');
-        //    Guid id = Guid.Parse(prefixes[0]);
-        //    Guid bullet = Guid.Parse(prefixes[1]);
-        //    int damage = int.Parse(prefixes[2]);
-        //    if (MapInfo.Objects.Values.Where(x => x.Identity == id).Count() == 1 && MapInfo.Objects.Values.Where(x => x.Identity == bullet).Count() == 1)
-        //    {
-        //        MapInfo.RemoveObject(id);
-        //        MapInfo.RemoveObject(bullet);
-        //    }
-        //}
-
-        //private void HandleRemove(Request response)
-        //{
-        //    string parameters = response.Parameters;
-        //    string[] prefixes = parameters.Split(';');
-        //    Guid id = Guid.Parse(prefixes[0]);
-        //    MapInfo.RemoveObject(id);
-        //}
-
-        //private void HandlePlaceObject(Request response)
-        //{
-        //    string parameters = response.Parameters;
-        //    string[] prefixes = parameters.Split(';');
-        //    Guid id = Guid.Parse(prefixes[0]);
-        //    double xPos = double.Parse(prefixes[1]);
-        //    double yPos = double.Parse(prefixes[2]);
-        //    int width = int.Parse(prefixes[3]);
-        //    int height = int.Parse(prefixes[4]);
-        //    int angle = int.Parse(prefixes[5]);
-
-        //}
-
-        //private void HandleMove(Request oldestRequest)
-        //{
-        //    string parameters = oldestRequest.Parameters;
-        //    string[] prefixes = parameters.Split(';');
-        //    Guid id = Guid.Parse(prefixes[0]);
-        //    double x = double.Parse(prefixes[1]);
-        //    double y = double.Parse(prefixes[2]);
-        //    double angle = double.Parse(prefixes[3]);
-        //    bool reply = Convert.ToBoolean(int.Parse(oldestRequest.Reply));
-        //    if (reply)
-        //    {
-        //        SetObjectPositon(id, x, y, angle);   
-        //    }
-        //}
-
-        //private void HandleShoot(Request oldestRequest)
-        //{
-        //    string parameters = oldestRequest.Parameters;
-        //    string[] prefixes = parameters.Split(';');
-        //    Guid id = Guid.Parse(prefixes[0]);
-        //    Guid bulletID = Guid.Parse(prefixes[1]);
-        //    int Damage = int.Parse(prefixes[2]);
-        //    bool reply = Convert.ToBoolean(int.Parse(oldestRequest.Reply));
-        //    if (!reply)
-        //    {
-        //        MapInfo.RemoveObject(bulletID);
-        //    }
-        //}
-
-        //private void HandleSendMessage(Request oldestRequest)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //private void HandleServerCheck(Request oldestRequest)
-        //{
-        //    if (oldestRequest.Reply == "0")
-        //    {
-        //        Online = false;
-        //        Queue = true;
-        //    }
-        //    else
-        //    {
-        //        Online = true;
-        //        Queue = false;
-        //    }
-        //}
-
-        //private void HandleDisconnect(Request oldestRequest)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private void HandleConnect(Request oldestRequest)
-        //{
-        //    Server.EndPoint.Address = IPAddress.Parse(oldestRequest.Reply.Split(';')[0]);
-        //    Server.EndPoint.Port = int.Parse(oldestRequest.Reply.Split(';')[1]);
-        //}
-
-        //public Request[] DoMovePlayer(double x, double y, double angle)
-        //{
-        //    List<Request> r = new List<Request>();
-        //    BaseObject[] colliders = MapInfo.CollidesWithAny(Player.Identity);
-        //    bool collide = false;
-        //    foreach (BaseObject collider in colliders)
-        //    {
-        //        VisualObject player = MapInfo.Visuals.Where(z => z.Identity == Player.Identity).FirstOrDefault();
-        //        VisualObject other = MapInfo.Visuals.Where(z => z.Identity == collider.Identity).FirstOrDefault();
-        //        if (CollidesWith(player.Primitive.RenderedGeometry, other.Primitive.RenderedGeometry, Player.Position, collider.Position))
-        //        {
-        //            if (collider.GetType() == typeof(Bullet))
-        //            {
-        //                r.Add(DoHit(Player.Identity, collider.Identity));
-        //                break;
-        //            }
-        //            else
-        //            {
-        //                collide = true;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    if (!collide)
-        //    {
-        //        r.Add(DoMove(Player.Identity, x, y, angle));
-        //        return r.ToArray();
-        //    }
-        //    else
-        //    {
-        //        return new Request[0];
-        //    }
-        //}
-        //private Request DoHit(Guid player, Guid bullet)
-        //{
-        //    return new Request();
-        //}
-
-        //private Request DoMove(Guid id, double x, double y, double angle = 0)
-        //{
-        //    SetObjectPositon(id, x, y, angle);
-        //    return new Request()
-        //    {
-        //        Operation = UDPNetworking.GameOperation.Move,
-        //        Parameters = $"{id};{x};{y};{angle}",
-        //    };
-        //}
-
-        //private Request[] DoShoot(Guid weapon)
-        //{
-        //    List<Request> r = new List<Request>();
-        //    if (Player.CurrentWeapon.Identity == weapon)
-        //    {
-        //        Guid id = Player.Identity;
-        //        Bullet[] bullets =  Player.CurrentWeapon.DoShoot();
-
-        //        foreach (var bullet in bullets)
-        //        {
-        //            r.Add(new Request()
-        //            {
-        //                Operation = UDPNetworking.GameOperation.Shoot,
-        //                Parameters = $"{id};{weapon};{bullet.Identity};{bullet.Position.X};{bullet.Position.Y};{bullet.Angle}",
-        //            });
-        //            MapInfo.AddObject(bullet);
-        //        }
-        //        return r.ToArray();
-        //    }
-        //    throw new Exception("The player don't have weapon");
-        //}
-
-        //private Request DoPickup(Guid weapon)
-        //{
-        //    Guid id = Player.Identity;
-        //    return new Request()
-        //    {
-        //        Operation = UDPNetworking.GameOperation.Pickup,
-        //        Parameters = $"{id};{weapon}",
-        //    };
-        //}
-
-        //private bool CollidesWith(Geometry firstObject, Geometry secondObject, Vector firstPosition, Vector secondPosition)
-        //{
-        //    var transform = new TranslateTransform(firstPosition.X, firstPosition.Y);
-        //    var baseGeometry = Geometry.Combine(firstObject, firstObject, GeometryCombineMode.Union, transform);
-        //    transform = new TranslateTransform(secondPosition.X, secondPosition.Y);
-        //    var shapeGeometry = Geometry.Combine(secondObject, secondObject, GeometryCombineMode.Union, transform);
-        //    var detail = baseGeometry.FillContainsWithDetail(shapeGeometry, 0, ToleranceType.Absolute);
-        //    if (detail == IntersectionDetail.Intersects || detail == IntersectionDetail.FullyContains)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        //public void BulletFly(double deltaTime)
-        //{
-        //    var bullets = MapInfo.Bullets;
-        //    if (bullets != null)
-        //    {
-        //        foreach (var bullet in bullets)
-        //        {
-        //            bullet.FlyForward(deltaTime);
-        //        }
-        //    }
-        //}
     }
 }

@@ -8,6 +8,7 @@ namespace obServer.Model.Interfaces
 {
     public interface IobServerModel
     {
+        IPlayer MyPlayer { get;  }
         IEnumerable<IBaseItem> AllItems { get; }
         IEnumerable<IBullet> Bullets { get; }
 
@@ -15,10 +16,11 @@ namespace obServer.Model.Interfaces
 
         IEnumerable<IBaseItem> Colliders { get; }
         IEnumerable<IStaticItem> Statics { get; }
+        IEnumerable<IWeapon> Weapons { get; }
 
         void ConstructItem(IBaseItem item);
 
         void DestructItem(Guid id);
-        Guid[] GetCloseItems(Guid id);
+        IEnumerable<Guid> GetCloseItems(Guid id);
     }
 }

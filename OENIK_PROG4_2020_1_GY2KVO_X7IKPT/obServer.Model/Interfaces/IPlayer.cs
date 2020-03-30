@@ -9,7 +9,8 @@ namespace obServer.Model.Interfaces
         void ChangeWeapon(IWeapon newWeapon);
         void Move(double xMove, double yMove, double deltaTime, double rotation);
         IBullet[] Shoot();
-        void Reload(int storedBullets);
+        void Reload();
+        void PickBullet(int bullets);
         void Damaged(double damage);
     }
 }

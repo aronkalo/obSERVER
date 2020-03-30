@@ -41,7 +41,7 @@ namespace obServer.Model.Performance
             }
         }
 
-        public Guid[] Collision(Guid id)
+        public IEnumerable<Guid> Collision(Guid id)
         {
             var elements = ContainedElements.Where(x => x.Key == id);
             if (elements.Count() == 1)
@@ -54,13 +54,9 @@ namespace obServer.Model.Performance
                 });
                 IterateRange(id, dim[0], dim[1], dim[2], dim[3], act);
                 var dist = colliders.Distinct().Where(x => x != id);
-                if (dist.Count()> 0) 
-                {
-                    return dist.ToArray();
-                }
-                return new Guid[0];
+                return dist;
             }
-            return new Guid[0];
+            throw new Exception("not contained id");
         }
 
         private void AddRange(Guid id, int xStart, int yStart, int width, int heigth)

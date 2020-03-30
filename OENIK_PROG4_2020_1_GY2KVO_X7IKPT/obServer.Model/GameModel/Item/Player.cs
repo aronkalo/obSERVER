@@ -24,6 +24,7 @@ namespace obServer.Model.GameModel.Item
         public IWeapon CurrentWeapon { get; private set; }
 
         private double health;
+        private int storedBullets;
 
         public void ChangeWeapon(IWeapon newWeapon)
         {
@@ -39,13 +40,19 @@ namespace obServer.Model.GameModel.Item
             }
         }
 
+        public void PickBullet(int bullets)
+        {
+            storedBullets += bullets;
+        }
+
         public IBullet[] Shoot()
         {
             return CurrentWeapon.DoShoot();
         }
 
-        public void Reload(int storedBullets)
+        public void Reload()
         {
+
             CurrentWeapon.DoReload(storedBullets);
         }
 

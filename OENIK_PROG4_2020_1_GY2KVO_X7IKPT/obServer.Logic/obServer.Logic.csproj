@@ -44,14 +44,12 @@
   <ItemGroup>
     <Compile Include="BaseLogic.cs" />
     <Compile Include="ClientLogic.cs" />
-    <Compile Include="MovementEventArgs.cs" />
+    <Compile Include="PlayerInputEventArgs.cs" />
     <Compile Include="Physics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerLogic.cs" />
-    <Compile Include="ShootEventArgs.cs" />
     <Compile Include="Structs\Operation.cs" />
     <Compile Include="Structs\Request.cs" />
-    <Compile Include="TacticalEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\obServer.Model\obServer.Model.csproj">

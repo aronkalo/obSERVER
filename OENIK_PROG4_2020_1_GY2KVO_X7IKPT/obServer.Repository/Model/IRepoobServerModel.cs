@@ -1,4 +1,5 @@
-﻿using System;
+﻿using obServer.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,14 +9,14 @@ namespace obServer.Repository.Model
 {
     public interface IRepoobServerModel
     {
-        IEnumerable<IRepoBullet> Bullets { get; }
+        IEnumerable<IBullet> Bullets { get; }
 
-        IEnumerable<IRepoPlayer> Players { get; }
+        IEnumerable<IPlayer> Players { get; }
 
-        IEnumerable<IRepoBaseItem> Colliders { get; }
-        IEnumerable<IRepoStaticItem> Statics { get; }
+        IEnumerable<IBaseItem> Colliders { get; }
+        IEnumerable<IStaticItem> Statics { get; }
 
-        void ConstructItem(IRepoBaseItem item);
+        void ConstructItem(IBaseItem item);
 
         void DestructItem(Guid id);
     }

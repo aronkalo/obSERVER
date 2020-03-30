@@ -1,6 +1,7 @@
 ﻿using obServer.Logic;
 using obServer.Model.GameModel;
 using obServer.Model.Interfaces;
+using obServer.ViewController.Render;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,16 +22,16 @@ namespace obServer.ViewController.Control
             Loaded += Window_Loaded;
             om = new obServerModel();
             cl = new ClientLogic(om);
+            or = new obServerRenderer(om);
         }
         private DispatcherTimer dt;
         private ClientLogic cl;
+        private ServerLogic sl;
+        private obServerRenderer or;
         private IobServerModel om;
         private Stopwatch sw;
-        private event EventHandler<MovementEventArgs> Movement;
-        private event EventHandler<ShootEventArgs> Shoot;
-        private event EventHandler<TacticalEventArgs> Tactic;
-        private static MovementEventArgs movementArgs;
-        private static ShootEventArgs shootArgs;
+        private event EventHandler<PlayerInputEventArgs> PlayerInput;
+        private static PlayerInputEventArgs playerArgs;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -43,24 +44,27 @@ namespace obServer.ViewController.Control
                 dt.Tick += Update;
                 win.KeyDown += KeyHit;
                 win.MouseMove += MouseMovement;
-                win.MouseLeftButtonDown += MouseClick;
-                movementArgs = new MovementEventArgs();
-                Movement += cl.OnMovement;
-                Shoot += cl.OnShoot;
-                Tactic += cl.OnTactic;
+                win.MouseLeftButtonDown += LeftMouseClick;
+                playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
+                PlayerInput += cl.OnShoot;
+                PlayerInput += cl.OnMove;
+                PlayerInput += cl.OnReload;
+                PlayerInput += cl.OnPickup;
+                cl.UpdateUI += (obj, args) => InvalidateVisual();
+                InvalidateVisual();
             }
         }
 
-        private void MouseClick(object sender, MouseButtonEventArgs e)
+        private void LeftMouseClick(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            playerArgs.Shoot = true;
         }
 
         private void MouseMovement(object sender, MouseEventArgs e)
         {
             Point mp = e.GetPosition(this);
             double angle = Vector.AngleBetween(new Vector(0, -1), new Vector(mp.X - this.ActualWidth, mp.Y - this.ActualHeight));
-            movementArgs.Angle = angle;
+            playerArgs.Angle = angle;
         }
 
         private void KeyHit(object sender, KeyEventArgs e)
@@ -68,34 +72,50 @@ namespace obServer.ViewController.Control
             switch (e.Key)
             {
                 case Key.W:
-                    movementArgs.Movement[0] = 1;
+                    playerArgs.Movement[0] = 1;
                     break;
                 case Key.S:
-                    movementArgs.Movement[0] = -1;
+                    playerArgs.Movement[0] = -1;
                     break;
                 case Key.A:
-                    movementArgs.Movement[1] = -1;
+                    playerArgs.Movement[1] = -1;
                     break;
                 case Key.D:
-                    movementArgs.Movement[1] = 1;
+                    playerArgs.Movement[1] = 1;
                     break;
                 case Key.R:
+                    playerArgs.Reload = true;
                     break;
                 case Key.F:
+                    playerArgs.Pickup = true;
                     break;
             }
         }
 
         private void Update(object sender, EventArgs e)
         {
-            
+            double deltaTime = sw.Elapsed.TotalSeconds; sw.Restart();
+            ServerUpdate(deltaTime);
+            playerArgs.deltaTime = deltaTime;
+            PlayerInput?.Invoke(this, playerArgs);
+            playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
+            cl.FlyBullets(deltaTime);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            double deltaTime = sw.Elapsed.TotalSeconds;
-
+            if (or != null)
+            {
+                or.DrawElements(drawingContext);
+            }
         }
 
+        private void ServerUpdate(double deltaTime)
+        {
+            if (sl != null)
+            {
+
+            }
+        }
     }
 }

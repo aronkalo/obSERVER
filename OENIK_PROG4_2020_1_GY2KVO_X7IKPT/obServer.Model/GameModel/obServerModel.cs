@@ -11,8 +11,13 @@ namespace obServer.Model.GameModel
     {
         public obServerModel()
         {
+            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[2] { 20, 20 }, 0, true, 100);
             Items = new List<IBaseItem>();
+            ConstructItem(player);
+            myPlayer = player;
         }
+
+        private IPlayer myPlayer;
 
         private List<IBaseItem> Items;
 
@@ -27,7 +32,16 @@ namespace obServer.Model.GameModel
                 playerChanged = value;
                 colliderChanged = value;
                 bulletChanged = value;
+                weaponChanged = value;
                 itemsChanged = value;
+            }
+        }
+
+        public IPlayer MyPlayer
+        {
+            get
+            {
+                return myPlayer;
             }
         }
 
@@ -58,7 +72,7 @@ namespace obServer.Model.GameModel
             {
                 if (bulletChanged)
                 {
-                    bulletCache = (IEnumerable<IBullet>)Items.Where(x => x.GetType() == typeof(Player));
+                    bulletCache = (IEnumerable<IBullet>)Items.Where(x => x.GetType() == typeof(Bullet));
                     bulletChanged = false;
                 }
                 return bulletCache;
@@ -91,6 +105,19 @@ namespace obServer.Model.GameModel
             }
         }
 
+        public IEnumerable<IWeapon> Weapons
+        {
+            get
+            {
+                if (weaponChanged)
+                {
+                    weaponCache = (IEnumerable<IWeapon>)Items.Where(x => x.GetType() == typeof(Weapon));
+                    weaponChanged = false;
+                }
+                return weaponCache;
+            }
+        }
+
         public void ConstructItem(IBaseItem item)
         {
             if (!Items.Contains(item))
@@ -115,7 +142,7 @@ namespace obServer.Model.GameModel
             }
         }
 
-        public Guid[] GetCloseItems(Guid id)
+        public IEnumerable<Guid> GetCloseItems(Guid id)
         {
             return info.Collision(id);
         }
@@ -135,5 +162,7 @@ namespace obServer.Model.GameModel
         private IEnumerable<IPlayer> playerCache;
 
         private bool playerChanged;
+        private bool weaponChanged;
+        private IEnumerable<IWeapon> weaponCache;
     }
 }
