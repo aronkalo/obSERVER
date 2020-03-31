@@ -4,37 +4,53 @@ using System.Collections.Generic;
 using System.Linq;
 using obServer.Model.Performance;
 using obServer.Model.Interfaces;
+using System.Xml.Linq;
+using System.Windows.Media;
 
 namespace obServer.Model.GameModel
 {
     public sealed class obServerModel :IobServerModel
     {
+        public Geometry StaticGeometry(double width, double height)
+        {
+            return new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) };
+        }
+
+
         public obServerModel(int width, int height)
         {
             IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[2] { 20, 20 }, 0, true, 100);
             Items = new List<IBaseItem>();
-            ConstructItem(player);
             info = new MapInformation(width, height);
+            ConstructItem(player);
+            map = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { 0, 0}, 0, new double[] { width, height}, false, "Map");
             myPlayer = player;
+            LoadItems(width, height);
         }
 
         private IPlayer myPlayer;
 
         private List<IBaseItem> Items;
 
+        private IStaticItem map;
+
         private MapInformation info;
 
-        private bool itemsChanged
+        private bool itemsChanged;
+        private void ItemsChanged()
         {
-            get { return itemsChanged; }
-            set
+            staticChanged = true;
+            playerChanged = true;
+            colliderChanged = true;
+            bulletChanged = true;
+            weaponChanged = true;
+            itemsChanged = true;
+        }
+        public  IStaticItem Map
+        {
+            get
             {
-                staticChanged = value;
-                playerChanged = value;
-                colliderChanged = value;
-                bulletChanged = value;
-                weaponChanged = value;
-                itemsChanged = value;
+                return map;
             }
         }
 
@@ -54,26 +70,26 @@ namespace obServer.Model.GameModel
             }
         }
 
-        public IEnumerable<IPlayer> Players
+        public IEnumerable<IBaseItem> Players
         {
             get
             {
                 if (playerChanged)
                 {
-                    playerCache = (IEnumerable<IPlayer>)Items.Where(x => x.GetType() == typeof(Player));
+                    playerCache = Items.Where(x => x.GetType() == typeof(Player));
                     playerChanged = false;
                 }
                 return playerCache;
             }
         }
 
-        public IEnumerable<IBullet> Bullets
+        public IEnumerable<IBaseItem> Bullets
         {
             get
             {
                 if (bulletChanged)
                 {
-                    bulletCache = (IEnumerable<IBullet>)Items.Where(x => x.GetType() == typeof(Bullet));
+                    bulletCache = Items.Where(x => x.GetType() == typeof(Bullet));
                     bulletChanged = false;
                 }
                 return bulletCache;
@@ -93,26 +109,26 @@ namespace obServer.Model.GameModel
             }
         }
 
-        public IEnumerable<IStaticItem> Statics
+        public IEnumerable<IBaseItem> Statics
         {
             get
             {
                 if (staticChanged)
                 {
-                    staticCache = (IEnumerable<IStaticItem>)Items.Where(x => x.GetType() == typeof(StaticItem));
+                    staticCache = Items.Where(x => x.GetType() == typeof(StaticItem));
                     staticChanged = false;
                 }
                 return staticCache;
             }
         }
 
-        public IEnumerable<IWeapon> Weapons
+        public IEnumerable<IBaseItem> Weapons
         {
             get
             {
                 if (weaponChanged)
                 {
-                    weaponCache = (IEnumerable<IWeapon>)Items.Where(x => x.GetType() == typeof(Weapon));
+                    weaponCache = Items.Where(x => x.GetType() == typeof(Weapon));
                     weaponChanged = false;
                 }
                 return weaponCache;
@@ -125,8 +141,12 @@ namespace obServer.Model.GameModel
             {
                 Items.Add(item);
                 var bounds = item.RealPrimitive.Bounds;
-                info.Add(item.Id, (int)bounds.X, (int)bounds.Y, (int)bounds.Width, (int)bounds.Height);
-                itemsChanged = true;
+                int width = (int)bounds.Width;
+                int height = (int)bounds.Height;
+                int x = (int)bounds.X + width;
+                int y = (int)bounds.Y + height;
+                info.Add(item.Id, x, y, width, height);
+                ItemsChanged();
             }
             else
             {
@@ -155,7 +175,7 @@ namespace obServer.Model.GameModel
                 Items.Remove(item);
                 item = null;
                 info.Del(item.Id);
-                itemsChanged = true;
+                ItemsChanged();
             }
         }
 
@@ -164,7 +184,7 @@ namespace obServer.Model.GameModel
             return info.Collision(id);
         }
         
-        private IEnumerable<IStaticItem> staticCache;
+        private IEnumerable<IBaseItem> staticCache;
 
         private bool staticChanged;
 
@@ -172,14 +192,43 @@ namespace obServer.Model.GameModel
 
         private bool colliderChanged;
 
-        private IEnumerable<IBullet> bulletCache;
+        private IEnumerable<IBaseItem> bulletCache;
 
         private bool bulletChanged;
 
-        private IEnumerable<IPlayer> playerCache;
+        private IEnumerable<IBaseItem> playerCache;
 
         private bool playerChanged;
         private bool weaponChanged;
-        private IEnumerable<IWeapon> weaponCache;
+        private IEnumerable<IBaseItem> weaponCache;
+
+        private void LoadItems(int xMax, int yMax)
+        {
+            Random r = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                double dim = r.Next(50, 100);
+                double xPos = r.Next(0, xMax - 2000);
+                double yPos = r.Next(0, yMax - 2000);
+                IBaseItem item = new StaticItem(StaticGeometry(dim,dim), Guid.NewGuid(), new double[] { xPos, yPos }, 0, new double[] { dim, dim }, true, "Crate");
+                ConstructItem(item);
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                double dim = r.Next(70, 120);
+                double xPos = r.Next(0, xMax - 2000);
+                double yPos = r.Next(0, yMax - 2000);
+                IBaseItem item = new StaticItem(StaticGeometry(dim, dim), Guid.NewGuid(), new double[] { xPos, yPos }, 0, new double[] { dim, dim }, true, "Wall");
+                ConstructItem(item);
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                double dim = r.Next(100, 200);
+                double xPos = r.Next(0, xMax - 2000);
+                double yPos = r.Next(0, yMax - 2000);
+                IBaseItem item = new StaticItem(StaticGeometry(dim, dim), Guid.NewGuid(), new double[] { xPos, yPos }, 0, new double[] { dim, dim }, true, "Bush");
+                ConstructItem(item);
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace obServer.Network.Interface
 {
-    public interface IGameServer
+    public interface IGameServer : IGameBase
     {
         void StartListening();
 
@@ -20,5 +20,9 @@ namespace obServer.Network.Interface
         bool AllReady { get; }
 
         void ReadyClient(string address);
+
+        EventHandler<IReceivedEventArgs> Receive { get; set; }
+
+
     }
 }

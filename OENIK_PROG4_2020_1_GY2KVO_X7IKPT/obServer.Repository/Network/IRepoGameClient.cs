@@ -1,4 +1,5 @@
-﻿using obServer.Network.Structs;
+﻿using obServer.Network.Interface;
+using obServer.Network.Structs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace obServer.Repository.Network
         void StartListening();
 
         Request GetResponse();
+
+        EventHandler<IReceivedEventArgs> ReceiveRequest { get; set; }
     }
 }

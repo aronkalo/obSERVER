@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using obServer.Network.Interface;
 using obServer.Network.NetworkController;
 using obServer.Network.Structs;
@@ -16,6 +17,8 @@ namespace obServer.Network.NetworkElements
         private bool ActiveSession { get; set; }
         private RequestPool ResponsePool { get; set; }
         private UdpUser Network { get; set; }
+        public EventHandler<IReceivedEventArgs> Receive { get; set; }
+
 
         public void Send(Operation operation, string parameters)
         {
@@ -31,7 +34,7 @@ namespace obServer.Network.NetworkElements
                     while (ActiveSession)
                     {
                         var received = await Network.Receive();
-                        ResponsePool.AddPoolElement(received);
+                        Receive?.Invoke(this, new ReceivedEventArgs() { ReceivedRequest = received });
                     }
                 });
         }

@@ -8,11 +8,11 @@ namespace obServer.Model.GameModel.Item
 	{
 		public BaseItem(Geometry geometry, Guid id, double[] position, double rotation, bool impact)
 		{
+			primitve = geometry;
 			Id = id;
 			Position = new double[2];
 			SetPosition(position[0], position[1]);
 			Rotation = rotation;
-			primitve = geometry;
 			Impact = impact;
 			changed = true;
 		}
@@ -61,6 +61,11 @@ namespace obServer.Model.GameModel.Item
 		private Geometry cache;
 
 		private bool changed;
+
+		public void SetGeometry(Geometry geom)
+		{
+			primitve = geom;
+		}
 
 		public Geometry RealPrimitive
 		{

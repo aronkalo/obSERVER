@@ -1,4 +1,5 @@
-﻿using obServer.Network.Structs;
+﻿using obServer.Network.Interface;
+using obServer.Network.Structs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,7 @@ namespace obServer.Repository.Network
         bool AllReady { get; }
 
         void ReadyClient(string address);
+
+        EventHandler<IReceivedEventArgs> ReceiveRequest { get; set; }
     }
 }

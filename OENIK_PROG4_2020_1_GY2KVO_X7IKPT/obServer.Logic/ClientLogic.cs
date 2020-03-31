@@ -1,6 +1,7 @@
 ﻿using obServer.Model.GameModel;
 using obServer.Model.GameModel.Item;
 using obServer.Model.Interfaces;
+using obServer.Network.Interface;
 using obServer.Network.Structs;
 using obServer.Repository.Network;
 using System;
@@ -17,17 +18,24 @@ namespace obServer.Logic
         public ClientLogic(IobServerModel model)
         {
             gameClient = new RepoGameClient(serverPort, clientPort);
+            gameClient.ReceiveRequest += OnReceive;
             gameClient.StartListening();
             this.model = model;
             AddMyPlayer();
+        }
+
+        private void OnReceive(object sender, IReceivedEventArgs e)
+        {
+            HandleRequests(e.ReceivedRequest);
         }
 
         private void AddMyPlayer()
         {
             IPlayer p = model.MyPlayer;
             var bounds = p.RealPrimitive.Bounds;
+            model.ConstructItem(p);
             string parameters = $"Player;{p.Id};{p.Position[0]};{p.Position[1]};{bounds.Width};{bounds.Height};{p.Rotation}";
-            gameClient.Send(Operation.SendObject, parameters);
+            //gameClient.Send(Operation.SendObject, parameters);
             p.Die += OnPlayerDie;
         }
 
@@ -35,7 +43,7 @@ namespace obServer.Logic
         {
             IPlayer player = (sender as IPlayer);
             model.DestructItem(player.Id);
-            gameClient.Send(Operation.Die, $"{player.Id}");
+            //gameClient.Send(Operation.Die, $"{player.Id}");
         }
 
         public EventHandler UpdateUI;
@@ -50,54 +58,46 @@ namespace obServer.Logic
 
         private IRepoGameClient gameClient;
 
-        protected override void HandleRequests()
+        protected override void HandleRequests(Request request)
         {
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    Request r = gameClient.GetResponse();
-                    switch (r.Operation)
+                    switch (request.Operation)
                     {
                         case Operation.Connect:
-                            HandleConnect(r);
+                            HandleConnect(request);
                             break;
                         case Operation.Disconnect:
-                            HandleDisconnect(r);
+                            HandleDisconnect(request);
                             break;
                         case Operation.CheckServerAvaliable:
-                            HandleReady(r);
+                            HandleReady(request);
                             break;
                         case Operation.SendObject:
-                            HandleSendObject(r);
+                            HandleSendObject(request);
                             break;
                         case Operation.Remove:
-                            HandleRemove(r);
+                            HandleRemove(request);
                             break;
                         case Operation.Die:
-                            HandleDie(r);
+                            HandleDie(request);
                             break;
                         case Operation.Hit:
-                            HandleHit(r);
+                            HandleHit(request);
                             break;
                         case Operation.SendChatMessage:
-                            HandleSendMessage(r);
+                            HandleSendMessage(request);
                             break;
                         case Operation.Shoot:
-                            HandleShoot(r);
+                            HandleShoot(request);
                             break;
                         case Operation.Move:
-                            HandleMove(r);
+                            HandleMove(request);
                             break;
                         case Operation.Pickup:
-                            HandlePickup(r);
+                            HandlePickup(request);
                             break;
                         default:
                             throw new Exception("Not implemented Exception");
                     }
-                }
-                catch (Exception) { }
-            });
         }
 
         public void OnPickup(object sender, PlayerInputEventArgs e)
@@ -109,8 +109,9 @@ namespace obServer.Logic
                 if (pickWeapon.Count() > 0)
                 {
                     var weapon = pickWeapon.First();
-                    gameClient.Send(Operation.Pickup, $"{e.Player.Id};{weapon.Id}");
+                    //gameClient.Send(Operation.Pickup, $"{e.Player.Id};{weapon.Id}");
                 }
+                UpdateUI?.Invoke(this, null);
             }
         }
 
@@ -131,7 +132,9 @@ namespace obServer.Logic
             model.ConstructItem(e.Player);
             var bounds = e.Player.RealPrimitive.Bounds;
             string parameters = $"Player;{e.Player.Id};{e.Player.Position[0]};{e.Player.Position[1]};{bounds.Width};{bounds.Height};{e.Player.Rotation}";
-            gameClient.Send(Operation.Move, parameters);
+            UpdateUI?.Invoke(this, null);
+
+            //gameClient.Send(Operation.Move, parameters);
         }
 
         public void OnShoot(object sender, PlayerInputEventArgs e)
@@ -153,7 +156,8 @@ namespace obServer.Logic
             var bullets = model.Bullets;
             foreach (var bullet in bullets)
             {
-                bullet.Fly(deltaTime);
+                var ibullet = (IBullet)bullet;
+                ibullet.Fly(deltaTime);
                 var ids = model.GetCloseItems(bullet.Id);
                 foreach (var id in ids)
                 {
@@ -165,7 +169,7 @@ namespace obServer.Logic
                         {
                             if (item.GetType() == typeof(Player))
                             {
-                                bullet.DoDamage((Player)item);
+                                ibullet.DoDamage((Player)item);
                                 gameClient.Send(Operation.Hit, $"{item.Id};{bullet.Id}");
                             }
                             else
@@ -175,6 +179,7 @@ namespace obServer.Logic
                         }
                     }
                 }
+                UpdateUI?.Invoke(this, null);
             }
         }
 
@@ -194,10 +199,10 @@ namespace obServer.Logic
             var players = model.Players.Where(x => x.Id == playerId);
             if (players.Count() > 0)
             {
-                IPlayer player = players.First();
+                IPlayer player = (IPlayer)players.First();
                 if (bullets.Count() > 0)
                 {
-                    IBullet bullet = bullets.First();
+                    IBullet bullet = (IBullet)bullets.First();
                     bullet.DoDamage(player);
                     model.DestructItem(bullet.Id);
                 }
@@ -229,8 +234,8 @@ namespace obServer.Logic
             Guid weaponId = Guid.Parse(zones[1]);
             if (request.Reply == "1")
             {
-                var player = model.Players.Where(x => x.Id == playerId).First();
-                var weapon = model.Weapons.Where(x => x.Id == weaponId).First();
+                var player = (IPlayer)model.Players.Where(x => x.Id == playerId).First();
+                var weapon = (IWeapon)model.Weapons.Where(x => x.Id == weaponId).First();
                 player.ChangeWeapon(weapon);
             }
         }

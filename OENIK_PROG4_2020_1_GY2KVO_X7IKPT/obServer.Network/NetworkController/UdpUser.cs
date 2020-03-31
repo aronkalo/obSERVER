@@ -38,7 +38,7 @@ namespace obServer.Network.NetworkController
                 $":{"Client"}");
             var ServerEp = new IPEndPoint(IPAddress.Any, serverPort);
             Client.EnableBroadcast = true;
-            Client.Client.SendTimeout = 100;
+            Client.Client.SendTimeout = 10;
             Client.Send(RequestData, RequestData.Length, new IPEndPoint(IPAddress.Broadcast, serverPort));
             var ServerResponseData = Client.Receive(ref ServerEp);
             var ServerResponse = Encoding.ASCII.GetString(ServerResponseData);

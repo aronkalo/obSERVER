@@ -12,6 +12,7 @@ namespace obServer.Model.Performance
         {
             map = new Guids[width, height];
             InitMap(width, height);
+            ContainedElements = new Dictionary<Guid, int[]>();
         }
 
         private Guids[,] map;
@@ -26,7 +27,7 @@ namespace obServer.Model.Performance
                 Del(id);
                 ContainedElements.Remove(id);
             }
-            AddRange(id, xStart, yStart, width, heigth);
+            AddRange(id, xStart, yStart,  xStart + width, yStart + heigth);
             ContainedElements.Add(id, new int[] { xStart, yStart, width, heigth });
         }
 
@@ -77,30 +78,26 @@ namespace obServer.Model.Performance
             IterateRange(id, xStart, yStart, width, heigth, act);
         }
 
-        private void IterateRange(Guid id, int xStart, int yStart, int width, int heigth, Action<int,int> innerMethod)
+        private void IterateRange(Guid id, int xStart, int yStart, int width, int heigth, Action<int, int> act)
         {
-            Task[] tasks = new Task[width - xStart];
-            for (int x = xStart; x < width; x++)
+            int i = 0;
+            for (int x = xStart; x < width -1; x++)
             {
-                Task t = new Task(() =>
-                {
-                    for (int y = yStart; y < heigth; y++)
+                    for (int y = yStart; y < heigth - 1; y++)
                     {
-                        innerMethod?.Invoke(x,y);
+                    act?.Invoke(x, y);
                     }
-                });
-                tasks[x - xStart] = t;
-                t.Start();
             }
-            Task.WaitAll(tasks);
         }
         private void InitMap(int width, int height)
         {
-            Action<int, int> act = new Action<int, int>((x, y) =>
+            for (int i = 0; i < width; i++)
             {
-                map[x, y] = new Guids();
-            });
-            IterateRange(Guid.NewGuid(), 0, 0, width, height, act);
+                for (int y = 0; y < height; y++)
+                {
+                    map[i, y] = new Guids();
+                }
+            }
         }
 
     }

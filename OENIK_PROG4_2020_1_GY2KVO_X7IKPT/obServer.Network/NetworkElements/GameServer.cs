@@ -19,6 +19,9 @@ namespace obServer.Network.NetworkElements
 
         private List<GameClientInfo> Clients { get; set; }
 
+        public EventHandler<IReceivedEventArgs> Receive { get; set; }
+
+
         public void ReadyClient(string ipAddress)
         {
             Clients.ForEach(x => x.SetReady(ipAddress)); 
@@ -44,8 +47,8 @@ namespace obServer.Network.NetworkElements
                     while (ActiveSession)
                     {
                         var recieved = await Listener.Receive();
+                        Receive?.Invoke(this, new ReceivedEventArgs() { ReceivedRequest = recieved });
                         CheckClients(recieved);
-                        RequestPool.AddPoolElement(recieved);
                     }
                 });
             }

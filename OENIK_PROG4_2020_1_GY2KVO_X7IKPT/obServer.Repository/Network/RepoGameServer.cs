@@ -14,7 +14,16 @@ namespace obServer.Repository.Network
         public RepoGameServer()
         {
             gameServer = new GameServer();
+            gameServer.Receive += OnReceive;
         }
+
+        public EventHandler<IReceivedEventArgs> ReceiveRequest { get; set; }
+
+        private void OnReceive(object sender, IReceivedEventArgs e)
+        {
+            ReceiveRequest?.Invoke(sender, e);
+        }
+
 
         private IGameServer gameServer;
         public void StartListening()
@@ -35,6 +44,13 @@ namespace obServer.Repository.Network
         public void ReplyHandler(Request request)
         {
             gameServer.ReplyHandler(request);
+        }
+
+        public bool AllReady { get { return gameServer.AllReady; } }
+
+        public void ReadyClient(string address)
+        {
+            gameServer.ReadyClient(address);
         }
     }
 }

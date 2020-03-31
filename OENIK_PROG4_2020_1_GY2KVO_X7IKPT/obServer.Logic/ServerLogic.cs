@@ -1,5 +1,6 @@
 ﻿using obServer.Model.GameModel;
 using obServer.Model.Interfaces;
+using obServer.Network.Interface;
 using obServer.Network.Structs;
 using obServer.Repository.Network;
 using System;
@@ -13,62 +14,60 @@ namespace obServer.Logic
         public ServerLogic(int width, int height)
         {
             gameServer = new RepoGameServer();
+            gameServer.ReceiveRequest += OnReceive;
             gameServer.StartListening();
             model = new ServerData(width, height);
+        }
+
+        private void OnReceive(object sender, IReceivedEventArgs e)
+        {
+            HandleRequests(e.ReceivedRequest);
         }
 
         private IRepoGameServer gameServer;
 
         private ServerData model;
 
-        protected override void HandleRequests()
+        protected override void HandleRequests(Request request)
         {
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    Request r = gameServer.GetRequest();
-                    switch (r.Operation)
+                    switch (request.Operation)
                     {
                         case Operation.Connect:
-                            HandleConnect(r);
+                            HandleConnect(request);
                             break;
                         case Operation.Disconnect:
-                            HandleDisconnect(r);
+                            HandleDisconnect(request);
                             break;
                         case Operation.CheckServerAvaliable:
-                            HandleReady(r);
+                            HandleReady(request);
                             break;
                         case Operation.SendObject:
-                            HandleSendObject(r);
+                            HandleSendObject(request);
                             break;
                         case Operation.Remove:
-                            HandleRemove(r);
+                            HandleRemove(request);
                             break;
                         case Operation.Die:
-                            HandleDie(r);
+                            HandleDie(request);
                             break;
                         case Operation.Hit:
-                            HandleHit(r);
+                            HandleHit(request);
                             break;
                         case Operation.SendChatMessage:
-                            HandleSendMessage(r);
+                            HandleSendMessage(request);
                             break;
                         case Operation.Shoot:
-                            HandleShoot(r);
+                            HandleShoot(request);
                             break;
                         case Operation.Move:
-                            HandleMove(r);
+                            HandleMove(request);
                             break;
                         case Operation.Pickup:
-                            HandlePickup(r);
+                            HandlePickup(request);
                             break;
                         default:
                             throw new Exception("Not implemented Exception");
                     }
-                }
-                catch (Exception) { }
-            });
         }
 
         protected override void HandleConnect(Request request)

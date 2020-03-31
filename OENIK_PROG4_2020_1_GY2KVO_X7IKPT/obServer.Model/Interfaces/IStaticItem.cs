@@ -6,5 +6,7 @@ namespace obServer.Model.Interfaces
     public interface IStaticItem : IBaseItem
     {
         string Type { get; set; }
+
+        double[] Dimensions { get; set; }
     }
 }

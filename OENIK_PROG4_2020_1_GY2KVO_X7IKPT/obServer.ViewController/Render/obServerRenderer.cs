@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace obServer.ViewController.Render
 {
@@ -17,9 +18,70 @@ namespace obServer.ViewController.Render
             this.Model = model;
         }
 
-        internal void DrawElements(System.Windows.Media.DrawingContext ctx)
+        private static ImageBrush playerBrush = new ImageBrush(new BitmapImage(new Uri("C:\\Users\\hp\\Desktop\\textures\\player.png")));
+        private static ImageBrush crateBrush = new ImageBrush(new BitmapImage(new Uri("C:\\Users\\hp\\Desktop\\textures\\crate.png")));
+        private static ImageBrush logBrush = new ImageBrush(new BitmapImage(new Uri("C:\\Users\\hp\\Desktop\\textures\\log.png")));
+        private static ImageBrush weaponBrush = new ImageBrush(new BitmapImage(new Uri("C:\\Users\\hp\\Desktop\\textures\\log.png")));
+        private static ImageBrush mapBrush = new ImageBrush(new BitmapImage(new Uri("C:\\Users\\hp\\Desktop\\textures\\hugemap.png")));
+        private static ImageBrush wallBrush = new ImageBrush(new BitmapImage(new Uri("C:\\Users\\hp\\Desktop\\textures\\wall.png")));
+        private static ImageBrush bushBrush = new ImageBrush(new BitmapImage(new Uri("C:\\Users\\hp\\Desktop\\textures\\bush.png")));
+        private static Pen blackBorder = new Pen(Brushes.Black, 2);
+        private static SolidColorBrush bulletBrush = Brushes.DarkGray;
+        private static SolidColorBrush mapEndBrush = Brushes.DarkOliveGreen;
+
+        internal void DrawElements(System.Windows.Media.DrawingContext context)
         {
-            DrawingGroup dg = new DrawingGroup();
+            DrawingGroup drawings = new DrawingGroup();
+
+            GeometryDrawing map = new GeometryDrawing(mapBrush, blackBorder, Model.Map.RealPrimitive);
+            drawings.Children.Add(map);
+            foreach (var Player in Model.Players) 
+            {
+                GeometryDrawing player = new GeometryDrawing(playerBrush, null , Player.RealPrimitive);
+                drawings.Children.Add(player);
+            }
+
+            foreach (var Weapon in Model.Weapons)
+            {
+                
+                GeometryDrawing weapon = new GeometryDrawing(weaponBrush, blackBorder, Weapon.RealPrimitive);
+                drawings.Children.Add(weapon);
+            }
+            foreach (var Bullet in Model.Bullets)
+            {
+                GeometryDrawing bullet = new GeometryDrawing(bulletBrush, blackBorder, Bullet.RealPrimitive);
+                drawings.Children.Add(bullet);
+            }
+
+            foreach (var Static in Model.Statics)
+            {
+                switch ((Static as IStaticItem).Type)
+                {
+                    case "Map":
+                        GeometryDrawing MAP = new GeometryDrawing(mapBrush, blackBorder, Static.RealPrimitive);
+                        drawings.Children.Add(MAP);
+                        break;
+                    case "Wall":
+                        GeometryDrawing WALL = new GeometryDrawing(wallBrush, blackBorder, Static.RealPrimitive);
+                        drawings.Children.Add(WALL);
+                        break;
+                    case "Crate":
+                        GeometryDrawing CRATE = new GeometryDrawing(crateBrush, blackBorder, Static.RealPrimitive);
+                        drawings.Children.Add(CRATE);
+                        break;
+                    case "Log":
+                        GeometryDrawing LOG = new GeometryDrawing(logBrush, blackBorder, Static.RealPrimitive);
+                        drawings.Children.Add(LOG);
+                        break;
+                    case "Bush":
+                        GeometryDrawing BUSH = new GeometryDrawing(bushBrush, null, Static.RealPrimitive);
+                        drawings.Children.Add(BUSH);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            context.DrawDrawing(drawings);
 
             //GeometryDrawing background = new GeometryDrawing(Config.BgColor,
             //    new Pen(Config.BorderColor, Config.BorderSize),
@@ -50,8 +112,6 @@ namespace obServer.ViewController.Render
             //        star.GetGeometry());
             //    dg.Children.Add(starGeo);
             //}
-
-            ctx.DrawDrawing(dg);
         }
     }
 }

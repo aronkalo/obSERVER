@@ -1,51 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace obServer.Model.Performance
 {
     class Guids
     {
-
-        private List<Guid> guidList;
+        private Guid[] guids;
 
         public Guids()
         {
-            this.guidList = new List<Guid>();
+            guids = new Guid[0];
         }
 
         public Guid[] Get()
         {
-            if (guidList.Count > 0)
+            if (guids.Length > 0)
             {
-                return guidList.ToArray();
+                return guids;
             }
             return new Guid[0];
         }
 
         public IEnumerable<Guid> List()
         {
-            return guidList;
+            return guids.ToList<Guid>();
         }
 
         public void Add(Guid id)
         {
-            if (!guidList.Contains(id))
-            {
-                guidList.Add(id);
-            }
+            Guid[] helper = guids;
+            guids = new Guid[helper.Length + 1];
+            helper.CopyTo(guids, 0);
+            guids[helper.Length] = id;
         }
 
         public void Del(Guid id)
         {
-            if (guidList.Contains(id))
+            if (guids.Contains(id))
             {
-                guidList.Remove(id);
+                guids = guids.Except(new List<Guid>{ id }).ToArray<Guid>();
             }
         }
 
         public bool Got(Guid id)
         {
-            return guidList.Contains(id) ? true : false;
+            if (guids.Length > 0)
+            {
+                return false;
+            }
+            else
+            {
+                if (guids.Contains(id))
+                {
+                    return true;
+                }
+                return false;
+            }
         }
     }
 }

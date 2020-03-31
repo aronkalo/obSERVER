@@ -11,9 +11,9 @@ namespace obServer.Model.GameModel.Item
     public sealed class Player : BaseItem, IPlayer, IBaseItem
     {
         public static Geometry PlayerGeometry = new EllipseGeometry() { RadiusX = Width, RadiusY = Height};
-        private const double movementSpeed = 100;
-        private const double Width = 100;
-        private const double Height = 100;
+        private const double movementSpeed = 50;
+        private const double Width = 50;
+        private const double Height = 50;
 
         public Player(Geometry geometry, Guid id, double[] position, double rotation, bool impact, double health) : base(geometry, id, position, rotation, impact)
         {
@@ -22,7 +22,7 @@ namespace obServer.Model.GameModel.Item
         }
 
         public IWeapon CurrentWeapon { get; private set; }
-        public EventHandler Die;
+        public EventHandler Die { get; set; }
 
         private double health;
         private int storedBullets;
@@ -48,7 +48,11 @@ namespace obServer.Model.GameModel.Item
 
         public IBullet[] Shoot()
         {
-            return CurrentWeapon.DoShoot();
+            if (CurrentWeapon != null)
+            {
+                return CurrentWeapon.DoShoot();
+            }
+            return new Bullet[0];
         }
 
         public void Reload()

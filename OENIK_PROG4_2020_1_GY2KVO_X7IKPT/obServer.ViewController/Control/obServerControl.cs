@@ -20,7 +20,8 @@ namespace obServer.ViewController.Control
         public obServerControl()
         {
             Loaded += Window_Loaded;
-            om = new obServerModel(1000,1000);
+            om = new obServerModel(3000,3000);
+            sl = new ServerLogic(3000, 3000);
             cl = new ClientLogic(om);
             or = new obServerRenderer(om);
         }
@@ -43,6 +44,7 @@ namespace obServer.ViewController.Control
                 sw = new Stopwatch();
                 dt.Tick += Update;
                 win.KeyDown += KeyHit;
+                win.KeyUp += KeyRelease;
                 win.MouseMove += MouseMovement;
                 win.MouseLeftButtonDown += LeftMouseClick;
                 playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
@@ -52,6 +54,7 @@ namespace obServer.ViewController.Control
                 PlayerInput += cl.OnPickup;
                 cl.UpdateUI += (obj, args) => InvalidateVisual();
                 InvalidateVisual();
+                dt.Start();
             }
         }
 
@@ -67,21 +70,47 @@ namespace obServer.ViewController.Control
             playerArgs.Angle = angle;
         }
 
+
+        private void KeyRelease(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.W:
+                    playerArgs.Movement[1] = 0;
+                    break;
+                case Key.S:
+                    playerArgs.Movement[1] = 0;
+                    break;
+                case Key.A:
+                    playerArgs.Movement[0] = 0;
+                    break;
+                case Key.D:
+                    playerArgs.Movement[0] = 0;
+                    break;
+                case Key.R:
+                    playerArgs.Reload = false;
+                    break;
+                case Key.F:
+                    playerArgs.Pickup = false;
+                    break;
+            }
+        }
+
         private void KeyHit(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
                 case Key.W:
-                    playerArgs.Movement[0] = 1;
-                    break;
-                case Key.S:
-                    playerArgs.Movement[0] = -1;
-                    break;
-                case Key.A:
                     playerArgs.Movement[1] = -1;
                     break;
-                case Key.D:
+                case Key.S:
                     playerArgs.Movement[1] = 1;
+                    break;
+                case Key.A:
+                    playerArgs.Movement[0] = -1;
+                    break;
+                case Key.D:
+                    playerArgs.Movement[0] = 1;
                     break;
                 case Key.R:
                     playerArgs.Reload = true;
@@ -95,11 +124,16 @@ namespace obServer.ViewController.Control
         private void Update(object sender, EventArgs e)
         {
             double deltaTime = sw.Elapsed.TotalSeconds; sw.Restart();
+            Debug.WriteLine(deltaTime);
             ServerUpdate(deltaTime);
             playerArgs.deltaTime = deltaTime;
             PlayerInput?.Invoke(this, playerArgs);
-            playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
             cl.FlyBullets(deltaTime);
+        }
+
+        private void HandleKey()
+        {
+            //Keyboard.Is
         }
 
         protected override void OnRender(DrawingContext drawingContext)

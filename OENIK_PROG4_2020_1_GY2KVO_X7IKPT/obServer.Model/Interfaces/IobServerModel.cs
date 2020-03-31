@@ -10,13 +10,14 @@ namespace obServer.Model.Interfaces
     {
         IPlayer MyPlayer { get;  }
         IEnumerable<IBaseItem> AllItems { get; }
-        IEnumerable<IBullet> Bullets { get; }
+        IEnumerable<IBaseItem> Bullets { get; }
 
-        IEnumerable<IPlayer> Players { get; }
+        IEnumerable<IBaseItem> Players { get; }
 
         IEnumerable<IBaseItem> Colliders { get; }
-        IEnumerable<IStaticItem> Statics { get; }
-        IEnumerable<IWeapon> Weapons { get; }
+        IEnumerable<IBaseItem> Statics { get; }
+        IEnumerable<IBaseItem> Weapons { get; }
+        IStaticItem Map { get; }
 
         void ConstructItem(IBaseItem item);
 

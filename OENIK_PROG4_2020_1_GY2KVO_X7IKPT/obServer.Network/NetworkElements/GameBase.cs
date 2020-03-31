@@ -19,5 +19,6 @@ namespace obServer.Network.NetworkElements
 		{
 			get { return sw.ElapsedMilliseconds/1000;}
 		}
+
 	}
 }

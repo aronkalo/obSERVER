@@ -9,7 +9,7 @@ namespace obServer.Logic
 {
     public abstract class BaseLogic
     {
-        virtual protected void HandleRequests() { }
+        virtual protected void HandleRequests(Request request) { }
 
         virtual protected void HandleMove(Request request) { }
 

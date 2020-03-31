@@ -41,8 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interface\IReceivedEventArgs.cs" />
+    <Compile Include="Interface\IGameBase.cs" />
     <Compile Include="Interface\IGameClient.cs" />
     <Compile Include="Interface\IGameServer.cs" />
+    <Compile Include="NetworkElements\ReceivedEventArgs.cs" />
     <Compile Include="NetworkElements\BasePool.cs" />
     <Compile Include="NetworkElements\GameBase.cs" />
     <Compile Include="NetworkElements\GameClient.cs" />
