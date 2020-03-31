@@ -17,15 +17,47 @@ namespace obServer.Model.GameModel.Item
         private double damage;
         private double[] direction;
         private double[] startPos;
-        private double supression 
+        private double supression
         {
-            get 
+            get
             {
-                double a = (startPos[0] - Position[0]); 
+                double a = (startPos[0] - Position[0]);
                 double b = (startPos[1] - Position[1]);
                 double sup = 1 - (Math.Sqrt((a * a) + (b * b)) * weight);
-                supressionCache =  sup > 0 ? sup : 0;
+                supressionCache = sup > 0 ? sup : 0;
                 return supressionCache;
+            }
+        }
+
+        public double BulletDamage
+        {
+            get
+            {
+                return damage;
+            }
+        }
+
+        public double[] Direction
+        {
+            get
+            {
+                return direction;
+            }
+        }
+
+        public double Weight
+        {
+            get
+            {
+                return weight;
+            }
+        }
+
+        public double Speed
+        {
+            get
+            {
+                return flySpeed;
             }
         }
         public Bullet(Geometry geometry, Guid id, double[] position, double rotation,  bool impact, double flySpeed, double damage, double[] direction, double weight) : base(geometry, id, position, rotation, impact)

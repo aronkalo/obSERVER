@@ -22,5 +22,7 @@ namespace obServer.Model.Interfaces
 
         void DestructItem(Guid id);
         IEnumerable<Guid> GetCloseItems(Guid id);
+
+        void UpdateItem(Guid id, double xMove, double yMove, double width, double height, double rotation);
     }
 }

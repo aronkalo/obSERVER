@@ -22,6 +22,7 @@ namespace obServer.Model.GameModel.Item
         }
 
         public IWeapon CurrentWeapon { get; private set; }
+        public EventHandler Die;
 
         private double health;
         private int storedBullets;
@@ -73,7 +74,7 @@ namespace obServer.Model.GameModel.Item
             health -= damage;
             if (health < 0)
             {
-                
+                Die?.Invoke(this, null);
             }
         }
     }

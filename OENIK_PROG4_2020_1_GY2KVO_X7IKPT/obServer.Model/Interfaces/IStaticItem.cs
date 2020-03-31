@@ -5,5 +5,6 @@ namespace obServer.Model.Interfaces
 {
     public interface IStaticItem : IBaseItem
     {
+        string Type { get; set; }
     }
 }

@@ -136,6 +136,16 @@ namespace obServer.Model.GameModel
             }
         }
 
+        public void UpdateItem(Guid id, double xMove, double yMove, double width, double height, double rotation)
+        {
+            var items = Items.Where(x => x.Id == id);
+            if (items.Count() > 0)
+            {
+                var item = items.First();
+                item.Position = new double[] { xMove, yMove };
+            }
+        }
+
         public void DestructItem(Guid id)
         {
             var items = Items.Where(x => x.Id == id);

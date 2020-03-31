@@ -12,5 +12,6 @@ namespace obServer.Model.Interfaces
         void Reload();
         void PickBullet(int bullets);
         void Damaged(double damage);
+        EventHandler Die { get; set; }
     }
 }

@@ -33,5 +33,13 @@ namespace obServer.Logic
 
         virtual protected void HandleSendMessage(Request request) { }
 
+        public double Milis
+        {
+            get
+            {
+                return DateTime.Now.Ticks / 1000000;
+            }
+        }
+
     }
 }

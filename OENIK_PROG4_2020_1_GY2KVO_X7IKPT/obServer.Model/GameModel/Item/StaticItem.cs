@@ -9,8 +9,16 @@ namespace obServer.Model.GameModel.Item
 {
     public sealed class StaticItem : BaseItem
     {
-        public StaticItem(Geometry geometry, Guid id, double[] position, double rotation, bool impact) : base(geometry, id, position, rotation, impact)
+        public StaticItem(Geometry geometry, Guid id, double[] position, double rotation, bool impact, string type) : base(geometry, id, position, rotation, impact)
         {
+        }
+
+        private string type;
+
+        public string Type
+        {
+            get { return type; }
+            set { type = value; }
         }
     }
 }

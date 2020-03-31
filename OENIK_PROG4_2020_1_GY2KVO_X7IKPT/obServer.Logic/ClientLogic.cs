@@ -19,6 +19,23 @@ namespace obServer.Logic
             gameClient = new RepoGameClient(serverPort, clientPort);
             gameClient.StartListening();
             this.model = model;
+            AddMyPlayer();
+        }
+
+        private void AddMyPlayer()
+        {
+            IPlayer p = model.MyPlayer;
+            var bounds = p.RealPrimitive.Bounds;
+            string parameters = $"Player;{p.Id};{p.Position[0]};{p.Position[1]};{bounds.Width};{bounds.Height};{p.Rotation}";
+            gameClient.Send(Operation.SendObject, parameters);
+            p.Die += OnPlayerDie;
+        }
+
+        private void OnPlayerDie(object sender, EventArgs e)
+        {
+            IPlayer player = (sender as IPlayer);
+            model.DestructItem(player.Id);
+            gameClient.Send(Operation.Die, $"{player.Id}");
         }
 
         public EventHandler UpdateUI;
@@ -124,7 +141,9 @@ namespace obServer.Logic
             {
                 model.ConstructItem(bullet);
                 var bounds = bullet.RealPrimitive.Bounds;
-                string parameters = $"Bullet;{bullet.Id};{bullet.Position[0]};{bullet.Position[1]};{bounds.Width};{bounds.Height};{bullet.Rotation}";
+                double[] direction = bullet.Direction;
+                string parameters = $"Bullet;{bullet.Id};{bullet.Position[0]};{bullet.Position[1]};{bounds.Width};{bounds.Height};{bullet.Rotation};" +
+                    $"{bullet.BulletDamage};{direction[0]};{direction[1]};{bullet.Speed};{bullet.Weight};{Milis};{e.Player.Id}";
                 gameClient.Send(Operation.Shoot, parameters);
             }
         }
@@ -151,7 +170,6 @@ namespace obServer.Logic
                             }
                             else
                             {
-                                model.DestructItem(bullet.Id);
                                 gameClient.Send(Operation.Remove, $"{bullet.Id}");
                             }
                         }
@@ -160,15 +178,9 @@ namespace obServer.Logic
             }
         }
 
-        protected override void HandleConnect(Request request)
-        {
+        protected override void HandleConnect(Request request) { }
 
-        }
-
-        protected override void HandleDie(Request request)
-        {
-
-        }
+        protected override void HandleDie(Request request) { }
 
         protected override void HandleDisconnect(Request request) { }
 
@@ -178,10 +190,37 @@ namespace obServer.Logic
             string[] zones = request.Parameters.Split(';');
             Guid playerId = Guid.Parse(zones[0]);
             Guid bulletId = Guid.Parse(zones[1]);
-
+            var bullets = model.Bullets.Where(x => x.Id == bulletId);
+            var players = model.Players.Where(x => x.Id == playerId);
+            if (players.Count() > 0)
+            {
+                IPlayer player = players.First();
+                if (bullets.Count() > 0)
+                {
+                    IBullet bullet = bullets.First();
+                    bullet.DoDamage(player);
+                    model.DestructItem(bullet.Id);
+                }
+            }
         }
 
-        protected override void HandleMove(Request request) { }
+        protected override void HandleMove(Request request) 
+        {
+            string[] zones = request.Parameters.Split(';');
+            double[] position = new double[]
+            {
+                double.Parse(zones[2]) ,
+                double.Parse(zones[3])
+            };
+            double[] dimensions = new double[]
+            {
+                double.Parse(zones[4]) ,
+                double.Parse(zones[5])
+            };
+            double rotation = double.Parse(zones[6]);
+            Guid id = Guid.Parse(zones[0]);
+            model.UpdateItem(id, position[0], position[1], dimensions[0], dimensions[1], rotation);
+        }
 
         protected override void HandlePickup(Request request)
         {
@@ -211,23 +250,45 @@ namespace obServer.Logic
             model.DestructItem(Id);
         }
 
-        protected override void HandleSendMessage(Request request)
-        {
-            base.HandleSendMessage(request);
-        }
+        protected override void HandleSendMessage(Request request) { }
 
         protected override void HandleSendObject(Request request)
         {
-            base.HandleSendObject(request);
+            string[] zones = request.Parameters.Split(';');
+            Guid id = Guid.Parse(zones[1]);
+            double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
+            double rotation = double.Parse(zones[6]);
+            IPlayer player = new Player(Player.PlayerGeometry, id, position, rotation, true, 100);
+            model.ConstructItem(player);
         }
 
         protected override void HandleShoot(Request request)
         {
+            string[] zones = request.Parameters.Split(';');
+            Guid id = Guid.Parse(zones[1]);
+            if (request.Reply  == "1")
+            {
+                var bullets = model.Bullets.Where(x => x.Id == id);
+                if (bullets.Count()<1)
+                {
+                    double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
+                    double[] direction = new double[] { double.Parse(zones[7]), double.Parse(zones[8]) };
+                    double damage = double.Parse(zones[7]);
+                    double rotation = double.Parse(zones[6]);
+                    double speed = double.Parse(zones[10]);
+                    double weight = double.Parse(zones[11]);
+                    double sendTime = double.Parse(zones[12]);
+                    IBullet bull = new Bullet(Bullet.BulletGeometry, id, position, rotation, true, speed, damage, direction, weight);
+                    bull.Fly(Milis - sendTime);
+                    model.ConstructItem(bull);
+                }
+            }
+            else
+            {
+                model.DestructItem(id);
+            }
         }
 
-        public void Add(IBaseItem item)
-        {
-            model.ConstructItem(item);
-        }
+        public void Add(IBaseItem item) { }
     }
 }

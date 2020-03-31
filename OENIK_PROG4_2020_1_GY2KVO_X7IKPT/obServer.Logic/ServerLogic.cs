@@ -147,15 +147,12 @@ namespace obServer.Logic
             {
                 request.Reply = "1";
                 request.Broadcast = true;
-                gameServer.ReplyHandler(request);
             }
             else
             {
                 request.Reply = "0";
-                gameServer.ReplyHandler(request);
             }
-            //$"{e.Player.Id};{weapon.Id}"
-
+            gameServer.ReplyHandler(request);
         }
 
         private int readyPlayers;
@@ -168,18 +165,32 @@ namespace obServer.Logic
             {
                 request.Reply = "1";
                 request.Broadcast = true;
-                gameServer.ReplyHandler(request);
             }
             else
             {
                 request.Reply = "0";
-                gameServer.ReplyHandler(request);
             }
+            gameServer.ReplyHandler(request);
         }
 
         protected override void HandleRemove(Request request)
         {
-
+            string[] zones = request.Parameters.Split(';');
+            Guid id = Guid.Parse(zones[1]);
+            double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
+            double rotation = double.Parse(zones[6]);
+            var items = model.AllItems.Where(x => x.Id == id);
+            if (items.Count() > 0)
+            {
+                model.DestructItem(id);
+                request.Reply = "1";
+                request.Broadcast = true;
+            }
+            else
+            {
+                request.Reply = "0";
+            }
+            gameServer.ReplyHandler(request);
         }
 
         protected override void HandleSendMessage(Request request)
@@ -189,23 +200,46 @@ namespace obServer.Logic
 
         protected override void HandleSendObject(Request request)
         {
-            //$"Bullet;{bullet.Id};{bullet.Position[0]};{bullet.Position[1]};{bounds.Width};{bounds.Height};{bullet.Rotation}"
+            string[] zones = request.Parameters.Split(';');
+            string type = zones[0];
+            Guid id = Guid.Parse(zones[1]);
+            double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
+            double[] dimensions = new double[] { double.Parse(zones[4]), double.Parse(zones[5]) };
+            double rotation = double.Parse(zones[6]);
+            model.ConstructItem(id, type, position, dimensions, rotation);
+            request.Reply = "1";
+            request.Broadcast = true;
+            gameServer.ReplyHandler(request);
         }
 
         protected override void HandleShoot(Request request)
         {
-            //$"Bullet;{bullet.Id};{bullet.Position[0]};{bullet.Position[1]};{bounds.Width};{bounds.Height};{bullet.Rotation}"
             string[] zones = request.Parameters.Split(';');
-            string type = zones[0];
-            Guid id = Guid.Parse(zones[1]);
-            double x = double.Parse(zones[2]);
-            double y = double.Parse(zones[3]);
-            double width = double.Parse(zones[4]);
-            double height = double.Parse(zones[5]);
-            double rotation = double.Parse(zones[5]);
-            model.ConstructItem(id, type, new double[] { x, y }, new double[] { width, height }, rotation);
-            request.Reply = "1";
-            request.Broadcast = true;
+            Guid player = Guid.Parse(zones[13]);
+            if (model.AllItems.Where(x => x.Id == player).Count() == 1)
+            {
+                string type = zones[0];
+                Guid id = Guid.Parse(zones[1]);
+                double x = double.Parse(zones[2]);
+                double y = double.Parse(zones[3]);
+                double width = double.Parse(zones[4]);
+                double height = double.Parse(zones[5]);
+                double rotation = double.Parse(zones[6]);
+                double[] direction = new double[] { double.Parse(zones[7]), double.Parse(zones[8]) };
+                double damage = double.Parse(zones[7]);
+                double speed = double.Parse(zones[10]);
+                double weight = double.Parse(zones[11]);
+                double delta = Milis - double.Parse(zones[12]);
+                x = x + (int)(direction[0] * delta * speed);
+                y = y + (int)(direction[1] * delta * speed);
+                model.ConstructItem(id, type, new double[] { x, y }, new double[] { width, height }, rotation);
+                request.Reply = "1";
+                request.Broadcast = true;
+            }
+            else
+            {
+                request.Reply = "0";
+            }
             gameServer.ReplyHandler(request);
         }
     }

@@ -7,5 +7,13 @@ namespace obServer.Model.Interfaces
     {
         void Fly(double deltaTime);
         void DoDamage(IPlayer player);
+
+        double BulletDamage { get; }
+
+        double[] Direction { get; }
+
+        double Weight { get; }
+
+        double Speed { get; }
     }
 }
