@@ -22,11 +22,12 @@ namespace obServer.ViewController.Control
         public obServerControl()
         {
             Loaded += Window_Loaded;
-            om = new obServerModel(5000,5000);
+            om = new obServerModel(5000, 5000);
             sl = new ServerLogic(5000, 5000);
             cl = new ClientLogic(om);
             or = new obServerRenderer(om);
         }
+
         private DispatcherTimer dt;
         private ClientLogic cl;
         private ServerLogic sl;
@@ -36,6 +37,24 @@ namespace obServer.ViewController.Control
         private event EventHandler<PlayerInputEventArgs> PlayerInput;
         private static PlayerInputEventArgs playerArgs;
         private double fpsCache = 50;
+
+        private double xCenter 
+        {
+            get
+            {
+                return ActualWidth / 2;
+            }
+                
+        }
+
+        private double yCenter
+        {
+            get
+            {
+                return ActualHeight / 2;
+            }
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Window win = Window.GetWindow(this);
@@ -45,95 +64,58 @@ namespace obServer.ViewController.Control
                 dt.Interval = TimeSpan.FromMilliseconds(8);
                 sw = new Stopwatch();
                 dt.Tick += Update;
+
                 win.SizeChanged += Resized;
                 win.KeyDown += KeyHit;
                 win.KeyUp += KeyRelease;
                 win.MouseMove += MouseMovement;
                 win.MouseLeftButtonDown += LeftMouseClick;
+                win.MouseRightButtonDown += RightMouseClick;
+
                 playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
+
                 PlayerInput += cl.OnShoot;
                 PlayerInput += cl.OnMove;
                 PlayerInput += cl.OnReload;
                 PlayerInput += cl.OnPickup;
                 cl.UpdateUI += (obj, args) => InvalidateVisual();
-                or.SetOffsets(ActualWidth / 2, ActualHeight / 2);
+
+                or.SetOffsets(xCenter, yCenter);
                 InvalidateVisual();
+
                 dt.Start();
+            }
+        }
+
+        private void RightMouseClick(object sender, MouseButtonEventArgs e)
+        {
+            var p = e.MouseDevice.GetPosition(this);
+            p.X += (om.MyPlayer.Position[0] - xCenter);
+            p.Y += (om.MyPlayer.Position[1] - yCenter);
+            var colls = om.Statics.Where(x => (x as IStaticItem).Type != "Map" && x.RealPrimitive.Bounds.Contains(p));
+            if (colls.Count() > 0)
+            {
+                om.DestructItem(colls.First().Id);
             }
         }
 
         private void Resized(object sender, SizeChangedEventArgs e)
         {
-            or.SetOffsets(ActualWidth / 2, ActualHeight / 2);
+            or.SetOffsets(xCenter, yCenter);
         }
-        Random r = new Random();
+
         private void LeftMouseClick(object sender, MouseButtonEventArgs e)
-        { 
-            if (playerArgs == null)
+        {
+            if (playerArgs== null)
             {
                 playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
             }
             playerArgs.Shoot = true;
-
-            var p = e.MouseDevice.GetPosition(this);
-            p.X += (om.MyPlayer.Position[0] - (ActualWidth/2));
-            p.Y += (om.MyPlayer.Position[1] - (ActualHeight/2));
-
-            int dim = r.Next(250, 350);
-            int wall = 70;
-            int crate = 50;
-            if (Keyboard.IsKeyDown(Key.E))
-            {
-                om.ConstructItem(new StaticItem(new RectangleGeometry()
-                {
-                    Rect = new Rect(0, 0, dim, dim) 
-                },
-                Guid.NewGuid(),
-                new double[]
-                { 
-                    p.X - (dim / 2),
-                    p.Y - (dim / 2)
-                },
-                0,
-                new double[] 
-                {
-                    dim,
-                    dim },
-                true,
-                "RedTree"));
-            }
-            else if (Keyboard.IsKeyDown(Key.R))
-            {
-                om.ConstructItem(new StaticItem(new RectangleGeometry()
-                { Rect = new Rect(0, 0, dim, dim) },
-                Guid.NewGuid(),
-                new double[] { p.X - (dim / 2), p.Y - (dim / 2) },
-                0, 
-                new double[] { dim, dim },
-                true,
-                "GreenTree"));
-            }
-            else if (Keyboard.IsKeyDown(Key.T))
-            {
-                om.ConstructItem(new StaticItem(new RectangleGeometry()
-                { Rect = new Rect(0, 0, dim, dim) },
-                Guid.NewGuid(),
-                new double[] { p.X - (dim / 2), p.Y - (dim / 2) },
-                0,
-                new double[] { dim, dim },
-                true,
-                "RoundTree"));
-            }
-            else if (Keyboard.IsKeyDown(Key.Z))
-            {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall, wall) }, Guid.NewGuid(), new double[] { p.X - (wall / 2), p.Y - (wall / 2) }, 0, new double[] { wall, wall }, true, "Crate"));
-            }
-            else if (Keyboard.IsKeyDown(Key.U))
-            {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, crate, crate) }, Guid.NewGuid(), new double[] { p.X - (crate / 2), p.Y - (crate / 2) }, 0, new double[] { crate, crate }, true, "Wall"));
-            }
+            var mousePoint = e.MouseDevice.GetPosition(this);
+            mousePoint.X += (om.MyPlayer.Position[0] - xCenter);
+            mousePoint.Y += (om.MyPlayer.Position[1] - yCenter);
+            AddItems(mousePoint);
         }
-
 
         private void MouseMovement(object sender, MouseEventArgs e)
         {
@@ -142,10 +124,11 @@ namespace obServer.ViewController.Control
                 playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
             }
             Point mp = e.GetPosition(this);
-            double angle = Vector.AngleBetween(new Vector(0, -1), new Vector(mp.X - (this.ActualWidth/2), mp.Y - (this.ActualHeight)/2));
+            double xmouseRelativeToCenter = mp.X - xCenter;
+            double ymouseRelativeToCenter = mp.Y - yCenter;
+            double angle = Vector.AngleBetween(new Vector(0, -1), new Vector(xmouseRelativeToCenter, ymouseRelativeToCenter));
             playerArgs.Angle = angle;
         }
-
 
         private void KeyRelease(object sender, KeyEventArgs e)
         {
@@ -221,14 +204,9 @@ namespace obServer.ViewController.Control
             if (playerArgs != null)
             {
                 PlayerInput?.Invoke(this, playerArgs);
+                playerArgs = null;
             }
             cl.FlyBullets(deltaTime);
-            GC.Collect();
-        }
-
-        private void HandleKey()
-        {
-            //Keyboard.Is
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -263,6 +241,34 @@ namespace obServer.ViewController.Control
                 xDoc.Root.Add(xelem);
             }
             xDoc.Save("Map.xml");
+        }
+
+        private void AddItems(Point p)
+        {
+            Random r = new Random();
+            int dim = r.Next(250, 350);
+            int wall = 70;
+            int crate = 50;
+            if (Keyboard.IsKeyDown(Key.E))
+            {
+                om.ConstructItem(new StaticItem(new RectangleGeometry() {Rect = new Rect(0, 0, dim, dim)},Guid.NewGuid(),new double[]{ p.X - (dim / 2),p.Y - (dim / 2)},0,new double[] {dim,dim },false,"RedTree"));
+            }
+            else if (Keyboard.IsKeyDown(Key.R))
+            {
+                om.ConstructItem(new StaticItem(new RectangleGeometry(){ Rect = new Rect(0, 0, dim, dim) },Guid.NewGuid(),new double[] { p.X - (dim / 2), p.Y - (dim / 2) },0,new double[] { dim, dim },false,"GreenTree"));
+            }
+            else if (Keyboard.IsKeyDown(Key.T))
+            {
+                om.ConstructItem(new StaticItem(new RectangleGeometry(){ Rect = new Rect(0, 0, dim, dim) },Guid.NewGuid(),new double[] { p.X - (dim / 2), p.Y - (dim / 2) },0,new double[] { dim, dim },false,"RoundTree"));
+            }
+            else if (Keyboard.IsKeyDown(Key.Z))
+            {
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall, wall) }, Guid.NewGuid(), new double[] { p.X - (wall / 2), p.Y - (wall / 2) }, 0, new double[] { wall, wall }, true, "Crate"));
+            }
+            else if (Keyboard.IsKeyDown(Key.U))
+            {
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, crate, crate) }, Guid.NewGuid(), new double[] { p.X - (crate / 2), p.Y - (crate / 2) }, 0, new double[] { crate, crate }, true, "Wall"));
+            }
         }
     }
 }

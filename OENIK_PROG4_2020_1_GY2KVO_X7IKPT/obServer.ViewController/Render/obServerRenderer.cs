@@ -13,7 +13,20 @@ namespace obServer.ViewController.Render
 {
     class obServerRenderer
     {
-        private IobServerModel Model;
+        private static string directory = Directory.GetCurrentDirectory();
+        private static ImageBrush playerBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\player.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush crateBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\crate.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush logBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\log.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush weaponBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\log.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush mapBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\hugemap.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush wallBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\wall.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush bushBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\bush.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush redTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\redtree.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush greenTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\greentree.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush roundTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\roundtree.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static Pen blackBorder = new Pen(Brushes.Black, 2);
+        private static SolidColorBrush bulletBrush = Brushes.DarkGray;
+        private static SolidColorBrush mapEndBrush = Brushes.DarkOliveGreen;
 
         public obServerRenderer(IobServerModel model)
         {
@@ -21,9 +34,10 @@ namespace obServer.ViewController.Render
             DrawStatic();
         }
 
+        private DrawingGroup cache;
+        private IobServerModel Model;
         private double width;
         private double height;
-        private double scaleDelta = 1;
 
         public void SetOffsets(double width, double height)
         {
@@ -32,38 +46,21 @@ namespace obServer.ViewController.Render
         }
 
 
-        private Stopwatch sw = new Stopwatch();
-        private static string directory = Directory.GetCurrentDirectory();
-        private static ImageBrush playerBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\player.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush crateBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\crate.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush logBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\log.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush weaponBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\log.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush mapBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\hugemap.png")) {  CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush wallBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\wall.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush bushBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\bush.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush redTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\redtree.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush greenTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\greentree.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static ImageBrush roundTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory  +  "\\textures\\roundtree.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        private static Pen blackBorder = new Pen(Brushes.Black, 2);
-        private static SolidColorBrush bulletBrush = Brushes.DarkGray;
-        private static SolidColorBrush mapEndBrush = Brushes.DarkOliveGreen;
-        private DrawingGroup cache;
-
 
         internal void DrawElements(DrawingContext context)
         {
-            sw.Restart();
             DrawStatic();
             DrawingGroup dGroup = new DrawingGroup();
             TransformGroup tg = new TransformGroup();
             tg.Children.Add(new TranslateTransform(-(Model.MyPlayer.Position[0] - width), -(Model.MyPlayer.Position[1] - height)));
-            tg.Children.Add(new ScaleTransform(scaleDelta, scaleDelta));
             dGroup.Transform = tg;
+
             foreach (var item in Model.Map)
             {
                 GeometryDrawing map = new GeometryDrawing(mapBrush, null, item.RealPrimitive);
                 dGroup.Children.Add(map);
             }
+
             foreach (var Player in Model.Players) 
             {
                 var p = Player.RealPrimitive;
@@ -79,17 +76,19 @@ namespace obServer.ViewController.Render
                 GeometryDrawing weapon = new GeometryDrawing(weaponBrush, blackBorder, Weapon.RealPrimitive);
                 dGroup.Children.Add(weapon);
             }
+
             foreach (var Bullet in Model.Bullets)
             {
                 GeometryDrawing bullet = new GeometryDrawing(bulletBrush, blackBorder, Bullet.RealPrimitive);
                 dGroup.Children.Add(bullet);
             }
+
             foreach (var Static in cache.Children)
             {
                 dGroup.Children.Insert(dGroup.Children.Count, Static);
             }
+
             context.DrawDrawing(dGroup);
-            Debug.WriteLine("Render: " + sw.Elapsed.TotalSeconds);
             GC.Collect();
         }
 

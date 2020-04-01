@@ -11,19 +11,14 @@ namespace obServer.Model.Interfaces
         IPlayer MyPlayer { get;  }
         IEnumerable<IBaseItem> AllItems { get; }
         IEnumerable<IBaseItem> Bullets { get; }
-
         IEnumerable<IBaseItem> Players { get; }
-
         IEnumerable<IBaseItem> Colliders { get; }
         IEnumerable<IBaseItem> Statics { get; }
         IEnumerable<IBaseItem> Weapons { get; }
         IStaticItem[] Map { get; }
-
         void ConstructItem(IBaseItem item);
-
         void DestructItem(Guid id);
         IEnumerable<Guid> GetCloseItems(Guid id);
-
         void UpdateItem(Guid id, double xMove, double yMove, double width, double height, double rotation);
     }
 }
