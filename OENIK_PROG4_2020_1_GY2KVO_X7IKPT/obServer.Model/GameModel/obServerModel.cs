@@ -223,10 +223,10 @@ namespace obServer.Model.GameModel
             foreach (var node in xDoc.Root.Descendants("item"))
             {
                 string type = node.Attribute("type").Value;
-                double x = double.Parse(node.Element("x").Value);
-                double y = double.Parse(node.Element("y").Value);
-                double width = double.Parse(node.Element("width").Value);
-                double height = double.Parse(node.Element("height").Value);
+                double x = double.Parse(node.Element("x").Value.Replace('.', ','));
+                double y = double.Parse(node.Element("y").Value.Replace('.', ','));
+                double width = double.Parse(node.Element("width").Value.Replace('.', ','));
+                double height = double.Parse(node.Element("height").Value.Replace('.',','));
                 double angle = double.Parse(node.Element("angle").Value);
                 Guid id = Guid.Parse(node.Attribute("id").Value);
                 ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) }, id, new double[] { x, y }, angle, new double[] { width, height }, false, type));

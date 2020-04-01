@@ -80,8 +80,8 @@ namespace obServer.ViewController.Control
             p.Y += (om.MyPlayer.Position[1] - (ActualHeight/2));
 
             int dim = r.Next(250, 350);
-            int dimsmall = 150;
-            int crate = 100;
+            int wall = 70;
+            int crate = 50;
             if (Keyboard.IsKeyDown(Key.E))
             {
                 om.ConstructItem(new StaticItem(new RectangleGeometry()
@@ -126,7 +126,7 @@ namespace obServer.ViewController.Control
             }
             else if (Keyboard.IsKeyDown(Key.Z))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, dimsmall, dimsmall) }, Guid.NewGuid(), new double[] { p.X - (dimsmall / 2), p.Y - (dimsmall / 2) }, 0, new double[] { dimsmall, dimsmall }, true, "Crate"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall, wall) }, Guid.NewGuid(), new double[] { p.X - (wall / 2), p.Y - (wall / 2) }, 0, new double[] { wall, wall }, true, "Crate"));
             }
             else if (Keyboard.IsKeyDown(Key.U))
             {
@@ -197,10 +197,10 @@ namespace obServer.ViewController.Control
                     playerArgs.Movement[0] = 1;
                     break;
                 case Key.R:
-                    playerArgs.Reload = true;
+                    //playerArgs.Reload = true;
                     break;
                 case Key.F:
-                    playerArgs.Pickup = true;
+                    //playerArgs.Pickup = true;
                     break;
                 case Key.Escape:
                     SaveXDoc();
