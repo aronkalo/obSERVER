@@ -62,22 +62,15 @@ namespace obServer.Model.GameModel.Item
 
 		private bool changed;
 
-		public void SetGeometry(Geometry geom)
-		{
-			primitve = geom;
-		}
-
 		public Geometry RealPrimitive
 		{
 			get 
 			{
 				if (changed)
 				{
-					TransformGroup tg = new TransformGroup();
-					tg.Children.Add(new TranslateTransform(Position[0], Position[1]));
-					tg.Children.Add(new RotateTransform(Rotation, Position[0], Position[1]));
-					primitve.Transform = tg;
+					primitve.Transform = new TranslateTransform(Position[0], Position[1]);
 					cache = primitve.GetFlattenedPathGeometry();
+					cache.Transform = new RotateTransform(Rotation, Position[0], Position[1]);
 					changed = false;
 				}
 				return cache;
@@ -102,6 +95,7 @@ namespace obServer.Model.GameModel.Item
 		{
 			Position[0] = x;
 			Position[1] = y;
+			changed = true;
 		}
 
 		virtual protected void ChangePosition(double x, double y, double angle = 0)
@@ -109,6 +103,7 @@ namespace obServer.Model.GameModel.Item
 			Position[0] = Position[0] + x;
 			Position[1] = Position[1] + y;
 			Rotation = angle;
+			changed = true;
 		}
 	}
 }

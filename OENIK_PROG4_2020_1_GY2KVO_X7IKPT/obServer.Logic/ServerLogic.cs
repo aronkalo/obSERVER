@@ -16,7 +16,7 @@ namespace obServer.Logic
             gameServer = new RepoGameServer();
             gameServer.ReceiveRequest += OnReceive;
             gameServer.StartListening();
-            model = new ServerData(width, height);
+            //model = new ServerData(width, height);
         }
 
         private void OnReceive(object sender, IReceivedEventArgs e)

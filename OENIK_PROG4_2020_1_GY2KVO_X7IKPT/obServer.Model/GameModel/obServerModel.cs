@@ -19,20 +19,35 @@ namespace obServer.Model.GameModel
 
         public obServerModel(int width, int height)
         {
-            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[2] { 20, 20 }, 0, true, 100);
+            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[2] { 300, 300 }, 0, true, 100);
             Items = new List<IBaseItem>();
-            info = new MapInformation(width, height);
+            //info = new MapInformation(width, height);
             ConstructItem(player);
-            map = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { 0, 0}, 0, new double[] { width, height}, false, "Map");
+            LoadMap(width, height);
+
             myPlayer = player;
             LoadItems(width, height);
+        }
+
+        private void LoadMap(int width,int height)
+        {
+            map = new IStaticItem[9];
+            map[0] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * -1, height * -1 }, 0, new double[] { width, height }, false, "Map");
+            map[1] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * -1, height * 0 }, 0, new double[] { width, height }, false, "Map");
+            map[2] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 0, height * -1 }, 0, new double[] { width, height }, false, "Map");
+            map[3] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 0, height * 0 }, 0, new double[] { width, height }, false, "Map");
+            map[4] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 1, height * 0 }, 0, new double[] { width, height }, false, "Map");
+            map[5] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 0, height * 1 }, 0, new double[] { width, height }, false, "Map");
+            map[6] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 1, height * 1 }, 1, new double[] { width, height }, false, "Map");
+            map[7] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * -1, height * 1 }, 0, new double[] { width, height }, false, "Map");
+            map[8] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 1, height * -1 }, 0, new double[] { width, height }, false, "Map");
         }
 
         private IPlayer myPlayer;
 
         private List<IBaseItem> Items;
 
-        private IStaticItem map;
+        private IStaticItem[] map;
 
         private MapInformation info;
 
@@ -46,7 +61,7 @@ namespace obServer.Model.GameModel
             weaponChanged = true;
             itemsChanged = true;
         }
-        public  IStaticItem Map
+        public  IStaticItem[] Map
         {
             get
             {
@@ -145,14 +160,14 @@ namespace obServer.Model.GameModel
                 int height = (int)bounds.Height;
                 int x = (int)bounds.X + width;
                 int y = (int)bounds.Y + height;
-                info.Add(item.Id, x, y, width, height);
+                //info.Add(item.Id, x, y, width, height);
                 ItemsChanged();
             }
             else
             {
-                info.Del(item.Id);
+                //info.Del(item.Id);
                 var bounds = item.RealPrimitive.Bounds;
-                info.Add(item.Id, (int)item.Position[0], (int)item.Position[1], (int)bounds.Width, (int)bounds.Height);
+                //info.Add(item.Id, (int)item.Position[0], (int)item.Position[1], (int)bounds.Width, (int)bounds.Height);
             }
         }
 
@@ -174,7 +189,7 @@ namespace obServer.Model.GameModel
                 IBaseItem item = items.First();
                 Items.Remove(item);
                 item = null;
-                info.Del(item.Id);
+                //info.Del(item.Id);
                 ItemsChanged();
             }
         }
@@ -204,31 +219,46 @@ namespace obServer.Model.GameModel
 
         private void LoadItems(int xMax, int yMax)
         {
-            Random r = new Random();
-            for (int i = 0; i < 10; i++)
+            XDocument xDoc = XDocument.Load("Map.xml");
+            foreach (var node in xDoc.Root.Descendants("item"))
             {
-                double dim = r.Next(50, 100);
-                double xPos = r.Next(0, xMax - 2000);
-                double yPos = r.Next(0, yMax - 2000);
-                IBaseItem item = new StaticItem(StaticGeometry(dim,dim), Guid.NewGuid(), new double[] { xPos, yPos }, 0, new double[] { dim, dim }, true, "Crate");
-                ConstructItem(item);
+                string type = node.Attribute("type").Value;
+                double x = double.Parse(node.Element("x").Value);
+                double y = double.Parse(node.Element("y").Value);
+                double width = double.Parse(node.Element("width").Value);
+                double height = double.Parse(node.Element("height").Value);
+                double angle = double.Parse(node.Element("angle").Value);
+                Guid id = Guid.Parse(node.Attribute("id").Value);
+                ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) }, id, new double[] { x, y }, angle, new double[] { width, height }, false, type));
             }
-            for (int i = 0; i < 10; i++)
-            {
-                double dim = r.Next(70, 120);
-                double xPos = r.Next(0, xMax - 2000);
-                double yPos = r.Next(0, yMax - 2000);
-                IBaseItem item = new StaticItem(StaticGeometry(dim, dim), Guid.NewGuid(), new double[] { xPos, yPos }, 0, new double[] { dim, dim }, true, "Wall");
-                ConstructItem(item);
-            }
-            for (int i = 0; i < 10; i++)
-            {
-                double dim = r.Next(100, 200);
-                double xPos = r.Next(0, xMax - 2000);
-                double yPos = r.Next(0, yMax - 2000);
-                IBaseItem item = new StaticItem(StaticGeometry(dim, dim), Guid.NewGuid(), new double[] { xPos, yPos }, 0, new double[] { dim, dim }, true, "Bush");
-                ConstructItem(item);
-            }
+
+            //Random r = new Random();
+            //double d = 70;
+            //for (int y = 0; y < yMax; y += (int)d)
+            //{
+            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { 0 - d, y }, 0, new double[] { d, d }, true, "Wall");
+            //    ConstructItem(start);
+            //    IBaseItem end = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { xMax, y }, 0, new double[] { d, d }, true, "Wall");
+            //    ConstructItem(end);
+            //}
+
+            //for (int x = 0; x < xMax; x += (int)d)
+            //{
+            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, 0 - d }, 0, new double[] { d, d }, true, "Wall");
+            //    ConstructItem(start);
+            //    IBaseItem end = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, yMax }, 0, new double[] { d, d }, true, "Wall");
+            //    ConstructItem(end);
+            //}
+            //IBaseItem tree1 = new StaticItem(StaticGeometry(250, 250), Guid.NewGuid(), new double[] { 100, 150 }, 0, new double[] { 250, 250 }, true, "RedTree");
+            //ConstructItem(tree1);
+            //IBaseItem tree2 = new StaticItem(StaticGeometry(150, 150), Guid.NewGuid(), new double[] { 200, 270 }, 0, new double[] { 150, 150 }, true, "GreenTree");
+            //ConstructItem(tree2);
+            //IBaseItem tree3 = new StaticItem(StaticGeometry(250, 250), Guid.NewGuid(), new double[] { 350, 170 }, 0, new double[] { 250, 250 }, true, "RedTree");
+            //ConstructItem(tree3);
+            //IBaseItem tree4 = new StaticItem(StaticGeometry(300, 300), Guid.NewGuid(), new double[] { 400, 340 }, 0, new double[] { 400, 400 }, true, "GreenTree");
+            //ConstructItem(tree4);
+            //IBaseItem tree5 = new StaticItem(StaticGeometry(250, 250), Guid.NewGuid(), new double[] { 300, 400 }, 0, new double[] { 450, 450 }, true, "GreenTree");
+            //ConstructItem(tree5);
         }
     }
 }

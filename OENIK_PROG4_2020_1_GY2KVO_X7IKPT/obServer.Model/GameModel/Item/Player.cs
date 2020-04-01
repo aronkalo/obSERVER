@@ -11,9 +11,9 @@ namespace obServer.Model.GameModel.Item
     public sealed class Player : BaseItem, IPlayer, IBaseItem
     {
         public static Geometry PlayerGeometry = new EllipseGeometry() { RadiusX = Width, RadiusY = Height};
-        private const double movementSpeed = 50;
-        private const double Width = 50;
-        private const double Height = 50;
+        private const double movementSpeed = 300;
+        private const double Width = 40;
+        private const double Height = 40;
 
         public Player(Geometry geometry, Guid id, double[] position, double rotation, bool impact, double health) : base(geometry, id, position, rotation, impact)
         {
@@ -57,7 +57,6 @@ namespace obServer.Model.GameModel.Item
 
         public void Reload()
         {
-
             CurrentWeapon.DoReload(storedBullets);
         }
 

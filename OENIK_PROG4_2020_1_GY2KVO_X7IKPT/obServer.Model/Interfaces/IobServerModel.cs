@@ -17,7 +17,7 @@ namespace obServer.Model.Interfaces
         IEnumerable<IBaseItem> Colliders { get; }
         IEnumerable<IBaseItem> Statics { get; }
         IEnumerable<IBaseItem> Weapons { get; }
-        IStaticItem Map { get; }
+        IStaticItem[] Map { get; }
 
         void ConstructItem(IBaseItem item);
 
