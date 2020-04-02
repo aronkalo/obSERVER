@@ -128,13 +128,20 @@ namespace obServer.Logic
 
         public void OnMove(object sender, PlayerInputEventArgs e)
         {
-            e.Player.Move(e.Movement[0], e.Movement[1], e.deltaTime, e.Angle);
-            model.ConstructItem(e.Player);
-            var bounds = e.Player.RealPrimitive.Bounds;
-            string parameters = $"Player;{e.Player.Id};{e.Player.Position[0]};{e.Player.Position[1]};{bounds.Width};{bounds.Height};{e.Player.Rotation}";
-            UpdateUI?.Invoke(this, null);
-
-            //gameClient.Send(Operation.Move, parameters);
+            if (e.Movement != null)
+            {
+                double angle = e.Player.Rotation;
+                if (e.Angle != 0)
+                {
+                    angle = e.Angle;
+                }
+                e.Player.Move(e.Movement[0], e.Movement[1], e.deltaTime, e.Angle);
+                //model.ConstructItem(e.Player);
+                var bounds = e.Player.RealPrimitive.Bounds;
+                string parameters = $"Player;{e.Player.Id};{e.Player.Position[0]};{e.Player.Position[1]};{bounds.Width};{bounds.Height};{e.Player.Rotation}";
+                UpdateUI?.Invoke(this, null);
+                //gameClient.Send(Operation.Move, parameters);
+            }
         }
 
         public void OnShoot(object sender, PlayerInputEventArgs e)

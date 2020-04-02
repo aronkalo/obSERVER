@@ -106,10 +106,6 @@ namespace obServer.ViewController.Control
 
         private void LeftMouseClick(object sender, MouseButtonEventArgs e)
         {
-            if (playerArgs== null)
-            {
-                playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
-            }
             playerArgs.Shoot = true;
             var mousePoint = e.MouseDevice.GetPosition(this);
             mousePoint.X += (om.MyPlayer.Position[0] - xCenter);
@@ -119,10 +115,6 @@ namespace obServer.ViewController.Control
 
         private void MouseMovement(object sender, MouseEventArgs e)
         {
-            if (playerArgs == null)
-            {
-                playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
-            }
             Point mp = e.GetPosition(this);
             double xmouseRelativeToCenter = mp.X - xCenter;
             double ymouseRelativeToCenter = mp.Y - yCenter;
@@ -132,10 +124,6 @@ namespace obServer.ViewController.Control
 
         private void KeyRelease(object sender, KeyEventArgs e)
         {
-            if (playerArgs == null)
-            {
-                playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
-            }
             switch (e.Key)
             {
                 case Key.W:
@@ -161,10 +149,6 @@ namespace obServer.ViewController.Control
 
         private void KeyHit(object sender, KeyEventArgs e)
         {
-            if (playerArgs == null)
-            {
-                playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
-            }
             switch (e.Key)
             {
                 case Key.W:
@@ -201,11 +185,7 @@ namespace obServer.ViewController.Control
             Debug.WriteLine("AVG FPS: " + fpsCache);
             ServerUpdate(deltaTime);
             playerArgs.deltaTime = deltaTime;
-            if (playerArgs != null)
-            {
-                PlayerInput?.Invoke(this, playerArgs);
-                playerArgs = null;
-            }
+            PlayerInput?.Invoke(this, playerArgs);
             cl.FlyBullets(deltaTime);
         }
 
