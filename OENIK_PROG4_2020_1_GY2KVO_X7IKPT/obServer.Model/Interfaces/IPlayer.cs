@@ -13,5 +13,7 @@ namespace obServer.Model.Interfaces
         void PickBullet(int bullets);
         void Damaged(double damage);
         EventHandler Die { get; set; }
+
+        double Health { get; }
     }
 }

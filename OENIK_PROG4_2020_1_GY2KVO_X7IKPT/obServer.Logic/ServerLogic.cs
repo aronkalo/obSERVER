@@ -6,6 +6,7 @@ using obServer.Repository.Network;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace obServer.Logic
 {
@@ -16,17 +17,16 @@ namespace obServer.Logic
             gameServer = new RepoGameServer();
             gameServer.ReceiveRequest += OnReceive;
             gameServer.StartListening();
-            //model = new ServerData(width, height);
-        }
-
-        private void OnReceive(object sender, IReceivedEventArgs e)
-        {
-            HandleRequests(e.ReceivedRequest);
+            model = new ServerSideModel();
         }
 
         private IRepoGameServer gameServer;
-
+        private int readyPlayers = 0;
         private ServerSideModel model;
+        private void OnReceive(object sender, IReceivedEventArgs e)
+        {
+            Task.Factory.StartNew(() => HandleRequests(e.ReceivedRequest));
+        }
 
         protected override void HandleRequests(Request request)
         {
@@ -122,7 +122,7 @@ namespace obServer.Logic
             };
             double rotation = double.Parse(zones[6]);
             Guid id = Guid.Parse(zones[0]);
-            model.ConstructItem(id, zones[1], position, dimensions, rotation);
+            model.ConstructItem(id, zones[1], new Rect(double.Parse(zones[2]), double.Parse(zones[3]), double.Parse(zones[4]), double.Parse(zones[5])));
             var bullets = model.BulletHit(id);
             request.Reply = "1";
             gameServer.ReplyHandler(request);
@@ -142,7 +142,7 @@ namespace obServer.Logic
             string[] zones = request.Parameters.Split(';');
             Guid playerId = Guid.Parse(zones[0]);
             Guid weaponId = Guid.Parse(zones[1]);
-            if (model.WeaponCollide(playerId).Where( x => x.Id == weaponId).Count() == 1)
+            if (model.Collision(playerId).Where( x => x.Id == weaponId).Count() == 1)
             {
                 request.Reply = "1";
                 request.Broadcast = true;
@@ -153,8 +153,6 @@ namespace obServer.Logic
             }
             gameServer.ReplyHandler(request);
         }
-
-        private int readyPlayers;
 
         protected override void HandleReady(Request request)
         {
@@ -202,10 +200,7 @@ namespace obServer.Logic
             string[] zones = request.Parameters.Split(';');
             string type = zones[0];
             Guid id = Guid.Parse(zones[1]);
-            double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
-            double[] dimensions = new double[] { double.Parse(zones[4]), double.Parse(zones[5]) };
-            double rotation = double.Parse(zones[6]);
-            model.ConstructItem(id, type, position, dimensions, rotation);
+            model.ConstructItem(id, type,new Rect(double.Parse(zones[2]), double.Parse(zones[3]), double.Parse(zones[2]), double.Parse(zones[3])));
             request.Reply = "1";
             request.Broadcast = true;
             gameServer.ReplyHandler(request);
@@ -231,7 +226,7 @@ namespace obServer.Logic
                 double delta = Milis - double.Parse(zones[12]);
                 x = x + (int)(direction[0] * delta * speed);
                 y = y + (int)(direction[1] * delta * speed);
-                model.ConstructItem(id, type, new double[] { x, y }, new double[] { width, height }, rotation);
+                model.ConstructItem(id, type, new Rect(x,y,width,height));
                 request.Reply = "1";
                 request.Broadcast = true;
             }

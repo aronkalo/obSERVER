@@ -104,6 +104,10 @@ namespace obServer.ViewController.Control
                 case Key.Escape:
                     SaveXDoc();
                     break;
+                case Key.LeftShift:
+                    playerArgs.Movement[0] = playerArgs.Movement[0] * 1.2;
+                    playerArgs.Movement[1] = playerArgs.Movement[1] * 1.2;
+                    break;
             }
         }
 
@@ -142,6 +146,7 @@ namespace obServer.ViewController.Control
             {
                 om.DestructItem(colls.First().Id);
             }
+            om.MyPlayer.Damaged(10);
         }
 
 

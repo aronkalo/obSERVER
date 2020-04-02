@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -88,8 +90,22 @@ namespace obServer.ViewController.Render
                 dGroup.Children.Insert(dGroup.Children.Count, Static);
             }
 
+            dGroup.Children.Add(DrawHealthBar());
             context.DrawDrawing(dGroup);
             GC.Collect();
+        }
+
+        public GeometryDrawing DrawHealthBar()
+        {
+            var healthdrBrush = new DrawingBrush();
+            var dg = new DrawingGroup();
+            dg.Children.Add(new GeometryDrawing(Brushes.IndianRed,null,new RectangleGeometry(new Rect(0, 0, Model.MyPlayer.Health * 2, 30))));
+            dg.Children.Add(new GeometryDrawing(Brushes.Transparent,null,new RectangleGeometry(new Rect(0, 0, 200, 30))));
+            dg.Children.Add(new GeometryDrawing(Brushes.White, new Pen(Brushes.White,3), new FormattedText(Model.MyPlayer.Health.ToString(),CultureInfo.CurrentCulture,FlowDirection.LeftToRight, new Typeface("Arial"),20,Brushes.White, 1.25).BuildGeometry(new Point(86, 3))));
+            //var healthBrush = new LinearGradientBrush(new GradientStopCollection() { new GradientStop(Colors.Red, 0), new GradientStop(Colors.Red, Model.MyPlayer.Health / 100), new GradientStop(Colors.Transparent, Model.MyPlayer.Health/100)}, new Point(0,0),new Point(1,0));
+            healthdrBrush.Drawing = dg;
+            healthdrBrush.Opacity = 0.8;
+            return new GeometryDrawing(healthdrBrush, blackBorder, new RectangleGeometry() { Rect = new Rect(Model.MyPlayer.Position[0] - width + 20, Model.MyPlayer.Position[1] + height - 50, 200, 30)});
         }
 
         public void DrawStatic()

@@ -35,7 +35,7 @@ namespace obServer.Logic
             var bounds = p.RealPrimitive.Bounds;
             model.ConstructItem(p);
             string parameters = $"Player;{p.Id};{p.Position[0]};{p.Position[1]};{bounds.Width};{bounds.Height};{p.Rotation}";
-            //gameClient.Send(Operation.SendObject, parameters);
+            gameClient.Send(Operation.SendObject, parameters);
             p.Die += OnPlayerDie;
         }
 
@@ -43,7 +43,7 @@ namespace obServer.Logic
         {
             IPlayer player = (sender as IPlayer);
             model.DestructItem(player.Id);
-            //gameClient.Send(Operation.Die, $"{player.Id}");
+            gameClient.Send(Operation.Die, $"{player.Id}");
         }
 
         public EventHandler UpdateUI;
@@ -105,11 +105,11 @@ namespace obServer.Logic
             if (e.Pickup)
             {
                 var close = model.GetCloseItems(e.Player.Id);
-                var pickWeapon = model.Weapons.Where(x => close.Contains(x.Id));
+                var pickWeapon = model.Weapons.Where(x => close.Contains(x));
                 if (pickWeapon.Count() > 0)
                 {
                     var weapon = pickWeapon.First();
-                    //gameClient.Send(Operation.Pickup, $"{e.Player.Id};{weapon.Id}");
+                    gameClient.Send(Operation.Pickup, $"{e.Player.Id};{weapon.Id}");
                 }
                 UpdateUI?.Invoke(this, null);
             }
@@ -136,25 +136,41 @@ namespace obServer.Logic
                     angle = e.Angle;
                 }
                 e.Player.Move(e.Movement[0], e.Movement[1], e.deltaTime, e.Angle);
-                //model.ConstructItem(e.Player);
                 var bounds = e.Player.RealPrimitive.Bounds;
+                var closeItems = model.Colliders.Where(x => x != e.Player && x.RealPrimitive.Bounds.Contains(bounds));
+                var colliders = closeItems.Where(x => x.CollidesWith(e.Player.RealPrimitive));
+                foreach (var collide in colliders)
+                {
+                    if (collide.GetType() == typeof(Bullet))
+                    {
+                        gameClient.Send(Operation.Hit, $"{e.Player.Id};{collide.Id}");
+                    }
+                    else
+                    {
+                        e.Player.Move(-e.Movement[0], -e.Movement[1], e.deltaTime, e.Angle);
+                        break;
+                    }
+                }
                 string parameters = $"Player;{e.Player.Id};{e.Player.Position[0]};{e.Player.Position[1]};{bounds.Width};{bounds.Height};{e.Player.Rotation}";
                 UpdateUI?.Invoke(this, null);
-                //gameClient.Send(Operation.Move, parameters);
+                gameClient.Send(Operation.Move, parameters);
             }
         }
 
         public void OnShoot(object sender, PlayerInputEventArgs e)
         {
             var bullets = e.Player.Shoot();
-            foreach (var bullet in bullets)
+            if (bullets != null)
             {
-                model.ConstructItem(bullet);
-                var bounds = bullet.RealPrimitive.Bounds;
-                double[] direction = bullet.Direction;
-                string parameters = $"Bullet;{bullet.Id};{bullet.Position[0]};{bullet.Position[1]};{bounds.Width};{bounds.Height};{bullet.Rotation};" +
-                    $"{bullet.BulletDamage};{direction[0]};{direction[1]};{bullet.Speed};{bullet.Weight};{Milis};{e.Player.Id}";
-                gameClient.Send(Operation.Shoot, parameters);
+                foreach (var bullet in bullets)
+                {
+                    model.ConstructItem(bullet);
+                    var bounds = bullet.RealPrimitive.Bounds;
+                    double[] direction = bullet.Direction;
+                    string parameters = $"Bullet;{bullet.Id};{bullet.Position[0]};{bullet.Position[1]};{bounds.Width};{bounds.Height};{bullet.Rotation};" +
+                        $"{bullet.BulletDamage};{direction[0]};{direction[1]};{bullet.Speed};{bullet.Weight};{Milis};{e.Player.Id}";
+                    gameClient.Send(Operation.Shoot, parameters);
+                }
             }
         }
 
@@ -165,19 +181,19 @@ namespace obServer.Logic
             {
                 var ibullet = (IBullet)bullet;
                 ibullet.Fly(deltaTime);
-                var ids = model.GetCloseItems(bullet.Id);
-                foreach (var id in ids)
+                var items = model.GetCloseItems(bullet.Id);
+                foreach (var item in items)
                 {
-                    var it = model.AllItems.Where(x => x.Id == id);
+                    var it = model.AllItems.Where(x => x.Id == item.Id);
                     if (it.Count() > 0)
                     {
-                        var item = it.First();
-                        if (item.CollidesWith(bullet.RealPrimitive))
+                        var i = it.First();
+                        if (i.CollidesWith(bullet.RealPrimitive))
                         {
-                            if (item.GetType() == typeof(Player))
+                            if (i.GetType() == typeof(Player))
                             {
-                                ibullet.DoDamage((Player)item);
-                                gameClient.Send(Operation.Hit, $"{item.Id};{bullet.Id}");
+                                ibullet.DoDamage((Player)i);
+                                gameClient.Send(Operation.Hit, $"{i.Id};{bullet.Id}");
                             }
                             else
                             {
@@ -198,7 +214,6 @@ namespace obServer.Logic
 
         protected override void HandleHit(Request request)
         {
-            //$"{item.Id};{bullet.Id}"
             string[] zones = request.Parameters.Split(';');
             Guid playerId = Guid.Parse(zones[0]);
             Guid bulletId = Guid.Parse(zones[1]);

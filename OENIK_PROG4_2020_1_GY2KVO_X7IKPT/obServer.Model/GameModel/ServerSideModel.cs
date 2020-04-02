@@ -10,7 +10,7 @@ namespace obServer.Model.GameModel
 {
     public class ServerSideModel
     {
-        public ServerSideModel(int width, int height)
+        public ServerSideModel()
         {
             Items = new List<ServerItem>();
         }

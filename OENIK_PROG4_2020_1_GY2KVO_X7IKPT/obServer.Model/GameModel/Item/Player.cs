@@ -25,6 +25,13 @@ namespace obServer.Model.GameModel.Item
         public EventHandler Die { get; set; }
 
         private double health;
+        public double Health
+        {
+            get
+            {
+                return health;
+            }
+        }
         private int storedBullets;
 
         public void ChangeWeapon(IWeapon newWeapon)
@@ -52,7 +59,7 @@ namespace obServer.Model.GameModel.Item
             {
                 return CurrentWeapon.DoShoot();
             }
-            return new Bullet[0];
+            return null;
         }
 
         public void Reload()
