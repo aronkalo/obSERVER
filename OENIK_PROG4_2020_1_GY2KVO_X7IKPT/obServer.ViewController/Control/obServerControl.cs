@@ -36,24 +36,9 @@ namespace obServer.ViewController.Control
         private Stopwatch sw;
         private event EventHandler<PlayerInputEventArgs> PlayerInput;
         private static PlayerInputEventArgs playerArgs;
-        private double fpsCache = 50;
 
-        private double xCenter 
-        {
-            get
-            {
-                return ActualWidth / 2;
-            }
-                
-        }
-
-        private double yCenter
-        {
-            get
-            {
-                return ActualHeight / 2;
-            }
-        }
+        private double xCenter { get { return ActualWidth / 2; } }
+        private double yCenter { get { return ActualHeight / 2; } }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -63,91 +48,38 @@ namespace obServer.ViewController.Control
                 dt = new DispatcherTimer();
                 dt.Interval = TimeSpan.FromMilliseconds(8);
                 sw = new Stopwatch();
-                dt.Tick += Update;
-
-                win.SizeChanged += Resized;
-                win.KeyDown += KeyHit;
-                win.KeyUp += KeyRelease;
-                win.MouseMove += MouseMovement;
-                win.MouseLeftButtonDown += LeftMouseClick;
-                win.MouseRightButtonDown += RightMouseClick;
-
+                dt.Tick += OnTickUpdate;
+                SetupWindowEvents(win);
+                //  Logic
                 playerArgs = new PlayerInputEventArgs() { Player = om.MyPlayer };
-
                 PlayerInput += cl.OnShoot;
                 PlayerInput += cl.OnMove;
                 PlayerInput += cl.OnReload;
                 PlayerInput += cl.OnPickup;
+                //  Graphics
                 cl.UpdateUI += (obj, args) => InvalidateVisual();
-
                 or.SetOffsets(xCenter, yCenter);
                 InvalidateVisual();
-
                 dt.Start();
             }
         }
 
-        private void RightMouseClick(object sender, MouseButtonEventArgs e)
+        private void SetupWindowEvents(Window window)
         {
-            var p = e.MouseDevice.GetPosition(this);
-            p.X += (om.MyPlayer.Position[0] - xCenter);
-            p.Y += (om.MyPlayer.Position[1] - yCenter);
-            var colls = om.Statics.Where(x => (x as IStaticItem).Type != "Map" && x.RealPrimitive.Bounds.Contains(p));
-            if (colls.Count() > 0)
-            {
-                om.DestructItem(colls.First().Id);
-            }
+            window.SizeChanged += OnWindowSizeChanged;
+            window.KeyDown += OnWindowKeyDown;
+            window.KeyUp += OnWindowKeyUp;
+            window.MouseMove += OnMouseMove;
+            window.MouseLeftButtonDown += OnMouseLeftButtonDown;
+            window.MouseRightButtonDown += OnMouseRightButtonDown;
         }
 
-        private void Resized(object sender, SizeChangedEventArgs e)
+        private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             or.SetOffsets(xCenter, yCenter);
         }
 
-        private void LeftMouseClick(object sender, MouseButtonEventArgs e)
-        {
-            playerArgs.Shoot = true;
-            var mousePoint = e.MouseDevice.GetPosition(this);
-            mousePoint.X += (om.MyPlayer.Position[0] - xCenter);
-            mousePoint.Y += (om.MyPlayer.Position[1] - yCenter);
-            AddItems(mousePoint);
-        }
-
-        private void MouseMovement(object sender, MouseEventArgs e)
-        {
-            Point mp = e.GetPosition(this);
-            double xmouseRelativeToCenter = mp.X - xCenter;
-            double ymouseRelativeToCenter = mp.Y - yCenter;
-            double angle = Vector.AngleBetween(new Vector(0, -1), new Vector(xmouseRelativeToCenter, ymouseRelativeToCenter));
-            playerArgs.Angle = angle;
-        }
-
-        private void KeyRelease(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.W:
-                    playerArgs.Movement[1] = 0;
-                    break;
-                case Key.S:
-                    playerArgs.Movement[1] = 0;
-                    break;
-                case Key.A:
-                    playerArgs.Movement[0] = 0;
-                    break;
-                case Key.D:
-                    playerArgs.Movement[0] = 0;
-                    break;
-                case Key.R:
-                    playerArgs.Reload = false;
-                    break;
-                case Key.F:
-                    playerArgs.Pickup = false;
-                    break;
-            }
-        }
-
-        private void KeyHit(object sender, KeyEventArgs e)
+        private void OnWindowKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
@@ -175,14 +107,67 @@ namespace obServer.ViewController.Control
             }
         }
 
-        private void Update(object sender, EventArgs e)
+        private void OnWindowKeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.W:
+                    playerArgs.Movement[1] = 0;
+                    break;
+                case Key.S:
+                    playerArgs.Movement[1] = 0;
+                    break;
+                case Key.A:
+                    playerArgs.Movement[0] = 0;
+                    break;
+                case Key.D:
+                    playerArgs.Movement[0] = 0;
+                    break;
+                case Key.R:
+                    playerArgs.Reload = false;
+                    break;
+                case Key.F:
+                    playerArgs.Pickup = false;
+                    break;
+            }
+        }
+
+        private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var p = e.MouseDevice.GetPosition(this);
+            p.X += (om.MyPlayer.Position[0] - xCenter);
+            p.Y += (om.MyPlayer.Position[1] - yCenter);
+            var colls = om.Statics.Where(x => (x as IStaticItem).Type != "Map" && x.RealPrimitive.Bounds.Contains(p));
+            if (colls.Count() > 0)
+            {
+                om.DestructItem(colls.First().Id);
+            }
+        }
+
+
+
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            playerArgs.Shoot = true;
+            var mousePoint = e.MouseDevice.GetPosition(this);
+            mousePoint.X += (om.MyPlayer.Position[0] - xCenter);
+            mousePoint.Y += (om.MyPlayer.Position[1] - yCenter);
+            AddItems(mousePoint);
+        }
+
+        private void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            Point mp = e.GetPosition(this);
+            double xmouseRelativeToCenter = mp.X - xCenter;
+            double ymouseRelativeToCenter = mp.Y - yCenter;
+            double angle = Vector.AngleBetween(new Vector(0, -1), new Vector(xmouseRelativeToCenter, ymouseRelativeToCenter));
+            playerArgs.Angle = angle;
+        }
+
+        private void OnTickUpdate(object sender, EventArgs e)
         {
             double deltaTime = sw.Elapsed.TotalSeconds; sw.Restart();
-            if (deltaTime > 0.0001)
-            {
-                fpsCache = ((1 / deltaTime) + fpsCache) / 2;
-            }
-            Debug.WriteLine("AVG FPS: " + fpsCache);
+            Debug.WriteLine(deltaTime);
             ServerUpdate(deltaTime);
             playerArgs.deltaTime = deltaTime;
             PlayerInput?.Invoke(this, playerArgs);
@@ -191,10 +176,7 @@ namespace obServer.ViewController.Control
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            if (or != null)
-            {
-                or.DrawElements(drawingContext);
-            }
+            or.DrawElements(drawingContext);
         }
 
         private void ServerUpdate(double deltaTime)
