@@ -3,25 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace obServer.Model.GameModel.ServerSide
 {
     public struct ServerItem
     {
-		private double[] position;
+		private Rect bounds;
 
-		public double[] Position
+		public Rect Bounds
 		{
-			get { return position; }
-			set { position = value; }
-		}
-
-		private double[] dimensions;
-
-		public double[] Dimensions
-		{
-			get { return dimensions; }
-			set { dimensions = value; }
+			get { return bounds; }
+			set { bounds = value; }
 		}
 
 		private string type;
@@ -30,14 +23,6 @@ namespace obServer.Model.GameModel.ServerSide
 		{
 			get { return type; }
 			set { type = value; }
-		}
-
-		private double rotation;
-
-		public double Rotation
-		{
-			get { return rotation; }
-			set { rotation = value; }
 		}
 
 		private Guid id;

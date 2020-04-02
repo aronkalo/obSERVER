@@ -26,7 +26,7 @@ namespace obServer.Logic
 
         private IRepoGameServer gameServer;
 
-        private ServerData model;
+        private ServerSideModel model;
 
         protected override void HandleRequests(Request request)
         {

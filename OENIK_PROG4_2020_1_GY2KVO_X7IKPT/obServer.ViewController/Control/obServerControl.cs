@@ -46,7 +46,7 @@ namespace obServer.ViewController.Control
             if (win != null)
             {
                 dt = new DispatcherTimer();
-                dt.Interval = TimeSpan.FromMilliseconds(8);
+                dt.Interval = TimeSpan.FromMilliseconds(1);
                 sw = new Stopwatch();
                 dt.Tick += OnTickUpdate;
                 SetupWindowEvents(win);
@@ -167,7 +167,7 @@ namespace obServer.ViewController.Control
         private void OnTickUpdate(object sender, EventArgs e)
         {
             double deltaTime = sw.Elapsed.TotalSeconds; sw.Restart();
-            Debug.WriteLine(deltaTime);
+            Debug.WriteLine(1/deltaTime);
             ServerUpdate(deltaTime);
             playerArgs.deltaTime = deltaTime;
             PlayerInput?.Invoke(this, playerArgs);

@@ -49,7 +49,7 @@ namespace obServer.ViewController.Render
 
         internal void DrawElements(DrawingContext context)
         {
-            DrawStatic();
+            //DrawStatic();
             DrawingGroup dGroup = new DrawingGroup();
             TransformGroup tg = new TransformGroup();
             tg.Children.Add(new TranslateTransform(-(Model.MyPlayer.Position[0] - width), -(Model.MyPlayer.Position[1] - height)));
