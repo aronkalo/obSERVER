@@ -2,7 +2,6 @@
 using obServer.Model.GameModel.Item;
 using System.Collections.Generic;
 using System.Linq;
-using obServer.Model.Performance;
 using obServer.Model.Interfaces;
 using System.Xml.Linq;
 using System.Windows.Media;
@@ -49,9 +48,8 @@ namespace obServer.Model.GameModel
 
         private IStaticItem[] map;
 
-        private MapInformation info;
-
         private bool itemsChanged;
+
         private void ItemsChanged()
         {
             staticChanged = true;
@@ -160,17 +158,11 @@ namespace obServer.Model.GameModel
                 int height = (int)bounds.Height;
                 int x = (int)bounds.X + width;
                 int y = (int)bounds.Y + height;
-                //info.Add(item.Id, x, y, width, height);
                 ItemsChanged();
-            }
-            else
-            {
-                //info.Del(item.Id);
-                var bounds = item.RealPrimitive.Bounds;
-                //info.Add(item.Id, (int)item.Position[0], (int)item.Position[1], (int)bounds.Width, (int)bounds.Height);
             }
         }
 
+        [Obsolete]
         public void UpdateItem(Guid id, double xMove, double yMove, double width, double height, double rotation)
         {
             var items = Items.Where(x => x.Id == id);
@@ -189,14 +181,20 @@ namespace obServer.Model.GameModel
                 IBaseItem item = items.First();
                 Items.Remove(item);
                 item = null;
-                //info.Del(item.Id);
                 ItemsChanged();
             }
         }
 
-        public IEnumerable<Guid> GetCloseItems(Guid id)
+        public IEnumerable<IBaseItem> GetCloseItems(Guid id)
         {
-            return info.Collision(id);
+            var items = Items.Where(x => x.Id == id);
+            if (items.Count() == 1)
+            {
+                var item = items.First();
+                var bound = item.RealPrimitive.Bounds;
+                return Items.Where(x => x.Impact && x.RealPrimitive.Bounds.Contains(bound));
+            }
+            return null;
         }
         
         private IEnumerable<IBaseItem> staticCache;
@@ -231,34 +229,6 @@ namespace obServer.Model.GameModel
                 Guid id = Guid.Parse(node.Attribute("id").Value);
                 ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) }, id, new double[] { x, y }, angle, new double[] { width, height }, false, type));
             }
-
-            //Random r = new Random();
-            //double d = 70;
-            //for (int y = 0; y < yMax; y += (int)d)
-            //{
-            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { 0 - d, y }, 0, new double[] { d, d }, true, "Wall");
-            //    ConstructItem(start);
-            //    IBaseItem end = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { xMax, y }, 0, new double[] { d, d }, true, "Wall");
-            //    ConstructItem(end);
-            //}
-
-            //for (int x = 0; x < xMax; x += (int)d)
-            //{
-            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, 0 - d }, 0, new double[] { d, d }, true, "Wall");
-            //    ConstructItem(start);
-            //    IBaseItem end = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, yMax }, 0, new double[] { d, d }, true, "Wall");
-            //    ConstructItem(end);
-            //}
-            //IBaseItem tree1 = new StaticItem(StaticGeometry(250, 250), Guid.NewGuid(), new double[] { 100, 150 }, 0, new double[] { 250, 250 }, true, "RedTree");
-            //ConstructItem(tree1);
-            //IBaseItem tree2 = new StaticItem(StaticGeometry(150, 150), Guid.NewGuid(), new double[] { 200, 270 }, 0, new double[] { 150, 150 }, true, "GreenTree");
-            //ConstructItem(tree2);
-            //IBaseItem tree3 = new StaticItem(StaticGeometry(250, 250), Guid.NewGuid(), new double[] { 350, 170 }, 0, new double[] { 250, 250 }, true, "RedTree");
-            //ConstructItem(tree3);
-            //IBaseItem tree4 = new StaticItem(StaticGeometry(300, 300), Guid.NewGuid(), new double[] { 400, 340 }, 0, new double[] { 400, 400 }, true, "GreenTree");
-            //ConstructItem(tree4);
-            //IBaseItem tree5 = new StaticItem(StaticGeometry(250, 250), Guid.NewGuid(), new double[] { 300, 400 }, 0, new double[] { 450, 450 }, true, "GreenTree");
-            //ConstructItem(tree5);
         }
     }
 }
