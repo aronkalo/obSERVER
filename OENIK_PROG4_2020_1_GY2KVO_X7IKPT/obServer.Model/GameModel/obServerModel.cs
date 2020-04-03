@@ -24,7 +24,6 @@ namespace obServer.Model.GameModel
             ConstructItem(weap);
             ConstructItem(player);
             player.ChangeWeapon(weap);
-
             myPlayer = player;
             LoadItems(width, height);
         }

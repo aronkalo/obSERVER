@@ -35,7 +35,13 @@ namespace obServer.Model.GameModel.Item
             }
         }
         private int storedBullets;
-
+        public int StoredBullets
+        {
+            get
+            {
+                return storedBullets;
+            }
+        }
         public void ChangeWeapon(IWeapon newWeapon)
         {
             if (CurrentWeapon == null)
