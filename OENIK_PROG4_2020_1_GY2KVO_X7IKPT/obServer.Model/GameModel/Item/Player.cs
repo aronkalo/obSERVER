@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 
 namespace obServer.Model.GameModel.Item
@@ -19,6 +20,7 @@ namespace obServer.Model.GameModel.Item
         {
             CurrentWeapon = null;
             this.health = health;
+            weaponCache = new Vector(0, 40);
         }
 
         public IWeapon CurrentWeapon { get; private set; }
@@ -45,6 +47,9 @@ namespace obServer.Model.GameModel.Item
                 IWeapon helper = CurrentWeapon;
                 helper = null;
                 CurrentWeapon = newWeapon;
+                Vector pos = WeaponPosition(0);
+                weaponCache = pos;
+                CurrentWeapon.Position = new Vector(Position.X, Position.Y);
             }
         }
 
@@ -74,7 +79,18 @@ namespace obServer.Model.GameModel.Item
             double yMovement = yMove * deltaTime * movementSpeed;
             if (CurrentWeapon != null)
             {
-                CurrentWeapon.Move(xMovement, yMovement, rotation);
+                if (rotation != Rotation)
+                {
+                    Vector pos = WeaponPosition(rotation - Rotation);
+                    Vector sub = Vector.Subtract(pos, weaponCache);
+                    CurrentWeapon.Move(xMovement + sub.X, yMovement + sub.Y, rotation);
+                    weaponCache = pos;
+                }
+                else
+                {
+                    CurrentWeapon.Move(xMovement, yMovement, rotation);
+                }
+
             }
             ChangePosition(xMovement, yMovement, rotation);
         }
@@ -86,6 +102,15 @@ namespace obServer.Model.GameModel.Item
             {
                 Die?.Invoke(this, null);
             }
+        }
+
+        private Vector weaponCache;
+
+        private Vector WeaponPosition(double angle)
+        {
+            Matrix m = Matrix.Identity;
+            m.Rotate(angle);
+            return m.Transform(weaponCache);
         }
     }
 }

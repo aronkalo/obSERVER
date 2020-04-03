@@ -15,5 +15,6 @@ namespace obServer.Model.Interfaces
         double Weight { get; }
 
         double Speed { get; }
+        double RealSpeed { get; }
     }
 }

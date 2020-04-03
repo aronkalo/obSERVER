@@ -1,5 +1,6 @@
 ﻿using obServer.Model.Interfaces;
 using System;
+using System.Windows;
 using System.Windows.Media;
 
 namespace obServer.Model.GameModel.Item
@@ -41,16 +42,17 @@ namespace obServer.Model.GameModel.Item
             {
                 bulletCount--;
                 Bullet[] bullets = new Bullet[bulletShoot];
-                double[] direction = BulletRotation();
                 for (int i = 0; i < bullets.Length; i++)
                 {
+                    double rot = Rotation + (BulletRandomizer.Next(-1, 2) * BulletRandomizer.NextDouble() * 10);
+                    double[] direction = BulletDirection(rot);
                     bullets[i] = new Bullet(
                         Bullet.BulletGeometry,
                         Guid.NewGuid(),
                         new double[] 
                         {
-                            Position[0],
-                            Position[1]
+                            Position.X,
+                            Position.Y
                         },
                         Rotation,
                         true,
@@ -61,7 +63,7 @@ namespace obServer.Model.GameModel.Item
                 }
                 return bullets;
             }
-            return new Bullet[0];
+            return null;
         }
 
 
@@ -81,18 +83,12 @@ namespace obServer.Model.GameModel.Item
             }
         }
 
-        private double[] BulletRotation()
+        private double[] BulletDirection(double angle)
         {
-            double xbase = 0;
-            double ybase = -1;
-            double rad = Rotation / 180 * Math.PI;
-            double sin = Math.Sin(rad);
-            double cos = Math.Cos(rad);
-            return new double[] 
-            {
-                xbase * cos - ybase * sin,
-                ybase * sin - xbase * cos,
-            };
+            Matrix m = Matrix.Identity;
+            m.Rotate(angle);
+            Vector trans = m.Transform(new Vector(0,1));
+            return new double[] { trans.X, trans.Y};
         }
     }
 }

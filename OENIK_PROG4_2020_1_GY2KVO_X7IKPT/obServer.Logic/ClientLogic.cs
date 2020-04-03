@@ -34,7 +34,7 @@ namespace obServer.Logic
             IPlayer p = model.MyPlayer;
             var bounds = p.RealPrimitive.Bounds;
             model.ConstructItem(p);
-            string parameters = $"Player;{p.Id};{p.Position[0]};{p.Position[1]};{bounds.Width};{bounds.Height};{p.Rotation}";
+            string parameters = $"Player;{p.Id};{p.Position.X};{p.Position.Y};{bounds.Width};{bounds.Height};{p.Rotation}";
             gameClient.Send(Operation.SendObject, parameters);
             p.Die += OnPlayerDie;
         }
@@ -104,8 +104,8 @@ namespace obServer.Logic
         {
             if (e.Pickup)
             {
-                var close = model.GetCloseItems(e.Player.Id);
-                var pickWeapon = model.Weapons.Where(x => close.Contains(x));
+                var bounds = e.Player.RealPrimitive.Bounds;
+                var pickWeapon = model.Weapons.Where(x => x.RealPrimitive.Bounds.IntersectsWith(bounds));
                 if (pickWeapon.Count() > 0)
                 {
                     var weapon = pickWeapon.First();
@@ -137,21 +137,14 @@ namespace obServer.Logic
                 }
                 e.Player.Move(e.Movement[0], e.Movement[1], e.deltaTime, e.Angle);
                 var bounds = e.Player.RealPrimitive.Bounds;
-                var closeItems = model.Colliders.Where(x => x != e.Player && x.RealPrimitive.Bounds.Contains(bounds));
+                var closeItems = model.Colliders.Where(x => x != e.Player && x.GetType() != typeof(Bullet) && bounds.IntersectsWith(x.RealPrimitive.Bounds));
                 var colliders = closeItems.Where(x => x.CollidesWith(e.Player.RealPrimitive));
                 foreach (var collide in colliders)
                 {
-                    if (collide.GetType() == typeof(Bullet))
-                    {
-                        gameClient.Send(Operation.Hit, $"{e.Player.Id};{collide.Id}");
-                    }
-                    else
-                    {
-                        e.Player.Move(-e.Movement[0], -e.Movement[1], e.deltaTime, e.Angle);
-                        break;
-                    }
+                    e.Player.Move(-e.Movement[0], -e.Movement[1], e.deltaTime, e.Angle);
+                    break;
                 }
-                string parameters = $"Player;{e.Player.Id};{e.Player.Position[0]};{e.Player.Position[1]};{bounds.Width};{bounds.Height};{e.Player.Rotation}";
+                string parameters = $"Player;{e.Player.Id};{e.Player.Position.X};{e.Player.Position.Y};{bounds.Width};{bounds.Height};{e.Player.Rotation}";
                 UpdateUI?.Invoke(this, null);
                 gameClient.Send(Operation.Move, parameters);
             }
@@ -159,17 +152,20 @@ namespace obServer.Logic
 
         public void OnShoot(object sender, PlayerInputEventArgs e)
         {
-            var bullets = e.Player.Shoot();
-            if (bullets != null)
+            if (e.Shoot)
             {
-                foreach (var bullet in bullets)
+                var bullets = e.Player.Shoot();
+                if (bullets != null)
                 {
-                    model.ConstructItem(bullet);
-                    var bounds = bullet.RealPrimitive.Bounds;
-                    double[] direction = bullet.Direction;
-                    string parameters = $"Bullet;{bullet.Id};{bullet.Position[0]};{bullet.Position[1]};{bounds.Width};{bounds.Height};{bullet.Rotation};" +
-                        $"{bullet.BulletDamage};{direction[0]};{direction[1]};{bullet.Speed};{bullet.Weight};{Milis};{e.Player.Id}";
-                    gameClient.Send(Operation.Shoot, parameters);
+                    foreach (var bullet in bullets)
+                    {
+                        model.ConstructItem(bullet);
+                        var bounds = bullet.RealPrimitive.Bounds;
+                        double[] direction = bullet.Direction;
+                        string parameters = $"Bullet;{bullet.Id};{bullet.Position.X};{bullet.Position.Y};{bounds.Width};{bounds.Height};{bullet.Rotation};" +
+                            $"{bullet.BulletDamage};{direction[0]};{direction[1]};{bullet.Speed};{bullet.Weight};{Milis};{e.Player.Id}";
+                        gameClient.Send(Operation.Shoot, parameters);
+                    }
                 }
             }
         }
@@ -177,35 +173,41 @@ namespace obServer.Logic
         public void FlyBullets(double deltaTime)
         {
             var bullets = model.Bullets;
-            foreach (var bullet in bullets)
+            int c = bullets.Count();
+            for (int i = 0; i < bullets.Count(); i++)
             {
-                var ibullet = (IBullet)bullet;
-                ibullet.Fly(deltaTime);
-                var items = model.GetCloseItems(bullet.Id);
-                foreach (var item in items)
+                var ibullet = (IBullet)bullets.ElementAt(i);
+                if ( ibullet.RealSpeed < 80)
                 {
-                    var it = model.AllItems.Where(x => x.Id == item.Id);
-                    if (it.Count() > 0)
-                    {
-                        var i = it.First();
-                        if (i.CollidesWith(bullet.RealPrimitive))
+                    model.DestructItem(ibullet.Id);
+                    UpdateUI?.Invoke(this, null);
+                    continue;
+                }
+                var bounds = ibullet.RealPrimitive.Bounds;
+                ibullet.Fly(deltaTime);
+                var items = model.Colliders.Where(x => x.RealPrimitive.Bounds.IntersectsWith(bounds) && x.GetType() != typeof(Bullet));
+                for (int y = 0; y < items.Count(); y++)
+                {
+                        if (items.ElementAt(y).CollidesWith(bullets.ElementAt(i).RealPrimitive))
                         {
-                            if (i.GetType() == typeof(Player))
+                            if (items.ElementAt(y).GetType() == typeof(Player))
                             {
-                                ibullet.DoDamage((Player)i);
-                                gameClient.Send(Operation.Hit, $"{i.Id};{bullet.Id}");
+                                ibullet.DoDamage((Player)items.ElementAt(y));
+                                gameClient.Send(Operation.Hit, $"{items.ElementAt(y).Id};{ibullet.Id}");
+                                model.DestructItem(ibullet.Id);
+                                break;
                             }
                             else
                             {
-                                gameClient.Send(Operation.Remove, $"{bullet.Id}");
+                                gameClient.Send(Operation.Remove, $"{ibullet.Id}");
+                                model.DestructItem(ibullet.Id);
+                                break;
                             }
                         }
                     }
                 }
                 UpdateUI?.Invoke(this, null);
-            }
         }
-
         protected override void HandleConnect(Request request) { }
 
         protected override void HandleDie(Request request) { }
@@ -317,5 +319,6 @@ namespace obServer.Logic
         }
 
         public void Add(IBaseItem item) { }
+
     }
 }

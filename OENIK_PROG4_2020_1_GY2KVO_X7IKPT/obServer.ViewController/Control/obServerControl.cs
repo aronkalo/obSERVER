@@ -139,8 +139,8 @@ namespace obServer.ViewController.Control
         private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             var p = e.MouseDevice.GetPosition(this);
-            p.X += (om.MyPlayer.Position[0] - xCenter);
-            p.Y += (om.MyPlayer.Position[1] - yCenter);
+            p.X += (om.MyPlayer.Position.X - xCenter);
+            p.Y += (om.MyPlayer.Position.Y - yCenter);
             var colls = om.Statics.Where(x => (x as IStaticItem).Type != "Map" && x.RealPrimitive.Bounds.Contains(p));
             if (colls.Count() > 0)
             {
@@ -155,8 +155,8 @@ namespace obServer.ViewController.Control
         {
             playerArgs.Shoot = true;
             var mousePoint = e.MouseDevice.GetPosition(this);
-            mousePoint.X += (om.MyPlayer.Position[0] - xCenter);
-            mousePoint.Y += (om.MyPlayer.Position[1] - yCenter);
+            mousePoint.X += (om.MyPlayer.Position.X - xCenter);
+            mousePoint.Y += (om.MyPlayer.Position.Y - yCenter);
             AddItems(mousePoint);
         }
 
@@ -165,7 +165,7 @@ namespace obServer.ViewController.Control
             Point mp = e.GetPosition(this);
             double xmouseRelativeToCenter = mp.X - xCenter;
             double ymouseRelativeToCenter = mp.Y - yCenter;
-            double angle = Vector.AngleBetween(new Vector(0, -1), new Vector(xmouseRelativeToCenter, ymouseRelativeToCenter));
+            double angle = Vector.AngleBetween(new Vector(0, 1), new Vector(xmouseRelativeToCenter, ymouseRelativeToCenter));
             playerArgs.Angle = angle;
         }
 
@@ -176,6 +176,9 @@ namespace obServer.ViewController.Control
             ServerUpdate(deltaTime);
             playerArgs.deltaTime = deltaTime;
             PlayerInput?.Invoke(this, playerArgs);
+            playerArgs.Shoot = false;
+            playerArgs.Reload = false;
+            playerArgs.Pickup = false;
             cl.FlyBullets(deltaTime);
         }
 
@@ -200,11 +203,24 @@ namespace obServer.ViewController.Control
                 var xelem = new XElement("item");
                 xelem.Add(new XAttribute("type", stat.Type));
                 xelem.Add(new XAttribute("id", stat.Id));
-                xelem.Add(new XElement("x", stat.Position[0]));
-                xelem.Add(new XElement("y", stat.Position[1]));
+                xelem.Add(new XElement("x", stat.Position.X));
+                xelem.Add(new XElement("y", stat.Position.Y));
                 xelem.Add(new XElement("width", stat.Dimensions[0]));
                 xelem.Add(new XElement("height", stat.Dimensions[1]));
                 xelem.Add(new XElement("angle", stat.Rotation));
+                bool imp = false;
+                switch (stat.Type)
+                {
+                    case "Crate":
+                        imp = true;
+                        break;
+                    case "Wall":
+                        imp = true;
+                        break;
+                    default:
+                        break;
+                }
+                xelem.Add(new XElement("impact", imp));
                 xDoc.Root.Add(xelem);
             }
             xDoc.Save("Map.xml");

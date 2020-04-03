@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Media;
 
 namespace obServer.Model.Interfaces
@@ -6,7 +7,7 @@ namespace obServer.Model.Interfaces
     public interface IBaseItem
     {
         Guid Id { get; set; }
-        double[] Position { get; set; }
+        Vector Position { get; set; }
         double Rotation { get; set; }
         bool Impact { get; set; }
         Geometry RealPrimitive { get; }

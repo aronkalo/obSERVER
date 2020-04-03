@@ -1,5 +1,6 @@
 ﻿using obServer.Model.Interfaces;
 using System;
+using System.Windows;
 using System.Windows.Media;
 
 namespace obServer.Model.GameModel.Item
@@ -10,7 +11,7 @@ namespace obServer.Model.GameModel.Item
 		{
 			primitve = geometry;
 			Id = id;
-			Position = new double[2];
+			Position = new Vector(position[0], position[1]);
 			SetPosition(position[0], position[1]);
 			Rotation = rotation;
 			Impact = impact;
@@ -24,9 +25,9 @@ namespace obServer.Model.GameModel.Item
 			get { return id; }
 			set { id = value; }
 		}
-		private double[] position;
+		private Vector position;
 
-		public double[] Position
+		public Vector Position
 		{
 			get { return position; }
 			set { position = value; }
@@ -37,8 +38,8 @@ namespace obServer.Model.GameModel.Item
 		public double Rotation
 		{
 			get { return rotation; }
-			set 
-			{ 
+			set
+			{
 				rotation = value;
 				changed = true;
 			}
@@ -49,8 +50,8 @@ namespace obServer.Model.GameModel.Item
 		public bool Impact
 		{
 			get { return impact; }
-			set 
-			{ 
+			set
+			{
 				impact = value;
 				changed = true;
 			}
@@ -64,13 +65,13 @@ namespace obServer.Model.GameModel.Item
 
 		public Geometry RealPrimitive
 		{
-			get 
+			get
 			{
 				if (changed)
 				{
-					primitve.Transform = new TranslateTransform(Position[0], Position[1]);
+					primitve.Transform = new TranslateTransform(Position.X, Position.Y);
 					cache = primitve.GetFlattenedPathGeometry();
-					cache.Transform = new RotateTransform(Rotation, Position[0], Position[1]);
+					cache.Transform = new RotateTransform(Rotation, Position.X, Position.Y);
 					changed = false;
 				}
 				return cache;
@@ -93,15 +94,13 @@ namespace obServer.Model.GameModel.Item
 
 		virtual protected void SetPosition(double x, double y)
 		{
-			Position[0] = x;
-			Position[1] = y;
+			Position = new Vector(x, y);
 			changed = true;
 		}
 
 		virtual protected void ChangePosition(double x, double y, double angle = 0)
 		{
-			Position[0] = Position[0] + x;
-			Position[1] = Position[1] + y;
+			Position = new Vector(Position.X + x, Position.Y + y);
 			Rotation = angle;
 			changed = true;
 		}

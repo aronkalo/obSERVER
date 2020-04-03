@@ -8,10 +8,11 @@ namespace obServer.Model.GameModel.Item
     public sealed class Bullet : BaseItem, IBullet
     {
         public static EllipseGeometry BulletGeometry { get { return new EllipseGeometry() { RadiusX = BulletWidth, RadiusY = BulletHeight }; } }
-        private const double BulletWidth = 5;
-        private const double BulletHeight = 5;
+        private const double BulletWidth = 3;
+        private const double BulletHeight = 3;
         private double flySpeed;
         private double supressionCache;
+        private double realspeedCache;
         private double weight;
         private double damage;
         private double[] direction;
@@ -20,12 +21,17 @@ namespace obServer.Model.GameModel.Item
         {
             get
             {
-                double a = (startPos[0] - Position[0]);
-                double b = (startPos[1] - Position[1]);
+                double a = (startPos[0] - Position.X);
+                double b = (startPos[1] - Position.Y);
                 double sup = 1 - (Math.Sqrt((a * a) + (b * b)) * weight);
                 supressionCache = sup > 0 ? sup : 0;
                 return supressionCache;
             }
+        }
+
+        public double RealSpeed
+        {
+            get { return realspeedCache; }
         }
 
         public double BulletDamage
@@ -62,6 +68,7 @@ namespace obServer.Model.GameModel.Item
         public Bullet(Geometry geometry, Guid id, double[] position, double rotation,  bool impact, double flySpeed, double damage, double[] direction, double weight) : base(geometry, id, position, rotation, impact)
         {
             this.flySpeed = flySpeed;
+            this.realspeedCache = flySpeed;
             this.damage = damage;
             this.direction = new double[2];
             this.direction[0] = direction[0];
@@ -75,8 +82,9 @@ namespace obServer.Model.GameModel.Item
 
         public void Fly(double deltaTime)
         {
-            double xMovement = direction[0] * flySpeed * deltaTime * supression;   
-            double yMovement = direction[1] * flySpeed * deltaTime * supression;
+            realspeedCache = flySpeed * supression;
+            double xMovement = direction[0] * realspeedCache * deltaTime;   
+            double yMovement = direction[1] * realspeedCache * deltaTime;
             ChangePosition(xMovement, yMovement, 0);
         }
 

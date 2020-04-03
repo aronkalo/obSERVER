@@ -5,6 +5,7 @@ using System.Linq;
 using obServer.Model.Interfaces;
 using System.Xml.Linq;
 using System.Windows.Media;
+using System.Windows;
 
 namespace obServer.Model.GameModel
 {
@@ -15,31 +16,17 @@ namespace obServer.Model.GameModel
             return new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) };
         }
 
-
         public obServerModel(int width, int height)
         {
-            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[2] { 300, 300 }, 0, true, 100);
             Items = new List<IBaseItem>();
-            //info = new MapInformation(width, height);
+            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[] { 300, 300 }, 0, true, 100);
+            IWeapon weap = new Weapon(new EllipseGeometry() { RadiusX = 1, RadiusY = 1 }, Guid.NewGuid(), new double[] { player.Position.X + 10, player.Position.Y + 35 }, player.Rotation, false, 7000, 7, 1100, 10, 0.001);
+            ConstructItem(weap);
             ConstructItem(player);
-            LoadMap(width, height);
+            player.ChangeWeapon(weap);
 
             myPlayer = player;
             LoadItems(width, height);
-        }
-
-        private void LoadMap(int width,int height)
-        {
-            map = new IStaticItem[9];
-            map[0] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * -1, height * -1 }, 0, new double[] { width, height }, false, "Map");
-            map[1] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * -1, height * 0 }, 0, new double[] { width, height }, false, "Map");
-            map[2] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 0, height * -1 }, 0, new double[] { width, height }, false, "Map");
-            map[3] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 0, height * 0 }, 0, new double[] { width, height }, false, "Map");
-            map[4] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 1, height * 0 }, 0, new double[] { width, height }, false, "Map");
-            map[5] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 0, height * 1 }, 0, new double[] { width, height }, false, "Map");
-            map[6] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 1, height * 1 }, 1, new double[] { width, height }, false, "Map");
-            map[7] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * -1, height * 1 }, 0, new double[] { width, height }, false, "Map");
-            map[8] = new StaticItem(StaticGeometry(width, height), Guid.NewGuid(), new double[] { width * 1, height * -1 }, 0, new double[] { width, height }, false, "Map");
         }
 
         private IPlayer myPlayer;
@@ -169,7 +156,7 @@ namespace obServer.Model.GameModel
             if (items.Count() > 0)
             {
                 var item = items.First();
-                item.Position = new double[] { xMove, yMove };
+                item.Position = new Vector(xMove, yMove);
             }
         }
 
@@ -183,18 +170,6 @@ namespace obServer.Model.GameModel
                 item = null;
                 ItemsChanged();
             }
-        }
-
-        public IEnumerable<IBaseItem> GetCloseItems(Guid id)
-        {
-            var items = Items.Where(x => x.Id == id);
-            if (items.Count() == 1)
-            {
-                var item = items.First();
-                var bound = item.RealPrimitive.Bounds;
-                return Items.Where(x => x.Impact && x.RealPrimitive.Bounds.Contains(bound));
-            }
-            return null;
         }
         
         private IEnumerable<IBaseItem> staticCache;
@@ -226,8 +201,9 @@ namespace obServer.Model.GameModel
                 double width = double.Parse(node.Element("width").Value.Replace('.', ','));
                 double height = double.Parse(node.Element("height").Value.Replace('.',','));
                 double angle = double.Parse(node.Element("angle").Value);
+                bool impact = bool.Parse(node.Element("impact").Value);
                 Guid id = Guid.Parse(node.Attribute("id").Value);
-                ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) }, id, new double[] { x, y }, angle, new double[] { width, height }, false, type));
+                ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) }, id, new double[] { x, y }, angle, new double[] { width, height }, impact, type));
             }
         }
     }
