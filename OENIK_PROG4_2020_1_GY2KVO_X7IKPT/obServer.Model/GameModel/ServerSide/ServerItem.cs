@@ -41,5 +41,53 @@ namespace obServer.Model.GameModel.ServerSide
 			set { impact = value; }
 		}
 
+		private Vector direction;
+
+		public Vector Direction
+		{
+			get { return direction; }
+			set { direction = value; }
+		}
+
+		private Vector startPoint;
+
+		public Vector StartPoint
+		{
+			get { return startPoint; }
+			set { startPoint = value; }
+		}
+
+		private string name;
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
+		private double speed;
+
+		public double Speed
+		{
+			get { return speed; }
+			set { speed = value; }
+		}
+
+		private double weight;
+
+		public double Weight
+		{
+			get { return weight; }
+			set { weight = value; }
+		}
+
+		public override bool Equals(object obj)
+		{
+			if ((obj as ServerItem?).Value.Id == this.Id)
+			{
+				return true;
+			}
+			return false;
+		}
 	}
 }

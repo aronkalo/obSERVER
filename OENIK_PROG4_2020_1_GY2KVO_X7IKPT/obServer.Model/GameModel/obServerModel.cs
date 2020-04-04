@@ -16,7 +16,7 @@ namespace obServer.Model.GameModel
             return new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) };
         }
 
-        public obServerModel(int width, int height)
+        public obServerModel()
         {
             Items = new List<IBaseItem>();
             IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[] { 300, 300 }, 0, true, 100);
@@ -25,7 +25,7 @@ namespace obServer.Model.GameModel
             //ConstructItem(player);
             player.ChangeWeapon(weap);
             myPlayer = player;
-            LoadItems(width, height);
+            LoadItems();
         }
 
         private IPlayer myPlayer;

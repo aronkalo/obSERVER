@@ -19,10 +19,9 @@ namespace obServer.Network.NetworkElements
         private UdpUser Network { get; set; }
         public EventHandler<IReceivedEventArgs> Receive { get; set; }
 
-
         public void Send(Operation operation, string parameters)
         {
-            Network.Send(operation, parameters);
+            Task.Factory.StartNew(() => Network.Send(operation, parameters));
         }
 
         public void StartListening()

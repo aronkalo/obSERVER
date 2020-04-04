@@ -22,8 +22,7 @@ namespace obServer.ViewController.Control
         public obServerControl()
         {
             Loaded += Window_Loaded;
-            om = new obServerModel(5000, 5000);
-            sl = new ServerLogic(5000, 5000);
+            om = new obServerModel();
             cl = new ClientLogic(om);
             or = new obServerRenderer(om);
         }
@@ -104,9 +103,11 @@ namespace obServer.ViewController.Control
                 case Key.Escape:
                     SaveXDoc();
                     break;
-                case Key.LeftShift:
-                    playerArgs.Movement[0] = playerArgs.Movement[0] * 1.2;
-                    playerArgs.Movement[1] = playerArgs.Movement[1] * 1.2;
+                case Key.H:
+                    sl = new ServerLogic();
+                    break;
+                case Key.C:
+                    cl.
                     break;
             }
         }

@@ -12,7 +12,7 @@ namespace obServer.Logic
 {
     public class ServerLogic : BaseLogic
     {
-        public ServerLogic(int width, int height)
+        public ServerLogic()
         {
             gameServer = new RepoGameServer();
             gameServer.ReceiveRequest += OnReceive;
@@ -27,10 +27,29 @@ namespace obServer.Logic
         {
             Task.Factory.StartNew(() => HandleRequests(e.ReceivedRequest));
         }
-
         public void Update(double deltaTime)
         {
-
+            var bullets = model.Bullets;
+            for (int i = 0; i < bullets.Count(); i++)
+            {
+                var bullet = bullets.ElementAt(i);
+                Vector start = bullet.StartPoint;
+                double x = bullet.Bounds.X;
+                double y = bullet.Bounds.Y;
+                double a = x - start.X;
+                double b = y - start.Y;
+                double suppression = 1 - (Math.Sqrt((a * a) + (b * b)) * bullet.Weight);
+                Vector direction = bullet.Direction;
+                double xMove = direction.X * deltaTime  * suppression;
+                double yMove = direction.Y * deltaTime * suppression;
+                bullet.Bounds = new Rect( x + xMove, y + yMove, 
+                    bullet.Bounds.Width, bullet.Bounds.Height);
+                var players = model.Collision(bullet.Id).Where( z => z.Type == "Player");
+                foreach (var player in players)
+                {
+                    gameServer.ReplyHandler( new Request() { Broadcast = true, Operation = Operation.Hit, Parameters = $"{bullet.Id};{player.Id}"});
+                }
+            }
         }
 
         protected override void HandleRequests(Request request)

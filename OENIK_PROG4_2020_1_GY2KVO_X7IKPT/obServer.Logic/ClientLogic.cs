@@ -26,7 +26,7 @@ namespace obServer.Logic
 
         private void OnReceive(object sender, IReceivedEventArgs e)
         {
-            HandleRequests(e.ReceivedRequest);
+            Task.Factory.StartNew(() => HandleRequests(e.ReceivedRequest));
         }
 
         private void AddMyPlayer()
@@ -180,6 +180,7 @@ namespace obServer.Logic
                 if ( ibullet.RealSpeed < 80)
                 {
                     model.DestructItem(ibullet.Id);
+                    //  Send Message
                     UpdateUI?.Invoke(this, null);
                     continue;
                 }
@@ -195,6 +196,7 @@ namespace obServer.Logic
                                 ibullet.DoDamage((Player)items.ElementAt(y));
                                 gameClient.Send(Operation.Hit, $"{items.ElementAt(y).Id};{ibullet.Id}");
                                 model.DestructItem(ibullet.Id);
+                                //  Send Message
                                 break;
                             }
                             else

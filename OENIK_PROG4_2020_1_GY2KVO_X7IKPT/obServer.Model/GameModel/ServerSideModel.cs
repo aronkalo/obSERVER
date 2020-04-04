@@ -33,9 +33,31 @@ namespace obServer.Model.GameModel
             }
         }
 
+        public IEnumerable<ServerItem> Bullets
+        {
+            get
+            {
+                return Items.Where(x => x.Type == "Bullet");
+            }
+        }
+
+        public IEnumerable<ServerItem> Weapons
+        {
+            get
+            {
+                return Items.Where(x => x.Type == "Weapon");
+            }
+        }
+
         public void ConstructItem(Guid id, string type, Rect bounds, bool impact)
         {
-            ServerItem item = new ServerItem() { Bounds = bounds, Type = type, Id = id, Impact = impact };
+            ServerItem item = new ServerItem() 
+            {
+                Bounds = bounds,
+                Type = type,
+                Id = id,
+                Impact = impact,
+            };
             if (Items.Contains(item))
             {
                 Items.Remove(item);
@@ -74,7 +96,7 @@ namespace obServer.Model.GameModel
             if (items.Count() == 1)
             {
                 var item = items.First();
-                var bull = Items.Where(x => x.Bounds.Contains(item.Bounds) && x.Type != "RedTree" && x.Type != "RoundTree" && x.Type != "GreenTree");
+                var bull = Items.Where(x => x.Impact && x.Bounds.Contains(item.Bounds));
                 if (bull.Count() > 0)
                 {
                     return bull.ToArray();
@@ -96,7 +118,7 @@ namespace obServer.Model.GameModel
                 double height = double.Parse(node.Element("height").Value.Replace('.', ','));
                 bool impact = bool.Parse(node.Element("impact").Value);
                 Guid id = Guid.Parse(node.Attribute("id").Value);
-                ConstructItem(id, type, new Rect(x,y,width, height));
+                ConstructItem(id, type, new Rect(x,y,width, height), impact);
             }
         }
     }
