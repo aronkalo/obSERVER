@@ -35,9 +35,20 @@ namespace obServer.ViewController.Render
             this.height = height;
         }
 
+        internal GeometryDrawing DrawStartMenu()
+        {
+            DrawingGroup dGroup = new DrawingGroup();
+            double realWidth = width * 2;
+            double realHeight = height * 2;
+
+            double controlXSize = realWidth - (realWidth * 0.6);
+            double controlYSize = realHeight - (realHeight * 0.8);
+            Rect r = new Rect(0, 0, 300, 200);
+            return new GeometryDrawing(textureCache.DrawText(Brushes.Blue, "welcome", 120, r, Brushes.WhiteSmoke, textureCache.officialFont),
+                null, new RectangleGeometry(r));
+        }
         internal void DrawElements(DrawingContext context)
         {
-            //DrawStatic();
             DrawingGroup dGroup = new DrawingGroup();
             TransformGroup tg = new TransformGroup();
             tg.Children.Add(new TranslateTransform(-(model.MyPlayer.Position.X - width), -(model.MyPlayer.Position.Y - height)));
@@ -80,6 +91,7 @@ namespace obServer.ViewController.Render
             }
             dGroup.Children.Add(DrawHealthBar());
             //dGroup.Children.Add(DrawBullets());
+            //dGroup.Children.Add(DrawStartMenu());
             context.DrawDrawing(dGroup);
             GC.Collect();
         }

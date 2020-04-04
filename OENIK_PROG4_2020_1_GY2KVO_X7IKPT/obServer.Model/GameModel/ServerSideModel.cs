@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace obServer.Model.GameModel
 {
@@ -32,9 +33,9 @@ namespace obServer.Model.GameModel
             }
         }
 
-        public void ConstructItem(Guid id, string type, Rect bounds)
+        public void ConstructItem(Guid id, string type, Rect bounds, bool impact)
         {
-            ServerItem item = new ServerItem() { Bounds = bounds, Type = type, Id = id, };
+            ServerItem item = new ServerItem() { Bounds = bounds, Type = type, Id = id, Impact = impact };
             if (Items.Contains(item))
             {
                 Items.Remove(item);
@@ -81,6 +82,22 @@ namespace obServer.Model.GameModel
                 return null;
             }
             return null;
+        }
+
+        public void LoadMap()
+        {
+            XDocument xDoc = System.Xml.Linq.XDocument.Load("Map.xml");
+            foreach (var node in xDoc.Root.Descendants("item"))
+            {
+                string type = node.Attribute("type").Value;
+                double x = double.Parse(node.Element("x").Value.Replace('.', ','));
+                double y = double.Parse(node.Element("y").Value.Replace('.', ','));
+                double width = double.Parse(node.Element("width").Value.Replace('.', ','));
+                double height = double.Parse(node.Element("height").Value.Replace('.', ','));
+                bool impact = bool.Parse(node.Element("impact").Value);
+                Guid id = Guid.Parse(node.Attribute("id").Value);
+                ConstructItem(id, type, new Rect(x,y,width, height));
+            }
         }
     }
 }

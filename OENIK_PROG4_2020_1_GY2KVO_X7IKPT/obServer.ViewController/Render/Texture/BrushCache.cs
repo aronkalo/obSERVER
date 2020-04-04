@@ -25,6 +25,9 @@ namespace obServer.ViewController.Render.Texture
         public ImageBrush redTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\redtree.png")) { CacheOption = BitmapCacheOption.OnLoad });
         public ImageBrush greenTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\greentree.png")) { CacheOption = BitmapCacheOption.OnLoad });
         public ImageBrush roundTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\roundtree.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        //public static FontFamily karmaFont = new FontFamily(new Uri(directory + "\\karma\\tt\\karma_future.ttf"), "Karma Future");
+        //public Typeface karmaTypeface = new Typeface(karmaFont, karmaFont.FamilyTypefaces.First().Style, FontWeights.Normal, karmaFont.FamilyTypefaces.First().Stretch, karmaFont);
+        public Typeface officialFont = new Typeface("Colonna MT");
         public Pen blackBorder = new Pen(Brushes.Black, 2);
         public SolidColorBrush bulletBrush = Brushes.DarkGray;
         public SolidColorBrush mapEndBrush = Brushes.DarkOliveGreen;
@@ -36,8 +39,8 @@ namespace obServer.ViewController.Render.Texture
                 var dg = new DrawingGroup();
                 dg.Children.Add(new GeometryDrawing(Brushes.MediumVioletRed, null, new RectangleGeometry(new Rect(0, 0, health * 2, 30))));
                 dg.Children.Add(new GeometryDrawing(Brushes.Transparent, null, new RectangleGeometry(new Rect(0, 0, wid, hei))));
-                dg.Children.Add(new GeometryDrawing(Brushes.White, new Pen(Brushes.White, 2), new FormattedText(health.ToString(),
-                    CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 20, Brushes.White, 1.25).BuildGeometry(new Point(86, 3))));
+                dg.Children.Add(new GeometryDrawing(DrawText(Brushes.Transparent, health.ToString(), 25, new Rect(0, 0, wid, hei),
+                    Brushes.WhiteSmoke, officialFont, blackBorder, new Pen(Brushes.WhiteSmoke, 2), 1),null, new RectangleGeometry(new Rect(0, 0, wid, hei))));
                 healthBarBrush.Drawing = dg;
                 healthBarBrush.Opacity = 0.8;
                 lastHealth = health;
@@ -56,11 +59,26 @@ namespace obServer.ViewController.Render.Texture
                 dg.Children.Add(new GeometryDrawing(Brushes.Gray, new Pen(Brushes.LightGray, 2), new RectangleGeometry(new Rect(0, 0, 200, 120))));
                 dg.Children.Add(new GeometryDrawing(bulletsBrush, null, new RectangleGeometry(new Rect(0, 0, 50, 50))));
                 dg.Children.Add(new GeometryDrawing(Brushes.White, new Pen(Brushes.White, 2), new FormattedText(count.ToString(),
-                    CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 20, Brushes.White, 1.25).BuildGeometry(new Point(20, 15))));
+                    CultureInfo.CurrentCulture, FlowDirection.LeftToRight, officialFont, 20, Brushes.White, 1.25).BuildGeometry(new Point(20, 15))));
                 storedBulletBrush.Drawing = dg;
                 storedBulletBrush.Opacity = 0.8;
             }
             return storedBulletBrush;
+        }
+
+        public Brush DrawText(SolidColorBrush bg, string text, int fontSize, Rect panel, SolidColorBrush fontColor, Typeface fontTypeface, Pen panelBorder = null, Pen fontBorder = null, double opacity = 1) 
+        {
+            var dg = new DrawingGroup();
+            int chars = text.Length;
+            double yalign = panel.Height/2 - (fontSize / 2);
+            double xalign = panel.Width /2 - (chars * fontSize * 0.6 * 0.5);
+            dg.Children.Add(new GeometryDrawing(bg, panelBorder, new RectangleGeometry(panel)));
+            dg.Children.Add(new GeometryDrawing(fontColor, fontBorder, new FormattedText(text,
+                    CultureInfo.CurrentCulture, FlowDirection.LeftToRight, fontTypeface, fontSize, fontColor, 1.25).BuildGeometry(new Point(xalign, yalign))));
+            DrawingBrush textBrush = new DrawingBrush();
+            textBrush.Drawing = dg;
+            textBrush.Opacity = opacity;
+            return textBrush;
         }
         private DrawingBrush storedBulletBrush;
         private ImageBrush bulletsBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\bullets.png")) { CacheOption = BitmapCacheOption.OnLoad });

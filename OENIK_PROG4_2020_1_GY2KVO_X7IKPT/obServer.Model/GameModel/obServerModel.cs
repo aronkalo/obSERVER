@@ -189,7 +189,7 @@ namespace obServer.Model.GameModel
         private bool weaponChanged;
         private IEnumerable<IBaseItem> weaponCache;
 
-        private void LoadItems(int xMax, int yMax)
+        private void LoadItems()
         {
             XDocument xDoc = XDocument.Load("Map.xml");
             foreach (var node in xDoc.Root.Descendants("item"))

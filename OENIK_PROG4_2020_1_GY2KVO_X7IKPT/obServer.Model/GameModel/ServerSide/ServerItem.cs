@@ -32,5 +32,14 @@ namespace obServer.Model.GameModel.ServerSide
 			get { return id; }
 			set { id = value; }
 		}
+
+		private bool impact;
+
+		public bool Impact
+		{
+			get { return impact; }
+			set { impact = value; }
+		}
+
 	}
 }

@@ -28,6 +28,11 @@ namespace obServer.Logic
             Task.Factory.StartNew(() => HandleRequests(e.ReceivedRequest));
         }
 
+        public void Update(double deltaTime)
+        {
+
+        }
+
         protected override void HandleRequests(Request request)
         {
                     switch (request.Operation)
