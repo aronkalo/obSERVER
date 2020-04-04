@@ -22,7 +22,7 @@ namespace obServer.Model.GameModel
             IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[] { 300, 300 }, 0, true, 100);
             IWeapon weap = new Weapon(new EllipseGeometry() { RadiusX = 1, RadiusY = 1 }, Guid.NewGuid(), new double[] { player.Position.X + 10, player.Position.Y + 35 }, player.Rotation, false, 7000, 7, 1100, 10, 0.001);
             ConstructItem(weap);
-            ConstructItem(player);
+            //ConstructItem(player);
             player.ChangeWeapon(weap);
             myPlayer = player;
             LoadItems(width, height);
