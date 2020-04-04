@@ -19,7 +19,7 @@ namespace obServer.Model.GameModel
 
         public obServerModel(int width, int height)
         {
-            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[2] { 300, 300 }, 0, true, 100);
+            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[2] { 2500, 2500 }, 0, true, 100);
             Items = new List<IBaseItem>();
             //info = new MapInformation(width, height);
             ConstructItem(player);
@@ -233,22 +233,73 @@ namespace obServer.Model.GameModel
             }
 
             //Random r = new Random();
-            //double d = 70;
-            //for (int y = 0; y < yMax; y += (int)d)
+            double d = 70;
+
+            //IBaseItem gravealap = new StaticItem(StaticGeometry(xMax / 2.3, yMax / 2.3), Guid.NewGuid(), new double[] { xMax / 2 + 210, 70}, 0, new double[] { d, d }, true, "GraveDirt");
+            //ConstructItem(gravealap);
+
+            ////függőleges főút
+            //for (int y = 0; y < yMax - 70; y += (int)d)
             //{
-            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { 0 - d, y }, 0, new double[] { d, d }, true, "Wall");
+            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { xMax / 2 + 10, y }, 0, new double[] { d, d }, true, "DirtyRoad");
             //    ConstructItem(start);
-            //    IBaseItem end = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { xMax, y }, 0, new double[] { d, d }, true, "Wall");
+            //}
+
+            ////Vízszintes főút
+            //for (int x = 0; x < xMax - 70; x += (int)d)
+            //{
+            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, yMax / 2 + 20}, 0, new double[] { d, d }, true, "DirtyRoad");
+            //    ConstructItem(start);
+            //}
+
+
+            ////függőleges Graveyard falak
+            //for (int y = 140; y < yMax - (yMax / 2) - 490; y += (int)d)
+            //{
+            //    //bal falak
+            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { xMax / 2 + 350, y }, 0, new double[] { d, d }, true, "GraveWall3");
+            //    ConstructItem(start);
+            //    //jobb falak
+            //    IBaseItem end = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { xMax - 350, y }, 0, new double[] { d, d }, true, "GraveWall7");
             //    ConstructItem(end);
             //}
 
-            //for (int x = 0; x < xMax; x += (int)d)
+            ////vízszintes Graveyard falak
+            //for (int x = xMax / 2 + 350; x < xMax - 280; x += (int)d)
             //{
-            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, 0 - d }, 0, new double[] { d, d }, true, "Wall");
+            //    //alsó falak
+            //    IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, yMax / 2 - 490 }, 0, new double[] { d, d }, true, "GraveWall1");
             //    ConstructItem(start);
-            //    IBaseItem end = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, yMax }, 0, new double[] { d, d }, true, "Wall");
+            //    //felső falak
+            //    IBaseItem end = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, 0 + 140 }, 0, new double[] { d, d }, true, "GraveWall5");
             //    ConstructItem(end);
             //}
+
+            //for (int y = 210; y < yMax - (yMax / 2); y += (int)d)
+            //{
+            //    //GraveYard utak függőleges
+            //    IBaseItem gravef = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { (xMax / 2) + (xMax / 4) + 10, y }, 0, new double[] { d, d }, true, "GraveFloor");
+            //    ConstructItem(gravef);
+            //}
+
+            //for (int x = xMax / 2 + 70; x < xMax - 420; x += (int)d)
+            //{
+            //    //GraveYard utak vízszintes
+            //    IBaseItem gravef = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, 1400 }, 0, new double[] { d, d }, true, "GraveFloor");
+            //    ConstructItem(gravef);
+            //}
+
+            //for (int x = xMax / 2 + 420; x < xMax - 420; x += (int)d)
+            //{
+            //    //GraveYard utak vízszintes
+            //    IBaseItem gravef1 = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, 560 }, 0, new double[] { d, d }, true, "GraveFloor");
+            //    ConstructItem(gravef1);
+            //    IBaseItem gravef2 = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, 980 }, 0, new double[] { d, d }, true, "GraveFloor");
+            //    ConstructItem(gravef2);
+            //    IBaseItem gravef3 = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, 1820 }, 0, new double[] { d, d }, true, "GraveFloor");
+            //    ConstructItem(gravef3);
+            //}
+
             //IBaseItem tree1 = new StaticItem(StaticGeometry(250, 250), Guid.NewGuid(), new double[] { 100, 150 }, 0, new double[] { 250, 250 }, true, "RedTree");
             //ConstructItem(tree1);
             //IBaseItem tree2 = new StaticItem(StaticGeometry(150, 150), Guid.NewGuid(), new double[] { 200, 270 }, 0, new double[] { 150, 150 }, true, "GreenTree");
