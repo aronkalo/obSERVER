@@ -300,6 +300,29 @@ namespace obServer.Model.GameModel
             //    ConstructItem(gravef3);
             //}
 
+            //Maze
+
+            ////Maze függőleges falak
+            //for (int i = 0; i < xMax / 2 - 490; i+= 210)
+            //{
+            //    for (int y = yMax / 2 + 280; y < yMax - 210; y += (int)d)
+            //    {                    
+            //        IBaseItem mazewall = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { xMax / 2 + 350 + i, y }, 0, new double[] { d, d }, true, "MazeBush");
+            //        ConstructItem(mazewall);
+            //    }
+            //}
+
+            ////Maze vízszintes falak
+            //for (int i = 0; i < yMax / 2 - 280; i+= 210)
+            //{
+            //    int db = 0;
+            //    for (int x = xMax / 2 + 350; x < xMax - 140; x += (int)d)
+            //    {                    
+            //        IBaseItem start = new StaticItem(StaticGeometry(d, d), Guid.NewGuid(), new double[] { x, yMax / 2 + 210 + i }, 0, new double[] { d, d }, true, "MazeBush");
+            //        ConstructItem(start);
+            //    }            
+            //}
+
             //IBaseItem tree1 = new StaticItem(StaticGeometry(250, 250), Guid.NewGuid(), new double[] { 100, 150 }, 0, new double[] { 250, 250 }, true, "RedTree");
             //ConstructItem(tree1);
             //IBaseItem tree2 = new StaticItem(StaticGeometry(150, 150), Guid.NewGuid(), new double[] { 200, 270 }, 0, new double[] { 150, 150 }, true, "GreenTree");

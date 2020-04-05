@@ -53,6 +53,16 @@ namespace obServer.ViewController.Render
         private static ImageBrush ForestBuildingBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\ForestBuilding.png")) { CacheOption = BitmapCacheOption.OnLoad });
         private static ImageBrush ForestChairFlippedBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\ChairFlipped.png")) { CacheOption = BitmapCacheOption.OnLoad });
 
+        //private static ImageBrush Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\ChairFlipped.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush MazeBushBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\MazeBush.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush PacmanBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Pacman.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush PacmanGhostBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\PacmanGhost.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush FerrariBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Ferrari.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush MazeChairBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\MazeFotel.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush MazeTVBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\MazeTv.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush MazeArtifactBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Artifact.png")) { CacheOption = BitmapCacheOption.OnLoad });
+
+
 
         private static Pen blackBorder = new Pen(Brushes.Black, 2);
         private static SolidColorBrush bulletBrush = Brushes.DarkGray;
@@ -256,6 +266,34 @@ namespace obServer.ViewController.Render
                     case "ForestBuilding":
                         GeometryDrawing FORESTBUILDING = new GeometryDrawing(ForestBuildingBrush, null, Static.RealPrimitive);
                         cache.Children.Add(FORESTBUILDING);
+                        break;
+                    case "MazeBush":
+                        GeometryDrawing MAZEBUSH = new GeometryDrawing(MazeBushBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(MAZEBUSH);
+                        break;
+                    case "Pacman":
+                        GeometryDrawing PACMAN = new GeometryDrawing(PacmanBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(PACMAN);
+                        break;
+                    case "PacmanGhost":
+                        GeometryDrawing PACMANGHOST = new GeometryDrawing(PacmanGhostBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(PACMANGHOST);
+                        break;
+                    case "Ferrari":
+                        GeometryDrawing FERRARI = new GeometryDrawing(FerrariBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(FERRARI);
+                        break;
+                    case "MazeChair":
+                        GeometryDrawing MAZECHAiR = new GeometryDrawing(MazeChairBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(MAZECHAiR);
+                        break;
+                    case "MazeTv":
+                        GeometryDrawing MAZETV = new GeometryDrawing(MazeTVBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(MAZETV);
+                        break;
+                    case "MazeArtifact":
+                        GeometryDrawing MAZEARTIFACT = new GeometryDrawing(MazeArtifactBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(MAZEARTIFACT);
                         break;
                     default:
                         break;
