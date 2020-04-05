@@ -238,6 +238,9 @@ namespace obServer.Model.GameModel
             //IBaseItem gravealap = new StaticItem(StaticGeometry(xMax / 2.3, yMax / 2.3), Guid.NewGuid(), new double[] { xMax / 2 + 210, 70}, 0, new double[] { d, d }, true, "GraveDirt");
             //ConstructItem(gravealap);
 
+            //IBaseItem DesertAlap = new StaticItem(StaticGeometry(xMax / 2 - 300, yMax / 2 - 300), Guid.NewGuid(), new double[] { 70, yMax / 2 + 210}, 0, new double[] { d, d }, true, "Desert");
+            //ConstructItem(DesertAlap);
+
             ////függőleges főút
             //for (int y = 0; y < yMax - 70; y += (int)d)
             //{

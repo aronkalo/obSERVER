@@ -61,7 +61,26 @@ namespace obServer.ViewController.Render
         private static ImageBrush MazeChairBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\MazeFotel.png")) { CacheOption = BitmapCacheOption.OnLoad });
         private static ImageBrush MazeTVBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\MazeTv.png")) { CacheOption = BitmapCacheOption.OnLoad });
         private static ImageBrush MazeArtifactBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Artifact.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush DesertBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Desert.png")) { CacheOption = BitmapCacheOption.OnLoad });
 
+        private static ImageBrush BlitzBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Blitz.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush EaglesBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Eagles.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Cliff1Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Cliff1.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Cliff2rush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Cliff2.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush NFLBallBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\NFLBall.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Rock1Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Rock1.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Rock2Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Rock2.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Rock3Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Rock3.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Rock4Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Rock4.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush StargateBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Stargate.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Car1Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Car1.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Car2Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Car2.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Car3Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Car3.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Car4Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Car4.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Car5Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Car5.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Cactus1Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Cactus01.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Cactus2Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Cactus02.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        private static ImageBrush Cactus3Brush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\Cactus03.png")) { CacheOption = BitmapCacheOption.OnLoad });
 
 
         private static Pen blackBorder = new Pen(Brushes.Black, 2);
@@ -294,6 +313,82 @@ namespace obServer.ViewController.Render
                     case "MazeArtifact":
                         GeometryDrawing MAZEARTIFACT = new GeometryDrawing(MazeArtifactBrush, null, Static.RealPrimitive);
                         cache.Children.Add(MAZEARTIFACT);
+                        break;
+                    case "Desert":
+                        GeometryDrawing DESERT = new GeometryDrawing(DesertBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(DESERT);
+                        break;
+                    case "Blitz":
+                        GeometryDrawing BLITZ = new GeometryDrawing(BlitzBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(BLITZ);
+                        break;
+                    case "Eagles":
+                        GeometryDrawing EAGLES = new GeometryDrawing(EaglesBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(EAGLES);
+                        break;
+                    case "Cliff1":
+                        GeometryDrawing CLIFF1 = new GeometryDrawing(Cliff1Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CLIFF1);
+                        break;
+                    case "Cliff2":
+                        GeometryDrawing CLIFF2 = new GeometryDrawing(Cliff2rush, null, Static.RealPrimitive);
+                        cache.Children.Add(CLIFF2);
+                        break;
+                    case "NFLBall":
+                        GeometryDrawing NFLBALL = new GeometryDrawing(NFLBallBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(NFLBALL);
+                        break;
+                    case "Rock1":
+                        GeometryDrawing ROCK1 = new GeometryDrawing(Rock1Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(ROCK1);
+                        break;
+                    case "Rock2":
+                        GeometryDrawing ROCK2 = new GeometryDrawing(Rock2Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(ROCK2);
+                        break;
+                    case "Rock3":
+                        GeometryDrawing ROCK3 = new GeometryDrawing(Rock3Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(ROCK3);
+                        break;
+                    case "Rock4":
+                        GeometryDrawing ROCK4 = new GeometryDrawing(Rock4Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(ROCK4);
+                        break;
+                    case "Stargate":
+                        GeometryDrawing STARGATE = new GeometryDrawing(StargateBrush, null, Static.RealPrimitive);
+                        cache.Children.Add(STARGATE);
+                        break;
+                    case "Car1":
+                        GeometryDrawing CAR1 = new GeometryDrawing(Car1Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CAR1);
+                        break;
+                    case "Car2":
+                        GeometryDrawing CAR2 = new GeometryDrawing(Car2Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CAR2);
+                        break;
+                    case "Car3":
+                        GeometryDrawing CAR3 = new GeometryDrawing(Car3Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CAR3);
+                        break;
+                    case "Car4":
+                        GeometryDrawing CAR4 = new GeometryDrawing(Car4Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CAR4);
+                        break;
+                    case "Car5":
+                        GeometryDrawing CAR5 = new GeometryDrawing(Car5Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CAR5);
+                        break;
+                    case "Cactus1":
+                        GeometryDrawing CACTUS1 = new GeometryDrawing(Cactus1Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CACTUS1);
+                        break;
+                    case "Cactus2":
+                        GeometryDrawing CACTUS2 = new GeometryDrawing(Cactus2Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CACTUS2);
+                        break;
+                    case "Cactus3":
+                        GeometryDrawing CACTUS3 = new GeometryDrawing(Cactus3Brush, null, Static.RealPrimitive);
+                        cache.Children.Add(CACTUS3);
                         break;
                     default:
                         break;

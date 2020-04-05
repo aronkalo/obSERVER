@@ -213,55 +213,59 @@ namespace obServer.ViewController.Control
             int crate = 50;
             if (Keyboard.IsKeyDown(Key.E))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() {Rect = new Rect(0, 0, dim, dim)},Guid.NewGuid(),new double[]{ p.X - (dim / 2),p.Y - (dim / 2)},0,new double[] {dim,dim },false,"RedTree"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() {Rect = new Rect(0, 0, 124, 300) }, Guid.NewGuid(), new double[] { p.X - (124 / 2), p.Y - (300 / 2) }, 0, new double[] { 124, 300 },false,"Car1"));
             }
             else if (Keyboard.IsKeyDown(Key.R))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry(){ Rect = new Rect(0, 0, dim, dim) },Guid.NewGuid(),new double[] { p.X - (dim / 2), p.Y - (dim / 2) },0,new double[] { dim, dim },false,"GreenTree"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry(){ Rect = new Rect(0, 0, 124, 300) }, Guid.NewGuid(), new double[] { p.X - (124 / 2), p.Y - (300 / 2) }, 0, new double[] { 124, 300 },false,"Car2"));
             }
             else if (Keyboard.IsKeyDown(Key.T))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry(){ Rect = new Rect(0, 0, dim, dim) },Guid.NewGuid(),new double[] { p.X - (dim / 2), p.Y - (dim / 2) },0,new double[] { dim, dim },false,"RoundTree"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry(){ Rect = new Rect(0, 0, 300, 124) }, Guid.NewGuid(), new double[] { p.X - (300 / 2), p.Y - (124 / 2) }, 0, new double[] { 300, 124 },false,"Car3"));
             }
             else if (Keyboard.IsKeyDown(Key.Z))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall, wall) }, Guid.NewGuid(), new double[] { p.X - (wall / 2), p.Y - (wall / 2) }, 0, new double[] { wall, wall }, true, "Crate"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, 300, 124) }, Guid.NewGuid(), new double[] { p.X - (300 / 2), p.Y - (124 / 2) }, 0, new double[] { 300, 124 }, true, "Car4"));
             }
             else if (Keyboard.IsKeyDown(Key.U))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, 512, 256) }, Guid.NewGuid(), new double[] { p.X - (512 / 2), p.Y - (256 / 2) }, 0, new double[] { 512, 256 }, true, "ForestBuilding"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, 124, 300) }, Guid.NewGuid(), new double[] { p.X - (124 / 2), p.Y - (300 / 2) }, 0, new double[] { 124, 300 }, true, "Car5"));
             }
             else if(Keyboard.IsKeyDown(Key.F))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, 300, 124) }, Guid.NewGuid(), new double[] { p.X - (300 / 2), p.Y - (124 / 2) }, 0, new double[] { 300, 124 }, true, "Ferrari"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 3, wall * 3) }, Guid.NewGuid(), new double[] { p.X - (wall * 3 / 2), p.Y - (wall * 3 / 2) }, 0, new double[] { wall * 3, wall * 3 }, true, "Cactus1"));
             }
             else if (Keyboard.IsKeyDown(Key.G))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall, wall) }, Guid.NewGuid(), new double[] { p.X - (wall / 2), p.Y - (wall / 2) }, 0, new double[] { wall, wall }, true, "Pacman"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 3, wall * 3) }, Guid.NewGuid(), new double[] { p.X - (wall * 3 / 2), p.Y - (wall * 3 / 2) }, 0, new double[] { wall * 3, wall * 3 }, true, "Cactus2"));
             }
             else if (Keyboard.IsKeyDown(Key.H))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall, wall) }, Guid.NewGuid(), new double[] { p.X - (wall / 2), p.Y - (wall / 2) }, 0, new double[] { wall, wall }, true, "PacmanGhost"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 3, wall * 3) }, Guid.NewGuid(), new double[] { p.X - (wall * 3 / 2), p.Y - (wall * 3 / 2) }, 0, new double[] { wall * 3, wall * 3 }, true, "Cactus3"));
             }
             else if (Keyboard.IsKeyDown(Key.J))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 3, wall * 3) }, Guid.NewGuid(), new double[] { p.X - (wall * 3 / 2), p.Y - (wall * 3 / 2) }, 0, new double[] { wall * 3, wall * 3 }, true, "MazeChair"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 3, wall * 3) }, Guid.NewGuid(), new double[] { p.X - (wall * 3 / 2), p.Y - (wall * 3 / 2) }, 0, new double[] { wall * 3, wall * 3 }, true, "Cliff1"));
             }
             else if (Keyboard.IsKeyDown(Key.K))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 2, wall * 2 * 2) }, Guid.NewGuid(), new double[] { p.X - wall, p.Y - wall}, 0, new double[] { wall * 2, wall * 2}, true, "MazeTv"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 3, wall * 3) }, Guid.NewGuid(), new double[] { p.X - (wall * 3 / 2), p.Y - (wall * 3 / 2) }, 0, new double[] { wall * 3, wall * 3 }, true, "Cliff2"));
             }
             else if (Keyboard.IsKeyDown(Key.L))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 6, wall * 6) }, Guid.NewGuid(), new double[] { p.X - (wall * 2), p.Y - (wall * 2) }, 0, new double[] { wall * 6, wall * 6 }, true, "MazeArtifact"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 1.5, wall * 1.5) }, Guid.NewGuid(), new double[] { p.X - (wall * 1.5 / 2), p.Y - (wall * 1.5 / 2) }, 0, new double[] { wall * 1.5, wall * 1.5 }, true, "Blitz"));
             }
             else if (Keyboard.IsKeyDown(Key.P))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 2, wall * 2) }, Guid.NewGuid(), new double[] { p.X - (wall), p.Y - (wall) }, 0, new double[] { wall * 2, wall * 2 }, true, "ForestChairFlipped"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall * 1.5, wall * 1.5) }, Guid.NewGuid(), new double[] { p.X - (wall * 1.5 / 2), p.Y - (wall * 1.5 / 2) }, 0, new double[] { wall * 1.5, wall * 1.5 }, true, "Eagles"));
             }
             else if (Keyboard.IsKeyDown(Key.O))
             {
-                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, 300, 300) }, Guid.NewGuid(), new double[] { p.X - (300 / 2), p.Y - (300 / 2) }, 0, new double[] { 300, 300 }, true, "Well"));
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, wall, wall / 2) }, Guid.NewGuid(), new double[] { p.X - (wall / 2), p.Y - (wall / 4) }, 0, new double[] { wall , wall / 2 }, true, "NFLBall"));
+            }
+            else if (Keyboard.IsKeyDown(Key.I))
+            {
+                om.ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new Rect(0, 0, 600, 600) }, Guid.NewGuid(), new double[] { p.X - (300), p.Y - (300) }, 0, new double[] { 600, 600 }, true, "Stargate"));
             }
         }
     }
