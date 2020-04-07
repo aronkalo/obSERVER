@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using obServer.Network.Interface;
 using obServer.Network.NetworkController;
@@ -11,20 +12,21 @@ namespace obServer.Network.NetworkElements
 {
     public sealed class GameServer : GameBase, IGameServer
     {
-        public GameServer() : base() { }
+        public GameServer() : base() { Clients = new List<GameClientInfo>(); RequestPool = new RequestPool(); Receive += OnReceive; }
 
+        private static object clientLock = new Object();
         private UdpListener Listener { get; set; }
         private RequestPool RequestPool { get; set; }
         private bool ActiveSession { get; set; }
-
         private List<GameClientInfo> Clients { get; set; }
-
-        public EventHandler<IReceivedEventArgs> Receive { get; set; }
-
+        private EventHandler<ReceivedEventArgs> Receive { get; set; }
 
         public void ReadyClient(string ipAddress)
         {
-            Clients.ForEach(x => x.SetReady(ipAddress)); 
+            for (int i = 0; i < Clients.Count; i++)
+            {
+                Clients[i].SetReady(ipAddress);
+            }
         }
 
         public bool AllReady
@@ -35,20 +37,27 @@ namespace obServer.Network.NetworkElements
             }
         }
 
+        private void OnReceive(object sender, ReceivedEventArgs e)
+        {
+            Task.Factory.StartNew(() => 
+            {
+                RequestPool.AddPoolElement(e.ReceivedRequest);
+                CheckClients(e.ReceivedRequest);
+            });
+        }
+
         public void StartListening()
         {
             if (this.Listener == null)
             {
                 Listener = new UdpListener();
                 ActiveSession = true;
-                this.RequestPool = new RequestPool();
                 Task.Factory.StartNew(async () =>
                 {
                     while (ActiveSession)
                     {
-                        var recieved = await Listener.Receive();
-                        Receive?.Invoke(this, new ReceivedEventArgs() { ReceivedRequest = recieved });
-                        CheckClients(recieved);
+                        var received = await Listener.Receive();
+                        Receive?.Invoke(this, new ReceivedEventArgs(received));
                     }
                 });
             }
@@ -60,13 +69,17 @@ namespace obServer.Network.NetworkElements
 
         private void CheckClients(Request recieved)
         {
-            if (Clients.Where( x => x.EndPoint == recieved.Sender).Count() == 0)
+            lock (clientLock)
             {
-                Clients.Add(new GameClientInfo() {
-                    EndPoint = recieved.Sender,
-                    Id = Guid.NewGuid(),
-                    Ready = false,
-                });
+                if (Clients.Where(x => x.EndPoint.ToString() == recieved.Sender.ToString()).Count() == 0)
+                {
+                    Clients.Add(new GameClientInfo()
+                    {
+                        EndPoint = recieved.Sender,
+                        Id = Guid.NewGuid(),
+                        Ready = false,
+                    });
+                }
             }
         }
 
@@ -75,14 +88,9 @@ namespace obServer.Network.NetworkElements
             Listener.Reply(request, request.Reply);
         }
 
-        private void Send(Request request, GameClientInfo clientInfo)
+        private void Send(Request request)
         {
-            Listener.Send(clientInfo.EndPoint, request.Operation, request.Parameters, request.Reply);
-        }
-
-        public Request GetRequest()
-        {
-            return RequestPool.GetRequest();
+            Listener.Send(request.Operation, request.Parameters, request.Reply);
         }
 
         public void StopListening()
@@ -94,15 +102,21 @@ namespace obServer.Network.NetworkElements
         {
             if (reply.Broadcast)
             {
-                foreach (var gameClient in Clients)
-                {
-                    Send(reply, gameClient);
-                }
+                Send(reply);
             }
             else
             {
                 Reply(reply);
             }
+        }
+
+        public Request? GetRequest()
+        {
+            if (RequestPool.NotNullElement())
+            {
+                return RequestPool.GetRequest();
+            }
+            return null;
         }
     }
 }

@@ -81,6 +81,15 @@ namespace obServer.Model.GameModel.ServerSide
 			set { weight = value; }
 		}
 
+		private bool owned;
+
+		public bool Owned
+		{
+			get { return owned; }
+			set { owned = value; }
+		}
+
+
 		public override bool Equals(object obj)
 		{
 			if ((obj as ServerItem?).Value.Id == this.Id)

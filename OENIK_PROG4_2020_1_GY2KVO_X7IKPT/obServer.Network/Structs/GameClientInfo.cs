@@ -28,9 +28,9 @@ namespace obServer.Network.Structs
 
 		public bool SetReady(string ipAddress)
 		{
-			IPAddress adr = IPAddress.Parse(ipAddress);
-			if (adr == endpoint.Address)
+			if (ipAddress == endpoint.Address.ToString())
 			{
+				Ready = true;
 				return true;
 			}
 			return false;

@@ -11,8 +11,7 @@ namespace obServer.Network.Interface
     {
         void StartListening();
 
-        Request GetRequest();
-
+        Request? GetRequest();
         void StopListening();
 
         void ReplyHandler(Request request);
@@ -20,8 +19,6 @@ namespace obServer.Network.Interface
         bool AllReady { get; }
 
         void ReadyClient(string address);
-
-        EventHandler<IReceivedEventArgs> Receive { get; set; }
 
 
     }

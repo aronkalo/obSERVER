@@ -20,7 +20,7 @@ namespace obServer.Model.GameModel
         {
             Items = new List<IBaseItem>();
             IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[] { 300, 300 }, 0, true, 100);
-            IWeapon weap = new Weapon(new EllipseGeometry() { RadiusX = 1, RadiusY = 1 }, Guid.NewGuid(), new double[] { player.Position.X + 10, player.Position.Y + 35 }, player.Rotation, false, 7000, 7, 1100, 10, 0.001);
+            IWeapon weap = new Weapon(new EllipseGeometry() { RadiusX = 1, RadiusY = 1 }, Guid.NewGuid(), new double[] { player.Position.X + 10, player.Position.Y + 35 }, player.Rotation, false, 7000, 4, 100, 10, 0.001);
             ConstructItem(weap);
             //ConstructItem(player);
             player.ChangeWeapon(weap);
@@ -139,23 +139,7 @@ namespace obServer.Model.GameModel
             if (!Items.Contains(item))
             {
                 Items.Add(item);
-                var bounds = item.RealPrimitive.Bounds;
-                int width = (int)bounds.Width;
-                int height = (int)bounds.Height;
-                int x = (int)bounds.X + width;
-                int y = (int)bounds.Y + height;
                 ItemsChanged();
-            }
-        }
-
-        [Obsolete]
-        public void UpdateItem(Guid id, double xMove, double yMove, double width, double height, double rotation)
-        {
-            var items = Items.Where(x => x.Id == id);
-            if (items.Count() > 0)
-            {
-                var item = items.First();
-                item.Position = new Vector(xMove, yMove);
             }
         }
 
@@ -204,6 +188,11 @@ namespace obServer.Model.GameModel
                 Guid id = Guid.Parse(node.Attribute("id").Value);
                 ConstructItem(new StaticItem(new RectangleGeometry() { Rect = new System.Windows.Rect(0, 0, width, height) }, id, new double[] { x, y }, angle, new double[] { width, height }, impact, type));
             }
+        }
+
+        public void Changed()
+        {
+            ItemsChanged();
         }
     }
 }

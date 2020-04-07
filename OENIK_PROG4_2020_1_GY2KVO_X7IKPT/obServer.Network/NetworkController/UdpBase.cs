@@ -11,14 +11,12 @@ namespace obServer.Network.NetworkController
 {
     internal abstract class UdpBase
     {
+        internal const int serverPort = 18500;
+        internal const int clientPort = 19321;
         public IPAddress GetIpv4HostAddress()
         {
             String strHostName = string.Empty;
-            // Getting Ip address of local machine...
-            // First get the host name of local machine.
             strHostName = Dns.GetHostName();
-            //Console.WriteLine("Local Machine's Host Name: " + strHostName);
-            // Then using host name, get the IP address list..
             IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
 
             IPAddress[] addr = ipEntry.AddressList.Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToArray();
@@ -41,6 +39,7 @@ namespace obServer.Network.NetworkController
 
         public async Task<Request> Receive()
         {
+            Client.AllowNatTraversal(true);
             var Result = await Client.ReceiveAsync();
             string data = Encoding.ASCII.GetString(Result.Buffer, 0, Result.Buffer.Length);
             string[] zones = data.Split(':');
@@ -52,6 +51,8 @@ namespace obServer.Network.NetworkController
                 Sender = Result.RemoteEndPoint,
             };
         }
+
+        
     }
 
 }

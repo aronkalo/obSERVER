@@ -6,9 +6,11 @@ using obServer.Network.Structs;
 using obServer.Repository.Network;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace obServer.Logic
@@ -17,11 +19,9 @@ namespace obServer.Logic
     {
         public ClientLogic(IobServerModel model)
         {
-            gameClient = new RepoGameClient(serverPort, clientPort);
+            gameClient = new RepoGameClient();
             gameClient.ReceiveRequest += OnReceive;
-            gameClient.StartListening();
             this.model = model;
-            AddMyPlayer();
         }
 
         private void OnReceive(object sender, IReceivedEventArgs e)
@@ -52,14 +52,11 @@ namespace obServer.Logic
 
         private IobServerModel model;
 
-        private const int serverPort = 3200;
-
-        private const int clientPort = 4500;
-
         private IRepoGameClient gameClient;
 
         protected override void HandleRequests(Request request)
         {
+            Debug.WriteLine($"{request.Parameters}--{request.Operation}--{request.Sender}");
                     switch (request.Operation)
                     {
                         case Operation.Connect:
@@ -128,7 +125,7 @@ namespace obServer.Logic
 
         public void OnMove(object sender, PlayerInputEventArgs e)
         {
-            if (e.Movement != null)
+            if (e.Movement[0] != 0 || e.Movement[1] != 0 || e.Angle != e.Player.Rotation)
             {
                 double angle = e.Player.Rotation;
                 if (e.Angle != 0)
@@ -144,7 +141,7 @@ namespace obServer.Logic
                     e.Player.Move(-e.Movement[0], -e.Movement[1], e.deltaTime, e.Angle);
                     break;
                 }
-                string parameters = $"Player;{e.Player.Id};{e.Player.Position.X};{e.Player.Position.Y};{bounds.Width};{bounds.Height};{e.Player.Rotation}";
+                string parameters = $"Player;{e.Player.Id};{e.Player.Position.X};{e.Player.Position.Y};{bounds.Width};{bounds.Height};{e.Player.Rotation};{(double)Milis}";
                 UpdateUI?.Invoke(this, null);
                 gameClient.Send(Operation.Move, parameters);
             }
@@ -193,8 +190,9 @@ namespace obServer.Logic
                         {
                             if (items.ElementAt(y).GetType() == typeof(Player))
                             {
-                                ibullet.DoDamage((Player)items.ElementAt(y));
-                                gameClient.Send(Operation.Hit, $"{items.ElementAt(y).Id};{ibullet.Id}");
+                                //ibullet.DoDamage((Player)items.ElementAt(y));
+                                gameClient.Send(Operation.Hit, $"{items.ElementAt(y).Id};{ibullet.Id};{ibullet.BulletDamage};{Milis}");
+                                
                                 model.DestructItem(ibullet.Id);
                                 //  Send Message
                                 break;
@@ -210,6 +208,12 @@ namespace obServer.Logic
                 }
                 UpdateUI?.Invoke(this, null);
         }
+
+        public void Ready()
+        {
+            AddMyPlayer();
+            Task.Factory.StartNew(() => gameClient.Send(Operation.CheckServerAvaliable, "READY TO PLAY"));
+        }
         protected override void HandleConnect(Request request) { }
 
         protected override void HandleDie(Request request) { }
@@ -218,39 +222,55 @@ namespace obServer.Logic
 
         protected override void HandleHit(Request request)
         {
-            string[] zones = request.Parameters.Split(';');
-            Guid playerId = Guid.Parse(zones[0]);
-            Guid bulletId = Guid.Parse(zones[1]);
-            var bullets = model.Bullets.Where(x => x.Id == bulletId);
-            var players = model.Players.Where(x => x.Id == playerId);
-            if (players.Count() > 0)
+            if (request.Reply == "1")
             {
-                IPlayer player = (IPlayer)players.First();
-                if (bullets.Count() > 0)
+                string[] zones = request.Parameters.Split(';');
+                Guid playerId = Guid.Parse(zones[0]);
+                Guid bulletId = Guid.Parse(zones[1]);
+                double damage = double.Parse(zones[2]);
+                double sendTime = double.Parse(zones[3]);
+                var bullets = model.Bullets.Where(x => x.Id == bulletId);
+                var players = model.Players.Where(x => x.Id == playerId);
+                if (players.Count() > 0)
                 {
-                    IBullet bullet = (IBullet)bullets.First();
-                    bullet.DoDamage(player);
-                    model.DestructItem(bullet.Id);
+                    IPlayer player = (IPlayer)players.First();
+                    if (bullets.Count() > 0)
+                    {
+                        IBullet bullet = (IBullet)bullets.First();
+                        bullet.DoDamage(player);
+                        model.DestructItem(bullet.Id);
+                    }
+                    else
+                    {
+                        player.Damaged(damage);
+                    }
                 }
+                Debug.WriteLine("Packet Roundtrip Time: " + ((double)((Milis - sendTime)*1000)));
             }
         }
 
         protected override void HandleMove(Request request) 
         {
-            string[] zones = request.Parameters.Split(';');
-            double[] position = new double[]
+            if (request.Reply == "1")
             {
+                string[] zones = request.Parameters.Split(';');
+                Vector position = new Vector(
                 double.Parse(zones[2]) ,
                 double.Parse(zones[3])
-            };
-            double[] dimensions = new double[]
-            {
-                double.Parse(zones[4]) ,
-                double.Parse(zones[5])
-            };
-            double rotation = double.Parse(zones[6]);
-            Guid id = Guid.Parse(zones[0]);
-            model.UpdateItem(id, position[0], position[1], dimensions[0], dimensions[1], rotation);
+                );
+                double rotation = double.Parse(zones[6]);
+                double sendTime = double.Parse(zones[7]);
+                Guid id = Guid.Parse(zones[1]);
+                if (id != model.MyPlayer.Id)
+                {
+                    var player = model.Players.Where(x => x.Id == id).FirstOrDefault();
+                    player.Position = position;
+                    player.Rotation = rotation;
+                    model.ConstructItem(player);
+                    model.Changed();
+                }
+                Debug.WriteLine("Packet Roundtrip Time: " + ((Milis - sendTime)/10000000));
+            }
         }
 
         protected override void HandlePickup(Request request)
@@ -270,7 +290,7 @@ namespace obServer.Logic
         {
             if (request.Reply == "1")
             {
-                Start?.Invoke(this, null);
+                Start?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -287,34 +307,21 @@ namespace obServer.Logic
         {
             string[] zones = request.Parameters.Split(';');
             Guid id = Guid.Parse(zones[1]);
-            double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
-            double rotation = double.Parse(zones[6]);
-            IPlayer player = new Player(Player.PlayerGeometry, id, position, rotation, true, 100);
-            model.ConstructItem(player);
+            var items = model.AllItems.Where(x => x.Id == id);
+            if (items.Count() == 0)
+            {
+                double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
+                double rotation = double.Parse(zones[6]);
+                IPlayer player = new Player(Player.PlayerGeometry, id, position, rotation, true, 100);
+                model.ConstructItem(player);
+            }
         }
 
         protected override void HandleShoot(Request request)
         {
             string[] zones = request.Parameters.Split(';');
             Guid id = Guid.Parse(zones[1]);
-            if (request.Reply  == "1")
-            {
-                var bullets = model.Bullets.Where(x => x.Id == id);
-                if (bullets.Count()<1)
-                {
-                    double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
-                    double[] direction = new double[] { double.Parse(zones[7]), double.Parse(zones[8]) };
-                    double damage = double.Parse(zones[7]);
-                    double rotation = double.Parse(zones[6]);
-                    double speed = double.Parse(zones[10]);
-                    double weight = double.Parse(zones[11]);
-                    double sendTime = double.Parse(zones[12]);
-                    IBullet bull = new Bullet(Bullet.BulletGeometry, id, position, rotation, true, speed, damage, direction, weight);
-                    bull.Fly(Milis - sendTime);
-                    model.ConstructItem(bull);
-                }
-            }
-            else
+            if (request.Reply  == "0")
             {
                 model.DestructItem(id);
             }

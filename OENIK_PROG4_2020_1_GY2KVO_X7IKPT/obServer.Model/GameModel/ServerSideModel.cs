@@ -51,18 +51,47 @@ namespace obServer.Model.GameModel
 
         public void ConstructItem(Guid id, string type, Rect bounds, bool impact)
         {
-            ServerItem item = new ServerItem() 
+            ServerItem updateItem = new ServerItem() 
             {
                 Bounds = bounds,
                 Type = type,
                 Id = id,
                 Impact = impact,
             };
-            if (Items.Contains(item))
+            var items = Items.Where(x => x.Id == id);
+            if (items.Count() == 1)
             {
-                Items.Remove(item);
+                var item = items.First();
+                item = updateItem;
             }
-            Items.Add(item);
+            else
+            {
+                Items.Add(updateItem);
+            }
+        }
+
+        public void ConstructBullet(Guid id, string type, Rect bounds, bool impact, Vector direction, double weight, double speed)
+        {
+            ServerItem updateItem = new ServerItem()
+            {
+                Bounds = bounds,
+                Type = type,
+                Id = id,
+                Impact = impact,
+                Direction = direction,
+                Weight = weight,
+                Speed = speed,
+            };
+            var items = Items.Where(x => x.Id == id);
+            if (items.Count() == 1)
+            {
+                var item = items.First();
+                item = updateItem;
+            }
+            else
+            {
+                Items.Add(updateItem);
+            }
         }
 
         public void DestructItem(Guid id)

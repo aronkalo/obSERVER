@@ -45,6 +45,7 @@
     <Compile Include="Interface\IGameBase.cs" />
     <Compile Include="Interface\IGameClient.cs" />
     <Compile Include="Interface\IGameServer.cs" />
+    <Compile Include="NetworkController\TcpBase.cs" />
     <Compile Include="NetworkElements\ReceivedEventArgs.cs" />
     <Compile Include="NetworkElements\BasePool.cs" />
     <Compile Include="NetworkElements\GameBase.cs" />

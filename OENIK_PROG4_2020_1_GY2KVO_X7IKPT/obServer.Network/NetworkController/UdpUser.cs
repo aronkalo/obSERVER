@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using obServer.Network.Structs;
 
@@ -11,44 +12,53 @@ namespace obServer.Network.NetworkController
 {
     internal sealed class UdpUser : UdpBase
     {
-        private UdpUser(int port) { ClientPort = port; Client = new UdpClient(ClientPort); }
+        private const int pingTimeout = 100;
 
-        private static int ClientPort { get; set; }
+        private IPEndPoint broadcastEndPoint;
 
-        private static IPEndPoint server { get; set; }
-
-        public static UdpUser ConnectTo(IPEndPoint endPoint, int clientPort)
+        public UdpUser()
         {
-            var connection = new UdpUser(clientPort);
-            connection.Client.Connect(endPoint.Address, endPoint.Port);
-            return connection;
+            Client = new UdpClient(clientPort);
+            broadcastEndPoint = new IPEndPoint(IPAddress.Broadcast, serverPort);
+        }
+
+        public bool PingServer()
+        {
+            bool foundServer = false;
+            Task receive = new Task( async () =>
+            {
+                while (!foundServer)
+                {
+                    Request r = await Receive();
+                    if (r.Operation == Operation.Connect)
+                    {
+                        foundServer = true;
+                    }
+                }
+            });
+            receive.Start();
+            Task pingServer = new Task(() => 
+            {
+                while (!foundServer)
+                {
+                    var datagram = Encoding.ASCII.GetBytes($"{Operation.Connect}:Client");
+                    Client.Send(datagram, datagram.Length, broadcastEndPoint);
+                    Thread.Sleep(pingTimeout);
+                }
+
+            });
+            pingServer.Start();
+            while (!foundServer)
+            {
+
+            }
+            return true;
         }
 
         public void Send(Operation operation, string parameters)
         {
-            string data = $"{operation}:{parameters}";
-            var datagram = Encoding.ASCII.GetBytes(data);
-            Client.Send(datagram, datagram.Length);
-        }
-        //Sends Connecting Banner: 1
-        public static IPEndPoint SearchForServers(int serverPort, int clientPort)
-        {
-            var Client = new UdpClient(clientPort);
-            byte[] RequestData = Encoding.ASCII.GetBytes($"{Operation.Connect}" +
-                $":{"Client"}");
-            var ServerEp = new IPEndPoint(IPAddress.Any, serverPort);
-            Client.EnableBroadcast = true;
-            Client.Client.SendTimeout = 10;
-            Client.Send(RequestData, RequestData.Length, new IPEndPoint(IPAddress.Broadcast, serverPort));
-            var ServerResponseData = Client.Receive(ref ServerEp);
-            var ServerResponse = Encoding.ASCII.GetString(ServerResponseData);
-            if (ServerResponse == String.Empty)
-            {
-                throw new Exception("No Server found in Subnet");
-            }
-            Client.Close();
-            Client.Dispose();
-            return ServerEp;
+            var datagram = Encoding.ASCII.GetBytes($"{operation}:{parameters}");
+            Client.Send(datagram, datagram.Length, broadcastEndPoint);
         }
     }
 }

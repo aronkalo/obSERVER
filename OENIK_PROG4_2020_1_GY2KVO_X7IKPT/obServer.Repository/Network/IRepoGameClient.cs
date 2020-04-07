@@ -14,8 +14,6 @@ namespace obServer.Repository.Network
 
         void StartListening();
 
-        Request GetResponse();
-
         EventHandler<IReceivedEventArgs> ReceiveRequest { get; set; }
     }
 }

@@ -47,6 +47,7 @@ namespace obServer.ViewController.Control
                 dt = new DispatcherTimer();
                 dt.Interval = TimeSpan.FromMilliseconds(1);
                 sw = new Stopwatch();
+
                 dt.Tick += OnTickUpdate;
                 SetupWindowEvents(win);
                 //  Logic
@@ -55,12 +56,17 @@ namespace obServer.ViewController.Control
                 PlayerInput += cl.OnMove;
                 PlayerInput += cl.OnReload;
                 PlayerInput += cl.OnPickup;
-                //  Graphics
-                cl.UpdateUI += (obj, args) => InvalidateVisual();
                 or.SetOffsets(xCenter, yCenter);
+                cl.UpdateUI += (obj, args) => InvalidateVisual();
                 InvalidateVisual();
                 dt.Start();
+                cl.Start += OnStartGame;
             }
+        }
+
+        private void OnStartGame(object sender, EventArgs e)
+        {
+            
         }
 
         private void SetupWindowEvents(Window window)
@@ -107,7 +113,7 @@ namespace obServer.ViewController.Control
                     sl = new ServerLogic();
                     break;
                 case Key.C:
-                    cl.
+                    cl.Ready();
                     break;
             }
         }

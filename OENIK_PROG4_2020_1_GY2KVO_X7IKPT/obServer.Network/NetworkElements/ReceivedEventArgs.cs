@@ -6,6 +6,10 @@ namespace obServer.Network.NetworkElements
 {
     public class ReceivedEventArgs : EventArgs, IReceivedEventArgs
     {
+        public ReceivedEventArgs(Request request)
+        {
+            this.ReceivedRequest = request;
+        }
       public Request ReceivedRequest { get; set; }
     }
 }

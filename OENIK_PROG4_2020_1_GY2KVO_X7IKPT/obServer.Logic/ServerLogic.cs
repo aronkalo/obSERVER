@@ -15,18 +15,29 @@ namespace obServer.Logic
         public ServerLogic()
         {
             gameServer = new RepoGameServer();
-            gameServer.ReceiveRequest += OnReceive;
-            gameServer.StartListening();
             model = new ServerSideModel();
+            gameServer.StartListening();
+            Serve();
         }
 
         private IRepoGameServer gameServer;
-        private int readyPlayers = 0;
         private ServerSideModel model;
-        private void OnReceive(object sender, IReceivedEventArgs e)
+
+        public void Serve()
         {
-            Task.Factory.StartNew(() => HandleRequests(e.ReceivedRequest));
+            Task.Factory.StartNew(() => 
+            {
+                while (true)
+                {
+                    Request? oldest = gameServer.GetRequest();
+                    if (oldest != null)
+                    {
+                        HandleRequests(oldest.Value);
+                    }
+                }
+            });
         }
+
         public void Update(double deltaTime)
         {
             var bullets = model.Bullets;
@@ -39,15 +50,20 @@ namespace obServer.Logic
                 double a = x - start.X;
                 double b = y - start.Y;
                 double suppression = 1 - (Math.Sqrt((a * a) + (b * b)) * bullet.Weight);
+                double movement = bullet.Speed * deltaTime * suppression;
                 Vector direction = bullet.Direction;
-                double xMove = direction.X * deltaTime  * suppression;
-                double yMove = direction.Y * deltaTime * suppression;
-                bullet.Bounds = new Rect( x + xMove, y + yMove, 
+                bullet.Bounds = new Rect( x + (direction.X * movement), y + (direction.Y * movement), 
                     bullet.Bounds.Width, bullet.Bounds.Height);
-                var players = model.Collision(bullet.Id).Where( z => z.Type == "Player");
-                foreach (var player in players)
+                var items = model.Collision(bullet.Id);
+                if (items.Count() > 0)
                 {
-                    gameServer.ReplyHandler( new Request() { Broadcast = true, Operation = Operation.Hit, Parameters = $"{bullet.Id};{player.Id}"});
+                    model.DestructItem(bullet.Id);
+                    var players = items.Where(z => z.Type == "Player");
+                    if (players.Count() > 0)
+                    {
+                        gameServer.ReplyHandler(new Request() { Broadcast = true, Operation = Operation.Hit, Parameters = $"{players.First().Id};{bullet.Id}" });
+                    }
+                    gameServer.ReplyHandler(new Request() { Broadcast = true, Operation = Operation.Remove, Parameters = $"{bullet.Id}" });
                 }
             }
         }
@@ -89,14 +105,13 @@ namespace obServer.Logic
                         case Operation.Pickup:
                             HandlePickup(request);
                             break;
-                        default:
-                            throw new Exception("Not implemented Exception");
                     }
         }
 
         protected override void HandleConnect(Request request)
         {
             request.Reply = "1";
+            request.Broadcast = true;
             gameServer.ReplyHandler(request);
         }
 
@@ -111,11 +126,6 @@ namespace obServer.Logic
                 request.Broadcast = true;
                 gameServer.ReplyHandler(request);
             }
-            else
-            {
-                request.Reply = "0";
-                gameServer.ReplyHandler(request);
-            }
         }
 
         protected override void HandleDisconnect(Request request)
@@ -127,12 +137,20 @@ namespace obServer.Logic
 
         protected override void HandleHit(Request request)
         {
-            
+            Guid id = Guid.Parse(request.Parameters.Split(';')[0]);
+            Guid bulletid = Guid.Parse(request.Parameters.Split(';')[1]);
+            var bullet = model.AllItems.Where(x => x.Id == bulletid);
+            if (bullet.Count() > 0)
+            {
+                model.DestructItem(bulletid);
+                request.Broadcast = true;
+                request.Reply = "1";
+                gameServer.ReplyHandler(request);
+            }
         }
 
         protected override void HandleMove(Request request)
         {
-            //$"Player;{e.Player.Id};{e.Player.Position[0]};{e.Player.Position[1]};{bounds.Width};{bounds.Height};{e.Player.Rotation}";
             string[] zones = request.Parameters.Split(';');
             double[] position = new double[]
             {
@@ -145,20 +163,23 @@ namespace obServer.Logic
                 double.Parse(zones[5])
             };
             double rotation = double.Parse(zones[6]);
-            Guid id = Guid.Parse(zones[0]);
-            model.ConstructItem(id, zones[1], new Rect(double.Parse(zones[2]), double.Parse(zones[3]), double.Parse(zones[4]), double.Parse(zones[5])));
-            var bullets = model.BulletHit(id);
+            Guid id = Guid.Parse(zones[1]);
+            model.ConstructItem(id, zones[0], new Rect(double.Parse(zones[2]), double.Parse(zones[3]), double.Parse(zones[4]), double.Parse(zones[5])), true) ;
+            //var bullets = model.BulletHit(id);
             request.Reply = "1";
+            request.Broadcast = true;
             gameServer.ReplyHandler(request);
-            foreach (var bullet in bullets)
-            {
-                gameServer.ReplyHandler(new Request()
-                {
-                    Operation = Operation.Hit,
-                    Parameters = $"{id};{bullet.Id}",
-                    Broadcast = true,
-                });
-            }
+            //for (int i = 0; i < bullets.Length; i++)
+            //{
+            //    Guid bulletid = bullets.ElementAt(i).Id;
+            //    model.DestructItem(bulletid);
+            //    gameServer.ReplyHandler(new Request()
+            //    {
+            //        Operation = Operation.Hit,
+            //        Parameters = $"{id};{bulletid}",
+            //        Broadcast = true,
+            //    });
+            //}
         }
 
         protected override void HandlePickup(Request request)
@@ -166,8 +187,11 @@ namespace obServer.Logic
             string[] zones = request.Parameters.Split(';');
             Guid playerId = Guid.Parse(zones[0]);
             Guid weaponId = Guid.Parse(zones[1]);
-            if (model.Collision(playerId).Where( x => x.Id == weaponId).Count() == 1)
+            var weapons = model.Collision(playerId).Where(x => x.Id == weaponId && !x.Owned);
+            if (weapons.Count() == 1)
             {
+                var weapon = weapons.First();
+                weapon.Owned = true;
                 request.Reply = "1";
                 request.Broadcast = true;
             }
@@ -186,32 +210,22 @@ namespace obServer.Logic
             {
                 request.Reply = "1";
                 request.Broadcast = true;
+                gameServer.ReplyHandler(request);
             }
-            else
-            {
-                request.Reply = "0";
-            }
-            gameServer.ReplyHandler(request);
         }
 
         protected override void HandleRemove(Request request)
         {
             string[] zones = request.Parameters.Split(';');
-            Guid id = Guid.Parse(zones[1]);
-            double[] position = new double[] { double.Parse(zones[2]), double.Parse(zones[3]) };
-            double rotation = double.Parse(zones[6]);
+            Guid id = Guid.Parse(zones[0]);
             var items = model.AllItems.Where(x => x.Id == id);
             if (items.Count() > 0)
             {
                 model.DestructItem(id);
                 request.Reply = "1";
                 request.Broadcast = true;
+                gameServer.ReplyHandler(request);
             }
-            else
-            {
-                request.Reply = "0";
-            }
-            gameServer.ReplyHandler(request);
         }
 
         protected override void HandleSendMessage(Request request)
@@ -224,7 +238,7 @@ namespace obServer.Logic
             string[] zones = request.Parameters.Split(';');
             string type = zones[0];
             Guid id = Guid.Parse(zones[1]);
-            model.ConstructItem(id, type,new Rect(double.Parse(zones[2]), double.Parse(zones[3]), double.Parse(zones[2]), double.Parse(zones[3])));
+            model.ConstructItem(id, type,new Rect(double.Parse(zones[2]), double.Parse(zones[3]), double.Parse(zones[2]), double.Parse(zones[3])), true);
             request.Reply = "1";
             request.Broadcast = true;
             gameServer.ReplyHandler(request);
@@ -234,7 +248,7 @@ namespace obServer.Logic
         {
             string[] zones = request.Parameters.Split(';');
             Guid player = Guid.Parse(zones[13]);
-            if (model.AllItems.Where(x => x.Id == player).Count() == 1)
+            if (model.Players.Where(x => x.Id == player).Count() == 1)
             {
                 string type = zones[0];
                 Guid id = Guid.Parse(zones[1]);
@@ -243,22 +257,23 @@ namespace obServer.Logic
                 double width = double.Parse(zones[4]);
                 double height = double.Parse(zones[5]);
                 double rotation = double.Parse(zones[6]);
-                double[] direction = new double[] { double.Parse(zones[7]), double.Parse(zones[8]) };
+                Vector direction = new Vector( double.Parse(zones[7]), double.Parse(zones[8]) );
                 double damage = double.Parse(zones[7]);
                 double speed = double.Parse(zones[10]);
                 double weight = double.Parse(zones[11]);
                 double delta = Milis - double.Parse(zones[12]);
-                x = x + (int)(direction[0] * delta * speed);
-                y = y + (int)(direction[1] * delta * speed);
-                model.ConstructItem(id, type, new Rect(x,y,width,height));
+                double xloc = (x + (direction.X * delta * speed));
+                double yloc = (y + (direction.Y * delta * speed));
+                double a = x - xloc;
+                double b = y - yloc;
+                double suppression = 1 - (Math.Sqrt((a * a) + (b * b)) * weight);
+                xloc = xloc * suppression;
+                yloc = yloc * suppression;
+                model.ConstructBullet(id, type, new Rect(xloc,yloc,width,height), true, direction, weight, speed);
                 request.Reply = "1";
                 request.Broadcast = true;
+                gameServer.ReplyHandler(request);
             }
-            else
-            {
-                request.Reply = "0";
-            }
-            gameServer.ReplyHandler(request);
         }
     }
 }

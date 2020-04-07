@@ -14,7 +14,6 @@ namespace obServer.Repository.Network
         public RepoGameServer()
         {
             gameServer = new GameServer();
-            gameServer.Receive += OnReceive;
         }
 
         public EventHandler<IReceivedEventArgs> ReceiveRequest { get; set; }
@@ -30,12 +29,6 @@ namespace obServer.Repository.Network
         {
             gameServer.StartListening();
         }
-
-        public Request GetRequest()
-        {
-            return gameServer.GetRequest();
-        }
-
         public void StopListening()
         {
             gameServer.StopListening();
@@ -51,6 +44,11 @@ namespace obServer.Repository.Network
         public void ReadyClient(string address)
         {
             gameServer.ReadyClient(address);
+        }
+
+        public Request? GetRequest()
+        {
+            return gameServer.GetRequest();
         }
     }
 }

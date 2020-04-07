@@ -9,7 +9,6 @@ namespace obServer.Network.Interface
 
         void StartListening();
 
-        Request GetResponse();
         EventHandler<IReceivedEventArgs> Receive { get; set; }
     }
 }

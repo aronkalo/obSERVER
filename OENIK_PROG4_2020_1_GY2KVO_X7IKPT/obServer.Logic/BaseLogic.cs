@@ -37,7 +37,7 @@ namespace obServer.Logic
         {
             get
             {
-                return DateTime.Now.Ticks / 1000000;
+                return DateTime.Now.Ticks;
             }
         }
 

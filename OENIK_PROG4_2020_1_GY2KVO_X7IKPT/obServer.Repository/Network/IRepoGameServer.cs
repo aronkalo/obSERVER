@@ -12,8 +12,6 @@ namespace obServer.Repository.Network
     {
         void StartListening();
 
-        Request GetRequest();
-
         void StopListening();
 
         void ReplyHandler(Request request);
@@ -22,6 +20,6 @@ namespace obServer.Repository.Network
 
         void ReadyClient(string address);
 
-        EventHandler<IReceivedEventArgs> ReceiveRequest { get; set; }
+        Request? GetRequest();
     }
 }
