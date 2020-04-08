@@ -19,7 +19,7 @@ namespace obServer.Model.GameModel
         public obServerModel()
         {
             Items = new List<IBaseItem>();
-            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[] { 300, 300 }, 0, true, 100);
+            IPlayer player = new Player(Player.PlayerGeometry, Guid.NewGuid(), new double[] { 2500, 2500 }, 0, true, 100);
             IWeapon weap = new Weapon(new EllipseGeometry() { RadiusX = 1, RadiusY = 1 }, Guid.NewGuid(), new double[] { player.Position.X + 10, player.Position.Y + 35 }, player.Rotation, false, 7000, 4, 100, 10, 0.001);
             ConstructItem(weap);
             //ConstructItem(player);

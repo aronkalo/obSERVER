@@ -224,6 +224,58 @@ namespace obServer.ViewController.Control
                     case "Wall":
                         imp = true;
                         break;
+                    case "GraveWall1":
+                        imp = true;
+                        break;
+                    case "GraveWall3":
+                        imp = true;
+                        break;
+                    case "GraveWall5":
+                        imp = true;
+                        break;
+                    case "GraveWall7":
+                        imp = true;
+                        break;
+                    case "TombStone1":
+                        imp = true;
+                        break;
+                    case "TombStone2":
+                        imp = true;
+                        break;
+                    case "Well":
+                        imp = true;
+                        break;
+                    case "MazeBush":
+                        imp = true;
+                        break;
+                    case "Ferrari":
+                        imp = true;
+                        break;
+                    case "MazeTv":
+                        imp = true;
+                        break;
+                    case "Cliff1":
+                        imp = true;
+                        break;
+                    case "Cliff2":
+                        imp = true;
+                        break;
+                    case "Car1":
+                        imp = true;
+                        break;
+                    case "Car2":
+                        imp = true;
+                        break;
+                    case "Car3":
+                        imp = true;
+                        break;
+                    case "Car4":
+                        imp = true;
+                        break;
+                    case "Car5":
+                        imp = true;
+                        break;
+
                     default:
                         break;
                 }

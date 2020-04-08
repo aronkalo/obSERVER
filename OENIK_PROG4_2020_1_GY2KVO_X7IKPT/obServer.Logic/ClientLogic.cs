@@ -263,11 +263,15 @@ namespace obServer.Logic
                 Guid id = Guid.Parse(zones[1]);
                 if (id != model.MyPlayer.Id)
                 {
-                    var player = model.Players.Where(x => x.Id == id).FirstOrDefault();
-                    player.Position = position;
-                    player.Rotation = rotation;
-                    model.ConstructItem(player);
-                    model.Changed();
+                    var players = model.Players.Where(x => x.Id == id);
+                    if (players.Count() > 0)
+                    {
+                        var player = players.First();
+                        player.Position = position;
+                        player.Rotation = rotation;
+                        model.ConstructItem(player);
+                        model.Changed();
+                    }
                 }
                 Debug.WriteLine("Packet Roundtrip Time: " + ((Milis - sendTime)/10000000));
             }
