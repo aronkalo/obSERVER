@@ -7,11 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "obServer.ViewController", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "obServer.Repository", "obServer.Repository\obServer.Repository.csproj", "{39F3031F-DD9B-4C9B-B6BB-9A6937EA3C15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "obServer.Logic", "obServer.Logic\obServer.Logic.csproj", "{6376C887-24A4-4D13-947A-B5D528E2517D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "obServer.Network", "obServer.Network\obServer.Network.csproj", "{4C0C22BC-8175-4781-9797-D2D06CE50C10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "obServer.Model", "obServer.Model\obServer.Model.csproj", "{D47B3456-F254-48FD-9F24-D54E376DEE81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "obServer.GameLogic", "obServer.GameLogic\obServer.GameLogic.csproj", "{6376C887-24A4-4D13-947A-B5D528E2517D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "obServer.GameModel", "obServer.GameModel\obServer.GameModel.csproj", "{D47B3456-F254-48FD-9F24-D54E376DEE81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +27,14 @@ Global
 		{39F3031F-DD9B-4C9B-B6BB-9A6937EA3C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39F3031F-DD9B-4C9B-B6BB-9A6937EA3C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39F3031F-DD9B-4C9B-B6BB-9A6937EA3C15}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6376C887-24A4-4D13-947A-B5D528E2517D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6376C887-24A4-4D13-947A-B5D528E2517D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6376C887-24A4-4D13-947A-B5D528E2517D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6376C887-24A4-4D13-947A-B5D528E2517D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C0C22BC-8175-4781-9797-D2D06CE50C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C0C22BC-8175-4781-9797-D2D06CE50C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C0C22BC-8175-4781-9797-D2D06CE50C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C0C22BC-8175-4781-9797-D2D06CE50C10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6376C887-24A4-4D13-947A-B5D528E2517D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6376C887-24A4-4D13-947A-B5D528E2517D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6376C887-24A4-4D13-947A-B5D528E2517D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6376C887-24A4-4D13-947A-B5D528E2517D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D47B3456-F254-48FD-9F24-D54E376DEE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D47B3456-F254-48FD-9F24-D54E376DEE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D47B3456-F254-48FD-9F24-D54E376DEE81}.Release|Any CPU.ActiveCfg = Release|Any CPU

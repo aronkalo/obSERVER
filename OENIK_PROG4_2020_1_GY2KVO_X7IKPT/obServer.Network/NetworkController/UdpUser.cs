@@ -18,6 +18,7 @@ namespace obServer.Network.NetworkController
 
         public UdpUser()
         {
+            
             Client = new UdpClient(clientPort);
             broadcastEndPoint = new IPEndPoint(IPAddress.Broadcast, serverPort);
         }

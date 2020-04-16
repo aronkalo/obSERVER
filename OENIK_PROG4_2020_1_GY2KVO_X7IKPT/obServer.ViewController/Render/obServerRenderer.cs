@@ -1,4 +1,4 @@
-﻿using obServer.Model.Interfaces;
+﻿using obServer.GameModel.Interfaces;
 using obServer.ViewController.Render.Texture;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace obServer.ViewController.Render
 {
     class obServerRenderer
     {
-        public obServerRenderer(IobServerModel model)
+        public obServerRenderer(IObServerModel model)
         {
             this.model = model;
             drawingCache = new RenderCache();
@@ -26,7 +26,7 @@ namespace obServer.ViewController.Render
         private Stopwatch sw = new Stopwatch();
         private RenderCache drawingCache;
         private BrushCache textureCache;
-        private IobServerModel model;
+        private IObServerModel model;
         private double width;
         private double height;
 
@@ -61,7 +61,7 @@ namespace obServer.ViewController.Render
                 var t = textureCache.playerBrush;
                 if ((Player as IPlayer).CurrentWeapon != null)
                 {
-                    //t = textureCache.playerPistolBrush;
+                    t = textureCache.playerPistolBrush;
                 }
                 t.Transform = p.Transform;
                 GeometryDrawing player = new GeometryDrawing(t, null , p);

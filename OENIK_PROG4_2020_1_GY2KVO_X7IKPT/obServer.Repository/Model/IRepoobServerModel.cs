@@ -1,11 +1,11 @@
-﻿using obServer.Model.Interfaces;
+﻿using obServer.GameModel.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace obServer.Repository.Model
+namespace obServer.Repository.GameModel
 {
     public interface IRepoobServerModel
     {

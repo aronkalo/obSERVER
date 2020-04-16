@@ -20,7 +20,7 @@ namespace obServer.ViewController.Render.Texture
         public ImageBrush dirtSecondBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\dirt2.png")) { CacheOption = BitmapCacheOption.OnLoad });
        
         public ImageBrush playerBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\player.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        //public ImageBrush playerPistolBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\pistol.png")) { CacheOption = BitmapCacheOption.OnLoad });
+        public ImageBrush playerPistolBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\pistol.png")) { CacheOption = BitmapCacheOption.OnLoad });
         public ImageBrush crateBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\crate.png")) { CacheOption = BitmapCacheOption.OnLoad });
         public ImageBrush logBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\log.png")) { CacheOption = BitmapCacheOption.OnLoad });
         public ImageBrush weaponBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\log.png")) { CacheOption = BitmapCacheOption.OnLoad });
@@ -30,8 +30,6 @@ namespace obServer.ViewController.Render.Texture
         public ImageBrush redTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\redtree.png")) { CacheOption = BitmapCacheOption.OnLoad });
         public ImageBrush greenTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\greentree.png")) { CacheOption = BitmapCacheOption.OnLoad });
         public ImageBrush roundTreeBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\roundtree.png")) { CacheOption = BitmapCacheOption.OnLoad });
-        //public static FontFamily karmaFont = new FontFamily(new Uri(directory + "\\karma\\tt\\karma_future.ttf"), "Karma Future");
-        //public Typeface karmaTypeface = new Typeface(karmaFont, karmaFont.FamilyTypefaces.First().Style, FontWeights.Normal, karmaFont.FamilyTypefaces.First().Stretch, karmaFont);
 
         public ImageBrush dirtyRoadBrush = new ImageBrush(new BitmapImage(new Uri(directory + "\\textures\\dirtyroad.png")) { CacheOption = BitmapCacheOption.OnLoad });
 

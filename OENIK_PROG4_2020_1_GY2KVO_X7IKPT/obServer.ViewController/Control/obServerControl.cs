@@ -1,10 +1,10 @@
-﻿using obServer.Logic;
-using obServer.Model.GameModel;
-using obServer.Model.GameModel.Item;
-using obServer.Model.Interfaces;
+﻿using obServer.GameLogic;
+using obServer.GameModel;
+using obServer.GameModel.Interfaces;
 using obServer.ViewController.Render;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -14,24 +14,36 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml.Linq;
+using obServer.GameModel.Item;
 
 namespace obServer.ViewController.Control
 {
-    class obServerControl : FrameworkElement
+    public class ObServerControl : FrameworkElement
     {
-        public obServerControl()
+        public ObServerControl()
         {
             Loaded += Window_Loaded;
-            om = new obServerModel();
+            om = new ObServerModel();
             cl = new ClientLogic(om);
             or = new obServerRenderer(om);
+            cl.RemoveVisuals();
+        }
+
+        public ObServerControl(ClientLogic logic, IObServerModel model)
+        {
+            Loaded += Window_Loaded;
+            om = model;
+            cl = logic;
+            cl.Ready();
+            or = new obServerRenderer(om);
+            cl.RemoveVisuals();
         }
 
         private DispatcherTimer dt;
         private ClientLogic cl;
         private ServerLogic sl;
         private obServerRenderer or;
-        private IobServerModel om;
+        private IObServerModel om;
         private Stopwatch sw;
         private event EventHandler<PlayerInputEventArgs> PlayerInput;
         private static PlayerInputEventArgs playerArgs;
@@ -45,7 +57,7 @@ namespace obServer.ViewController.Control
             if (win != null)
             {
                 dt = new DispatcherTimer();
-                dt.Interval = TimeSpan.FromMilliseconds(1);
+                dt.Interval = TimeSpan.FromMilliseconds(10);
                 sw = new Stopwatch();
 
                 dt.Tick += OnTickUpdate;
@@ -71,12 +83,30 @@ namespace obServer.ViewController.Control
 
         private void SetupWindowEvents(Window window)
         {
+            window.Closing += OnClosing;
             window.SizeChanged += OnWindowSizeChanged;
             window.KeyDown += OnWindowKeyDown;
             window.KeyUp += OnWindowKeyUp;
             window.MouseMove += OnMouseMove;
             window.MouseLeftButtonDown += OnMouseLeftButtonDown;
             window.MouseRightButtonDown += OnMouseRightButtonDown;
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            dt.Stop();
+            cl = null; 
+        }
+
+        private void LoginWindowEvents(Window window)
+        {
+            window.MouseLeftButtonDown += OnMouseLeftLogin;
+
+        }
+
+        private void OnMouseLeftLogin(object sender, MouseButtonEventArgs e)
+        {
+
         }
 
         private void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
@@ -107,7 +137,7 @@ namespace obServer.ViewController.Control
                     //playerArgs.Pickup = true;
                     break;
                 case Key.Escape:
-                    SaveXDoc();
+                    //SaveXDoc();
                     break;
                 case Key.H:
                     sl = new ServerLogic();
@@ -194,6 +224,8 @@ namespace obServer.ViewController.Control
             or.DrawElements(drawingContext);
         }
 
+        
+
         private void ServerUpdate(double deltaTime)
         {
             if (sl != null)
@@ -201,89 +233,89 @@ namespace obServer.ViewController.Control
             }
         }
 
-        private void SaveXDoc()
-        {
-            XDocument xDoc = new XDocument(new XElement("items"));
-            foreach (var item in om.Statics)
-            {
-                var stat = (IStaticItem)item;
-                var xelem = new XElement("item");
-                xelem.Add(new XAttribute("type", stat.Type));
-                xelem.Add(new XAttribute("id", stat.Id));
-                xelem.Add(new XElement("x", stat.Position.X));
-                xelem.Add(new XElement("y", stat.Position.Y));
-                xelem.Add(new XElement("width", stat.Dimensions[0]));
-                xelem.Add(new XElement("height", stat.Dimensions[1]));
-                xelem.Add(new XElement("angle", stat.Rotation));
-                bool imp = false;
-                switch (stat.Type)
-                {
-                    case "Crate":
-                        imp = true;
-                        break;
-                    case "Wall":
-                        imp = true;
-                        break;
-                    case "GraveWall1":
-                        imp = true;
-                        break;
-                    case "GraveWall3":
-                        imp = true;
-                        break;
-                    case "GraveWall5":
-                        imp = true;
-                        break;
-                    case "GraveWall7":
-                        imp = true;
-                        break;
-                    case "TombStone1":
-                        imp = true;
-                        break;
-                    case "TombStone2":
-                        imp = true;
-                        break;
-                    case "Well":
-                        imp = true;
-                        break;
-                    case "MazeBush":
-                        imp = true;
-                        break;
-                    case "Ferrari":
-                        imp = true;
-                        break;
-                    case "MazeTv":
-                        imp = true;
-                        break;
-                    case "Cliff1":
-                        imp = true;
-                        break;
-                    case "Cliff2":
-                        imp = true;
-                        break;
-                    case "Car1":
-                        imp = true;
-                        break;
-                    case "Car2":
-                        imp = true;
-                        break;
-                    case "Car3":
-                        imp = true;
-                        break;
-                    case "Car4":
-                        imp = true;
-                        break;
-                    case "Car5":
-                        imp = true;
-                        break;
+        //private void SaveXDoc()
+        //{
+        //    XDocument xDoc = new XDocument(new XElement("items"));
+        //    foreach (var item in om.Statics)
+        //    {
+        //        var stat = (IStaticItem)item;
+        //        var xelem = new XElement("item");
+        //        xelem.Add(new XAttribute("type", stat.Type));
+        //        xelem.Add(new XAttribute("id", stat.Id));
+        //        xelem.Add(new XElement("x", stat.Position.X));
+        //        xelem.Add(new XElement("y", stat.Position.Y));
+        //        xelem.Add(new XElement("width", stat.Dimensions[0]));
+        //        xelem.Add(new XElement("height", stat.Dimensions[1]));
+        //        xelem.Add(new XElement("angle", stat.Rotation));
+        //        bool imp = false;
+        //        switch (stat.Type)
+        //        {
+        //            case "Crate":
+        //                imp = true;
+        //                break;
+        //            case "Wall":
+        //                imp = true;
+        //                break;
+        //            case "GraveWall1":
+        //                imp = true;
+        //                break;
+        //            case "GraveWall3":
+        //                imp = true;
+        //                break;
+        //            case "GraveWall5":
+        //                imp = true;
+        //                break;
+        //            case "GraveWall7":
+        //                imp = true;
+        //                break;
+        //            case "TombStone1":
+        //                imp = true;
+        //                break;
+        //            case "TombStone2":
+        //                imp = true;
+        //                break;
+        //            case "Well":
+        //                imp = true;
+        //                break;
+        //            case "MazeBush":
+        //                imp = true;
+        //                break;
+        //            case "Ferrari":
+        //                imp = true;
+        //                break;
+        //            case "MazeTv":
+        //                imp = true;
+        //                break;
+        //            case "Cliff1":
+        //                imp = true;
+        //                break;
+        //            case "Cliff2":
+        //                imp = true;
+        //                break;
+        //            case "Car1":
+        //                imp = true;
+        //                break;
+        //            case "Car2":
+        //                imp = true;
+        //                break;
+        //            case "Car3":
+        //                imp = true;
+        //                break;
+        //            case "Car4":
+        //                imp = true;
+        //                break;
+        //            case "Car5":
+        //                imp = true;
+        //                break;
 
-                    default:
-                        break;
-                }
-                xelem.Add(new XElement("impact", imp));
-                xDoc.Root.Add(xelem);
-            }
-            xDoc.Save("Map.xml");
-        }
+        //            default:
+        //                break;
+        //        }
+        //        xelem.Add(new XElement("impact", imp));
+        //        xDoc.Root.Add(xelem);
+        //    }
+        //    xDoc.Save("Map.xml");
+        //}
 
         private void AddItems(Point p)
         {

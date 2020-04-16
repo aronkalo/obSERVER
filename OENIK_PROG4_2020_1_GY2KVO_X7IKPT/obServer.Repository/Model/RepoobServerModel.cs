@@ -1,9 +1,9 @@
-﻿//using obServer.Model.GameModel;
-//using obServer.Model.Interfaces;
+﻿//using obServer.GameModel;
+//using obServer.GameModel.Interfaces;
 //using System;
 //using System.Collections.Generic;
 
-//namespace obServer.Repository.Model
+//namespace obServer.Repository.GameModel
 //{
 //    public class RepoobServerModel
 //    {
