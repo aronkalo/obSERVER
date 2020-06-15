@@ -1,0 +1,44 @@
+﻿<Window x:Class="obServer.ViewController.HistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:obServer.ViewController"
+        xmlns:z="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        DataContext="{StaticResource HVM}"
+        Background="#243015"
+        FontSize="17" FontFamily="Segoe UI" FontWeight="DemiBold"
+        Foreground="White"
+        Title="Match History" Height="450" Width="800"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <Label Foreground="Wheat" HorizontalAlignment="Center" FontSize="25">Match History</Label>
+            <ComboBox Foreground="#243015" SelectedValue="{Binding Sel}" Margin="100,0,100,0" ItemsSource="{Binding Path=Matches}"></ComboBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="20,20,20,20">
+            <ListBox Foreground="#243015" ItemsSource="{Binding Path=Places}"></ListBox>
+        </StackPanel>
+        <DockPanel Grid.Row="1" Grid.Column="0" Margin="3">
+            <Border CornerRadius="3" BorderThickness="3" BorderBrush="Wheat" Background="#243035">
+                <StackPanel DockPanel.Dock="Top"  Grid.Row="1" Grid.Column="0">
+                    <Label Foreground="Wheat">Games Played</Label>
+                    <Label Foreground="Wheat" Content="{Binding Path=SumGames}" ></Label>
+                    <Label Foreground="Wheat">Match Time</Label>
+                    <Label Foreground="Wheat" Content="{Binding Date}" FontSize="14" ></Label>
+                    <Label Foreground="Wheat">Average Player(s)</Label>
+                    <Label Foreground="Wheat" Content="{Binding AvgPlayers}"></Label>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+    </Grid>
+</Window>

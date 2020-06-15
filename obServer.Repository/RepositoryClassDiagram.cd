@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="obServer.Repository.Model.RepoBaseItem" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAIAgAAQAFAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Model\RepoBaseItem.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoBullet" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAIAgACAKFAABACAAEAAAAAABAgAIAAA=</HashCode>
+      <FileName>Model\RepoBullet.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoCrate" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEAAAAIAgAAAAFAAAAAAAAAAAAAAAAwAAEgA=</HashCode>
+      <FileName>Model\RepoCrate.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoPlayer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACCAAAgIAABIEgAAAIFAQAAAAAAAABCAAIAgAAAAA=</HashCode>
+      <FileName>Model\RepoPlayer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoServerSideModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAIAAAAAAQAAAAAEAAgAAAAAAAAAAAQCIABA=</HashCode>
+      <FileName>Model\RepoServerSideModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoStaticItem" Collapsed="true">
+    <Position X="11.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Model\RepoStaticItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoWeapon" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICAAAEAAAAAIAgAAACFAAACAAAAgAAAAAAAgAAAAA=</HashCode>
+      <FileName>Model\RepoWeapon.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.GameModel.RepoobServerModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgABgAAAAABAARBIAAABAAAAgQAAQAAAAAACIABA=</HashCode>
+      <FileName>Model\RepoobServerModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Network.RepoGameClient" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAQAAAAAEIAAAAAAAAAAAAQAAAAAAAAAIA=</HashCode>
+      <FileName>Network\RepoGameClient.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Network.RepoGameServer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAwAAAAAAIQACCAAAAAAAEAAAAAEAAAAIA=</HashCode>
+      <FileName>Network\RepoGameServer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Position.MapInformation" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Position\MapInformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="obServer.Repository.Model.IRepoBaseItem" Collapsed="true">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAIAgAAAAFAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Model\IRepoBaseItem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoBullet" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAKAAABACAAEAAAAAABAAAAAAA=</HashCode>
+      <FileName>Model\IRepoBullet.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoCrate" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAEgA=</HashCode>
+      <FileName>Model\IRepoCrate.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoPlayer" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACCAAAgIAABAEgAAAIAAQAAAAAAAAACAAIAAAAAAA=</HashCode>
+      <FileName>Model\IRepoPlayer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoServerSideModel" Collapsed="true">
+    <Position X="15" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgAAAAIAAAAAAQAAAAAEAAgAAAAAAAAAAAQCAABA=</HashCode>
+      <FileName>Model\IRepoServerSideModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoStaticItem" Collapsed="true">
+    <Position X="9.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Model\IRepoStaticItem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoWeapon" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAEAAAAAAAAAAACAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\IRepoWeapon.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.GameModel.IRepoobServerModel" Collapsed="true">
+    <Position X="13.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgABgAAAAABAARBIAAABAAAAgQAAQAAAAAACAABA=</HashCode>
+      <FileName>Model\IRepoobServerModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.Network.IRepoGameClient" Collapsed="true">
+    <Position X="9.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEIAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Network\IRepoGameClient.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Repository.Network.IRepoGameServer" Collapsed="true">
+    <Position X="11.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAACCAAAAAAAEAAAAAEAAAAIA=</HashCode>
+      <FileName>Network\IRepoGameServer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

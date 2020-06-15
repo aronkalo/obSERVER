@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="obServer.ViewController.App" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.HistoryWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HistoryWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.ViewController.LoginWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LoginWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.ViewController.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.ViewController.Control.DataSaver" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAgAAAgAAAAQAQAAAAAAAAABAAAA=</HashCode>
+      <FileName>Control\DataSaver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.Control.ObServerControl" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YAIAAIQCAIAEAIEAACABgAkEABCAMAAAAgACIAZIgAI=</HashCode>
+      <FileName>Control\ObServerControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.Properties.Resources" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.Properties.Settings" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.Render.obServerRenderer" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAmAAAABEAAAQAAgQACAAAAAgAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Render\obServerRenderer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.Render.Texture.BrushCache" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIQWqBCTQghPhKh1IIYg2BEQLOgCCZpAnRAwQAjAw4A=</HashCode>
+      <FileName>Render\Texture\BrushCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.Render.Texture.RenderCache" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AoAAgIAAAAQCIABAEEAAIQAACAABAQAQAAAACAAAAEA=</HashCode>
+      <FileName>Render\Texture\RenderCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.Sound.MusicPlayer" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQAAQIAAAAQAAAAAAAAAAgAgAAAAAAAIAAAAABAAAA=</HashCode>
+      <FileName>Sound\MusicPlayer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.Sound.SoundPlayer" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAKAAABAAAAQFAgABUgEIACAAAIACEAJCAIACAQMAEA=</HashCode>
+      <FileName>Sound\SoundPlayer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.ViewModel.ClientInfo" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\ClientInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.ViewModel.HistoryViewModel" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABBAAAAAAAAQBAAAAAQAAAUAAAAFQAABAEAAAQBAAAA=</HashCode>
+      <FileName>ViewModel\HistoryViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.ViewModel.LoginCache" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIEAAAAgEAQAAAAQAIMAAAgAgAAQACAAAAAAAEBQAA=</HashCode>
+      <FileName>ViewModel\LoginCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.ViewController.ViewModel.LoginViewModel" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>YCQACAAEBEQIQARgAAAIAAQgRAAEAFIAGCAUCBCYAAg=</HashCode>
+      <FileName>ViewModel\LoginViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoBaseItem" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoBullet" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoCrate" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoPlayer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="6" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoServerSideModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="7" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoStaticItem" Collapsed="true">
+    <Position X="11.5" Y="7" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="obServer.Repository.Model.RepoWeapon" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="7" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.GameModel.RepoobServerModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="6" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Network.RepoGameClient" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="6" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Network.RepoGameServer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="6" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.Repository.Position.MapInformation" Collapsed="true">
+    <Position X="9.75" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="obServer.GameModel.Item.BaseItem" Collapsed="true">
+    <Position X="5.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.Bullet" Collapsed="true">
+    <Position X="3" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.Player" Collapsed="true">
+    <Position X="5.25" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.StaticItem" Collapsed="true">
+    <Position X="7.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.Weapon" Collapsed="true">
+    <Position X="9.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.Model.GameModel.Item.Crate" Collapsed="true">
+    <Position X="0.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.ObServerModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.GameModel.ServerSideModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.GameModel.ServerSide.ServerItem" Collapsed="true">
+    <Position X="24" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="obServer.Repository.Model.IRepoBaseItem" Collapsed="true">
+    <Position X="3.75" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoBullet" Collapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoCrate" Collapsed="true">
+    <Position X="5" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoPlayer" Collapsed="true">
+    <Position X="7.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoServerSideModel" Collapsed="true">
+    <Position X="15" Y="8.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoStaticItem" Collapsed="true">
+    <Position X="9.75" Y="9" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.Model.IRepoWeapon" Collapsed="true">
+    <Position X="2.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.GameModel.IRepoobServerModel" Collapsed="true">
+    <Position X="13.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.Network.IRepoGameClient" Collapsed="true">
+    <Position X="9.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Repository.Network.IRepoGameServer" Collapsed="true">
+    <Position X="11.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IBaseItem" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IBullet" Collapsed="true">
+    <Position X="10.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IObServerModel" Collapsed="true">
+    <Position X="22.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IPlayer" Collapsed="true">
+    <Position X="15.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IStaticItem" Collapsed="true">
+    <Position X="17.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IWeapon" Collapsed="true">
+    <Position X="19.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Model.Interfaces.ICrate" Collapsed="true">
+    <Position X="13" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Model.Interfaces.IServerSideModel" Collapsed="true">
+    <Position X="24" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

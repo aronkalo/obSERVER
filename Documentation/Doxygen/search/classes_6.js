@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['ibaseitem_447',['IBaseItem',['../interfaceob_server_1_1_game_model_1_1_interfaces_1_1_i_base_item.html',1,'obServer::GameModel::Interfaces']]],
+  ['ibullet_448',['IBullet',['../interfaceob_server_1_1_game_model_1_1_interfaces_1_1_i_bullet.html',1,'obServer::GameModel::Interfaces']]],
+  ['iclientlogic_449',['IClientLogic',['../interfaceob_server_1_1_logic_1_1_interfaces_1_1_i_client_logic.html',1,'obServer::Logic::Interfaces']]],
+  ['icrate_450',['ICrate',['../interfaceob_server_1_1_model_1_1_interfaces_1_1_i_crate.html',1,'obServer::Model::Interfaces']]],
+  ['igamebase_451',['IGameBase',['../interfaceob_server_1_1_network_1_1_interface_1_1_i_game_base.html',1,'obServer::Network::Interface']]],
+  ['igameclient_452',['IGameClient',['../interfaceob_server_1_1_network_1_1_interface_1_1_i_game_client.html',1,'obServer::Network::Interface']]],
+  ['igameserver_453',['IGameServer',['../interfaceob_server_1_1_network_1_1_interface_1_1_i_game_server.html',1,'obServer::Network::Interface']]],
+  ['iloginlogic_454',['ILoginLogic',['../interfaceob_server_1_1_logic_1_1_interfaces_1_1_i_login_logic.html',1,'obServer::Logic::Interfaces']]],
+  ['iobservermodel_455',['IObServerModel',['../interfaceob_server_1_1_game_model_1_1_interfaces_1_1_i_ob_server_model.html',1,'obServer::GameModel::Interfaces']]],
+  ['iplayer_456',['IPlayer',['../interfaceob_server_1_1_game_model_1_1_interfaces_1_1_i_player.html',1,'obServer::GameModel::Interfaces']]],
+  ['ireceivedeventargs_457',['IReceivedEventArgs',['../interfaceob_server_1_1_network_1_1_interface_1_1_i_received_event_args.html',1,'obServer::Network::Interface']]],
+  ['irepobaseitem_458',['IRepoBaseItem',['../interfaceob_server_1_1_repository_1_1_model_1_1_i_repo_base_item.html',1,'obServer::Repository::Model']]],
+  ['irepobullet_459',['IRepoBullet',['../interfaceob_server_1_1_repository_1_1_model_1_1_i_repo_bullet.html',1,'obServer::Repository::Model']]],
+  ['irepocrate_460',['IRepoCrate',['../interfaceob_server_1_1_repository_1_1_model_1_1_i_repo_crate.html',1,'obServer::Repository::Model']]],
+  ['irepogameclient_461',['IRepoGameClient',['../interfaceob_server_1_1_repository_1_1_network_1_1_i_repo_game_client.html',1,'obServer::Repository::Network']]],
+  ['irepogameserver_462',['IRepoGameServer',['../interfaceob_server_1_1_repository_1_1_network_1_1_i_repo_game_server.html',1,'obServer::Repository::Network']]],
+  ['irepoobservermodel_463',['IRepoobServerModel',['../interfaceob_server_1_1_repository_1_1_game_model_1_1_i_repoob_server_model.html',1,'obServer::Repository::GameModel']]],
+  ['irepoplayer_464',['IRepoPlayer',['../interfaceob_server_1_1_repository_1_1_model_1_1_i_repo_player.html',1,'obServer::Repository::Model']]],
+  ['ireposerversidemodel_465',['IRepoServerSideModel',['../interfaceob_server_1_1_repository_1_1_model_1_1_i_repo_server_side_model.html',1,'obServer::Repository::Model']]],
+  ['irepostaticitem_466',['IRepoStaticItem',['../interfaceob_server_1_1_repository_1_1_model_1_1_i_repo_static_item.html',1,'obServer::Repository::Model']]],
+  ['irepoweapon_467',['IRepoWeapon',['../interfaceob_server_1_1_repository_1_1_model_1_1_i_repo_weapon.html',1,'obServer::Repository::Model']]],
+  ['iserverlogic_468',['IServerLogic',['../interfaceob_server_1_1_logic_1_1_interfaces_1_1_i_server_logic.html',1,'obServer::Logic::Interfaces']]],
+  ['iserversidemodel_469',['IServerSideModel',['../interfaceob_server_1_1_model_1_1_interfaces_1_1_i_server_side_model.html',1,'obServer::Model::Interfaces']]],
+  ['istaticitem_470',['IStaticItem',['../interfaceob_server_1_1_game_model_1_1_interfaces_1_1_i_static_item.html',1,'obServer::GameModel::Interfaces']]],
+  ['iweapon_471',['IWeapon',['../interfaceob_server_1_1_game_model_1_1_interfaces_1_1_i_weapon.html',1,'obServer::GameModel::Interfaces']]]
+];

@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="obServer.GameLogic.BaseLogic" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQABAAAAAAAAAAQCAAAAgAAAAAQAABgAAAAAEIABAk=</HashCode>
+      <FileName>BaseLogic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.GameLogic.ClientData" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQCAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>ClientData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="obServer.GameLogic.ClientLogic" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQEFAAAQCAYBAEYLCAABqQAAAAAAABgCBIAAFJIBAk=</HashCode>
+      <FileName>ClientLogic.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameLogic.LoginLogic" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQABAAAAIQAwAADAAAABgAAAAAAIAAEIAABIAAAA=</HashCode>
+      <FileName>LoginLogic.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.GameLogic.ServerLogic" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQABAAAAAAAAAAQCAAQAiAgAAAAAABgAEgABkIIBBk=</HashCode>
+      <FileName>ServerLogic.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.BaseItem" Collapsed="true">
+    <Position X="5.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.Bullet" Collapsed="true">
+    <Position X="3" Y="8" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.Player" Collapsed="true">
+    <Position X="5.25" Y="8" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.StaticItem" Collapsed="true">
+    <Position X="7.5" Y="8" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.Item.Weapon" Collapsed="true">
+    <Position X="9.75" Y="8" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.Model.GameModel.Item.Crate" Collapsed="true">
+    <Position X="0.75" Y="8" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="obServer.GameModel.ObServerModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.GameModel.ServerSideModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="obServer.GameModel.ServerSide.ServerItem" Collapsed="true">
+    <Position X="14" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="obServer.Logic.Interfaces.IClientLogic" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAAAAQCAIBAEIBCAABIQAAAAAAAAgCBIAAAAAAAE=</HashCode>
+      <FileName>Interfaces\IClientLogic.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Logic.Interfaces.ILoginLogic" Collapsed="true">
+    <Position X="7" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAQAwAADAAAABgAAAAAAAAAEIAABAAAAA=</HashCode>
+      <FileName>Interfaces\ILoginLogic.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.Logic.Interfaces.IServerLogic" Collapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAgAAAAA=</HashCode>
+      <FileName>Interfaces\IServerLogic.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IBaseItem" Collapsed="true">
+    <Position X="5.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IBullet" Collapsed="true">
+    <Position X="0.75" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IObServerModel" Collapsed="true">
+    <Position X="12.25" Y="6" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IPlayer" Collapsed="true">
+    <Position X="5.25" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IStaticItem" Collapsed="true">
+    <Position X="7.5" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.GameModel.Interfaces.IWeapon" Collapsed="true">
+    <Position X="9.75" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Model.Interfaces.ICrate" Collapsed="true">
+    <Position X="3" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="obServer.Model.Interfaces.IServerSideModel" Collapsed="true">
+    <Position X="14" Y="6" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

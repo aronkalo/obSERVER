@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{39F3031F-DD9B-4C9B-B6BB-9A6937EA3C15}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>obServer.Repository</RootNamespace>
+    <AssemblyName>obServer.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>onenik.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>onenik.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsBase.4.6.1055.0\lib\WindowsBase.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\IRepoBaseItem.cs" />
+    <Compile Include="Model\IRepoBullet.cs" />
+    <Compile Include="Model\IRepoCrate.cs" />
+    <Compile Include="Model\IRepoOBServerModel.cs" />
+    <Compile Include="Model\IRepoPlayer.cs" />
+    <Compile Include="Model\IRepoServerSideModel.cs" />
+    <Compile Include="Model\IRepoStaticItem.cs" />
+    <Compile Include="Model\IRepoWeapon.cs" />
+    <Compile Include="Model\RepoBaseItem.cs" />
+    <Compile Include="Model\RepoBullet.cs" />
+    <Compile Include="Model\RepoCrate.cs" />
+    <Compile Include="Model\RepoPlayer.cs" />
+    <Compile Include="Model\RepoServerSideModel.cs" />
+    <Compile Include="Model\RepoStaticItem.cs" />
+    <Compile Include="Model\RepoOBServerModel.cs" />
+    <Compile Include="Model\RepoWeapon.cs" />
+    <Compile Include="Network\IRepoGameServer.cs" />
+    <Compile Include="Network\IRepoGameClient.cs" />
+    <Compile Include="Network\RepoGameClient.cs" />
+    <Compile Include="Network\RepoGameServer.cs" />
+    <Compile Include="Position\MapInformation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\obServer.GameModel\obServer.GameModel.csproj">
+      <Project>{D47B3456-F254-48FD-9F24-D54E376DEE81}</Project>
+      <Name>obServer.GameModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\obServer.Network\obServer.Network.csproj">
+      <Project>{4C0C22BC-8175-4781-9797-D2D06CE50C10}</Project>
+      <Name>obServer.Network</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RepositoryClassDiagram.cd" />
+    <None Include="onenik.ruleset" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
